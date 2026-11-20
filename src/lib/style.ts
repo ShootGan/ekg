@@ -1,4 +1,4 @@
-export type StyleId = 'klinika' | 'monitor' | 'atlas' | 'swiss';
+export type StyleId = 'papier' | 'klinika' | 'monitor' | 'atlas' | 'swiss';
 
 export interface StyleDef {
   id: StyleId;
@@ -8,6 +8,12 @@ export interface StyleDef {
 }
 
 export const STYLES: StyleDef[] = [
+  {
+    id: 'papier',
+    name: 'Papier',
+    note: 'Wydruk EKG: krem, siatka milimetrowa, czerwony tusz',
+    swatch: ['#f7f4ee', '#fffdf9', '#b4232c', '#1f1b16'],
+  },
   {
     id: 'klinika',
     name: 'Klinika',
@@ -34,7 +40,7 @@ export const STYLES: StyleDef[] = [
   },
 ];
 
-const KEY = 'ekg-style';
+const KEY = 'ekg-style-v2';
 
 export function readStyle(): StyleId {
   try {
@@ -43,7 +49,7 @@ export function readStyle(): StyleId {
   } catch {
     /* brak dostępu */
   }
-  return 'klinika';
+  return 'papier';
 }
 
 export function applyStyle(id: StyleId): void {

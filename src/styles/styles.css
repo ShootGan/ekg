@@ -7,6 +7,368 @@
    - Klinika: aplikacja medyczna, miękkie karty, dużo powietrza (domyślny)
    ========================================================================== */
 
+/* ---------- PAPIER (domyślny) --------------------------------------------- */
+
+:root[data-style='papier'] {
+  --bg: #f7f4ee;
+  --panel: #fdfbf7;
+  --ink: #1f1b16;
+  --ink-2: #5e554a;
+  --muted: #7b7266;
+  --line: rgba(31, 27, 22, 0.1);
+  --line-2: rgba(31, 27, 22, 0.2);
+  --line-soft: rgba(31, 27, 22, 0.06);
+  --accent: #1f1b16;
+  --accent-ink: #3a332b;
+  --accent-soft: #efe9df;
+  --on-accent: #fdfbf7;
+  --chip: #efe9df;
+  --chipOn: #1f1b16;
+  --chipOnInk: #fdfbf7;
+  --paper: #fffdf9;
+  --paper-line: #ead9cf;
+  --gridMin: #f0c4bf;
+  --gridMaj: #de918a;
+  --trace: #1b1714;
+  --pen: #b4232c;
+  --ok: #2f7d4f;
+  --zle: #5e554a;
+  --brak: #a8620a;
+  --okBg: #e9f2ea;
+  --zleBg: #efe9df;
+  --brakBg: #f7ecdc;
+  --focus: #b4232c;
+  --r-key: 5px;
+  --r-ctl: 10px;
+  --r-card: 16px;
+  --r-panel: 16px;
+  --shadow-sm: none;
+  --shadow: none;
+  color-scheme: light;
+}
+
+:root[data-style='papier'] h1,
+:root[data-style='papier'] h2,
+:root[data-style='papier'] h3,
+:root[data-style='papier'] .quiz-head h2,
+:root[data-style='papier'] .page-head h2,
+:root[data-style='papier'] .atlas-info .atlas-name {
+  font-family: Georgia, 'Iowan Old Style', serif;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+:root[data-style='papier'] .brand-name {
+  font-size: 17px;
+}
+
+:root[data-style='papier'] .brand svg,
+:root[data-style='papier'] .brand path {
+  color: var(--pen);
+  stroke: var(--pen);
+}
+
+:root[data-style='papier'] .brand small {
+  display: none;
+}
+
+:root[data-style='papier'] .nav a[aria-current='page'] {
+  background: var(--panel);
+  box-shadow: none;
+  outline: 1px solid var(--line);
+}
+
+:root[data-style='papier'] .btn-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fdfbf7;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+:root[data-style='papier'] .btn-primary:hover {
+  background: #3a332b;
+  transform: none;
+}
+
+:root[data-style='papier'] .btn-primary:active {
+  transform: scale(0.97);
+}
+
+:root[data-style='papier'] .quiz-opt.zle {
+  text-decoration: line-through;
+}
+
+/* ---------- STRONA STARTOWA ----------------------------------------------- */
+
+.land h1 {
+  font-size: 64px;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  max-width: 14em;
+  margin: 0;
+}
+
+.land h2 {
+  font-size: 40px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.land h3 {
+  font-size: 22px;
+  line-height: 28px;
+  margin: 0;
+}
+
+.land-hero {
+  padding: 40px 0 32px;
+}
+
+.land-hero p {
+  font-size: 19px;
+  line-height: 29px;
+  color: var(--ink-2);
+  max-width: 34rem;
+  margin: 20px 0 0;
+}
+
+.land-cta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+.land-link {
+  color: var(--ink);
+  border-bottom: 1px solid var(--line-2);
+}
+
+.land-link:hover {
+  text-decoration: none;
+  border-color: var(--ink);
+}
+
+.land-strip {
+  margin: 0 calc(50% - 50vw);
+  border-top: 1px solid var(--paper-line);
+  border-bottom: 1px solid var(--paper-line);
+}
+
+.land-strip-cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 12px;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.land-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.land-sec {
+  padding-top: 96px;
+}
+
+.land-lead {
+  font-size: 17px;
+  line-height: 27px;
+  color: var(--ink-2);
+  max-width: 36rem;
+  margin: 16px 0 0;
+}
+
+.land-modes {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 40px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.land-quiz {
+  display: block;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.land-quiz:hover {
+  text-decoration: none;
+  border-color: var(--line-2);
+}
+
+.land-quiz > p {
+  color: var(--ink-2);
+  margin: 8px 0 16px;
+}
+
+.land-quiz ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.land-quiz li {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-size: 15px;
+}
+
+.land-quiz small {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.land-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  color: #fff;
+}
+
+.land-v {
+  font-size: 13px;
+}
+
+.land-quiz .ok .land-box { background: var(--ok); }
+.land-quiz .ok .land-v { color: var(--ok); }
+.land-quiz .miss .land-box { box-shadow: inset 0 0 0 1.5px var(--brak); }
+.land-quiz .miss .land-v { color: var(--brak); }
+.land-quiz .zle .land-box { background: var(--ink-2); }
+.land-quiz .zle .land-v { color: var(--ink-2); }
+.land-quiz .zle > span:nth-child(2) { text-decoration: line-through; color: var(--ink-2); }
+
+.land-side {
+  display: grid;
+  gap: 32px;
+  padding-top: 8px;
+}
+
+.land-side a {
+  color: var(--ink);
+}
+
+.land-side a:hover {
+  text-decoration: none;
+}
+
+.land-side a:hover h3 {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.land-side p {
+  color: var(--ink-2);
+  margin: 6px 0 0;
+}
+
+.land-atlas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.land-pat {
+  display: block;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 8px 16px;
+  transition: border-color var(--t-fast) var(--ease);
+}
+
+.land-pat:hover {
+  text-decoration: none;
+  border-color: var(--line-2);
+}
+
+.land-mini {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.land-pat h4 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 23px;
+  margin: 12px 8px 0;
+}
+
+.land-end {
+  margin-top: 96px;
+  padding: 56px 0 16px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 32px;
+}
+
+.land-facts {
+  display: flex;
+  gap: 48px;
+  margin-top: 28px;
+}
+
+.land-facts b {
+  display: block;
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.land-facts span {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.land-note {
+  margin: 20px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .land h1 { font-size: 40px; }
+  .land h2 { font-size: 30px; }
+  .land-hero { padding-top: 16px; }
+  .land-modes { grid-template-columns: 1fr; gap: 32px; }
+  .land-atlas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .land-end { grid-template-columns: 1fr; }
+  .land-strip-cap { flex-direction: column; gap: 4px; }
+  .land-sec { padding-top: 64px; }
+}
+
 /* ---------- ATLAS --------------------------------------------------------- */
 
 :root[data-style='atlas'] {

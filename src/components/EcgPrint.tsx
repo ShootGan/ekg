@@ -213,7 +213,7 @@ function draw(v: View) {
   g.setTransform(v.dpr * sc, 0, 0, v.dpr * sc, v.dpr * v.ox, v.dpr * v.oy);
   for (let i = 0; i <= W / MM; i++) {
     g.strokeStyle = i % 5 ? gridMin : gridMaj;
-    g.lineWidth = lw(i % 5 ? 0.5 : 1);
+    g.lineWidth = lw(i % 5 ? 0.6 : 1);
     g.beginPath();
     g.moveTo(i * MM, 0);
     g.lineTo(i * MM, h);
@@ -221,7 +221,7 @@ function draw(v: View) {
   }
   for (let j = 0; j <= h / MM; j++) {
     g.strokeStyle = j % 5 ? gridMin : gridMaj;
-    g.lineWidth = lw(j % 5 ? 0.5 : 1);
+    g.lineWidth = lw(j % 5 ? 0.6 : 1);
     g.beginPath();
     g.moveTo(0, j * MM);
     g.lineTo(W, j * MM);

@@ -1,88 +1,115 @@
-import { useMemo } from 'react';
-import { generateCase } from '../lib/generate';
-import { EcgPrint } from '../components/EcgPrint';
+import { PaperStrip } from '../components/PaperStrip';
 import { PRZYPADKI } from '../data/przypadki';
-import { randomSeed } from '../lib/generate';
+import { ZAB } from '../data/atlas';
 
-const CELLS: { href: string; title: string; text: string }[] = [
-  {
-    href: '#/trening',
-    title: 'Trening',
-    text: 'Jeden zapis, lista zmian i pułapek. Zaznaczasz to, co naprawdę widzisz, a wydruk od razu pokazuje, gdzie tego szukać.',
-  },
-  {
-    href: '#/trener',
-    title: 'Pełny opis',
-    text: 'Dziewięć kroków od rytmu do wniosku, z punktacją i porównaniem z kluczem przypadku.',
-  },
-  {
-    href: '#/atlas',
-    title: 'Atlas',
-    text: 'Piętnaście wzorców z bijącym sercem: co dzieje się w mięśniu i dlaczego tak wygląda krzywa.',
-  },
-  {
-    href: '#/postepy',
-    title: 'Postępy',
-    text: 'Które działy wchodzą w nawyk, a które wciąż wypadają z opisu.',
-  },
+const HERO_CFG = { rhythm: 'sinus' as const, hr: 72 };
+
+const PODGLAD: { txt: string; meta: string; v: 'ok' | 'miss' | 'zle'; werdykt: string }[] = [
+  { txt: 'Uniesienie ST', meta: 'II, III, aVF', v: 'ok', werdykt: 'poprawne' },
+  { txt: 'Obniżenie ST', meta: 'aVL', v: 'miss', werdykt: 'przeoczone' },
+  { txt: 'Blok AV I stopnia', meta: 'PR 240 ms', v: 'ok', werdykt: 'poprawne' },
+  { txt: 'Bradykardia', meta: '< 60/min', v: 'zle', werdykt: 'błędne' },
 ];
 
-const HERO_ID = 'stemi-dolny';
+const WZORCE = ['sinus', 'av1', 'stemi-inf', 'af', 'lbbb'];
+const MINI = WZORCE.map((id) => ZAB.find((z) => z.id === id)).filter((z): z is (typeof ZAB)[number] => !!z);
 
 export function Home() {
-  const hero = useMemo(() => generateCase({ seed: 20260412, id: HERO_ID }), []);
-  const caseCount = PRZYPADKI.length;
-
   return (
-    <>
-      <div className="home-lead">
-        <h2>Opis 12-odprowadzeniowego EKG, ćwiczony do nawyku</h2>
+    <div className="land">
+      <section className="land-hero">
+        <h1>Zobacz, skąd się bierze każdy załamek</h1>
         <p>
-          Każdy załamek na wydruku liczy model wektorowy serca, nie gotowa krzywa. Dlatego prawa Einthovena i
-          Goldbergera, oś serca i zmiany przeciwstawne wychodzą z modelu — także w zapisach, gdzie nakłada się kilka
-          patologii naraz. Ten sam model rysuje wydruk, animację w atlasie i przypadki w quizie.
+          Wydruki liczone z wektora pobudzenia serca, nie wklejone krzywe. Zaznaczasz, co widzisz, a zapis pokazuje, gdzie
+          tego szukać.
         </p>
-        <div className="home-actions">
+        <div className="land-cta">
           <a className="btn-primary" href="#/trening/quiz">
-            Zacznij od quizu
+            Zacznij quiz
           </a>
-          <a href="#/atlas">Przejrzyj atlas</a>
+          <a className="land-link" href="#/atlas">
+            Przejrzyj atlas
+          </a>
         </div>
+      </section>
+
+      <div className="land-strip">
+        <PaperStrip cfg={HERO_CFG} leads={['I', 'II', 'III']} live mmPx={6} rowMm={18} label="Zapis EKG rysowany na żywo w odprowadzeniach I, II i III" />
+      </div>
+      <div className="land-strip-cap">
+        <span>Ten sam wektor rzutowany na trzy osie. Odprowadzenie II leży prawie wzdłuż niego, dlatego ma najwyższe R.</span>
+        <span className="land-mono">25 mm/s · 10 mm/mV</span>
       </div>
 
-      <figure className="home-hero">
-        <EcgPrint ecg={hero.EX.ecg} seed={hero.EX.seed} heightMm={112} />
-        <figcaption>
-          <span className="stat">
-            STEMI ściany dolnej · uniesienie ST w II, III, aVF · zmiany przeciwstawne w aVL
-          </span>
-          <a href={'#/trener/' + randomSeed() + '?id=' + HERO_ID}>Otwórz w trenerze →</a>
-        </figcaption>
-      </figure>
-
-      <div className="home-grid">
-        {CELLS.map((c) => (
-          <a className="home-cell" key={c.href} href={c.href}>
-            <h3>{c.title}</h3>
-            <p>{c.text}</p>
+      <section className="land-sec">
+        <h2>Ćwiczysz na zapisie, nie na definicjach</h2>
+        <p className="land-lead">
+          W jednym EKG z karetki bywa kilka zmian naraz. Quiz pokazuje je wszystkie i dokłada pułapki, których w zapisie nie
+          ma.
+        </p>
+        <div className="land-modes">
+          <a className="land-quiz" href="#/trening/quiz">
+            <h3>Quiz</h3>
+            <p>Mężczyzna, 64 lata, ucisk w klatce od 40 minut. Co jest na zapisie?</p>
+            <ul>
+              {PODGLAD.map((r) => (
+                <li key={r.txt} className={r.v}>
+                  <span className="land-box" aria-hidden="true">
+                    {r.v === 'miss' ? '' : '✓'}
+                  </span>
+                  <span>
+                    {r.txt} <small>{r.meta}</small>
+                  </span>
+                  <span className="land-v">{r.werdykt}</span>
+                </li>
+              ))}
+            </ul>
           </a>
-        ))}
-      </div>
+          <div className="land-side">
+            <a href="#/trener">
+              <h3>Pełny opis</h3>
+              <p>Rytm, przewodzenie, oś, QRS, ST i T, na koniec wniosek i postępowanie.</p>
+            </a>
+            <a href="#/postepy">
+              <h3>Postępy</h3>
+              <p>Wyniki według działów. Dział, który wypada najsłabiej, wraca częściej.</p>
+            </a>
+          </div>
+        </div>
+      </section>
 
-      <div className="home-foot">
-        <span className="stat">
-          <b>{caseCount}</b> przypadków w banku
-        </span>
-        <span className="stat">
-          <b>15</b> wzorców w atlasie
-        </span>
-        <span className="stat">
-          <b>9</b> kroków opisu
-        </span>
-        <span className="stat">
-          <b>10</b> punktów za pełny opis
-        </span>
-      </div>
-    </>
+      <section className="land-sec">
+        <h2>Atlas wzorców z bijącym sercem</h2>
+        <p className="land-lead">Przy każdym wzorcu animacja tego, co dzieje się w mięśniu, i krzywa, która z tego wychodzi.</p>
+        <div className="land-atlas">
+          {MINI.map((z, i) => (
+            <a key={z.id} className="land-pat" href={'#/atlas/' + z.id}>
+              <PaperStrip cfg={z.cfg} leads={['II']} mmPx={4} rowMm={22} seed={11 + i} className="land-mini" label={z.name} />
+              <h4>{z.name}</h4>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="land-end">
+        <div>
+          <h2>Pierwszy zapis czeka</h2>
+          <div className="land-facts">
+            <div>
+              <b>{PRZYPADKI.length}</b>
+              <span>przypadków w banku</span>
+            </div>
+            <div>
+              <b>{ZAB.length}</b>
+              <span>wzorców w atlasie</span>
+            </div>
+          </div>
+          <p className="land-note">Bez konta i logowania, wszystko zostaje w przeglądarce.</p>
+        </div>
+        <a className="btn-primary" href="#/trening/quiz">
+          Zacznij quiz
+        </a>
+      </section>
+    </div>
   );
 }

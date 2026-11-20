@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { EcgPrint, type EcgPrintHandle } from '../components/EcgPrint';
 import { DxPicker } from '../components/DxPicker';
 import { generateCase, type GenerateResult } from '../lib/generate';
@@ -85,9 +85,9 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
   const tourRef = useRef(tour);
   tourRef.current = tour;
 
-  useEffect(() => {
-    if (W && kroki.length) goRef.current(0);
-  }, [W, kroki]);
+  const [tick, setTick] = useState(0);
+  const bump = useCallback(() => setTick((t) => t + 1), []);
+  const printRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -109,8 +109,8 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
     if (!W || !gen) return undefined;
     const all = gen.key.zaznaczenia;
     const marks = active ? marksFor(active, all) : diagnosticMarks(all, gen.key.id);
-    return { zaznaczenia: marks, focus: active?.leads.length ? active.leads : undefined };
-  }, [W, gen, active]);
+    return { zaznaczenia: marks, focus: active?.leads.length ? active.leads : undefined, dim: tour != null };
+  }, [W, gen, active, tour]);
 
   if (err) {
     return (
@@ -201,8 +201,11 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
       {EX.kontekst ? <div className="quiz-context">{EX.kontekst}</div> : null}
 
       <div className="quiz-split">
-        <div className="quiz-print">
-          <EcgPrint ref={ref} ecg={EX.ecg} seed={EX.seed} review={review} />
+        <div className="quiz-print" ref={printRef}>
+          <EcgPrint ref={ref} ecg={EX.ecg} seed={EX.seed} review={review} onDraw={tour != null ? bump : undefined} />
+          {done && tour != null ? (
+            <Omowienie kroki={kroki} i={tour} gen={gen} onGo={goTour} print={ref.current} host={printRef.current} tick={tick} />
+          ) : null}
           {calMsg ? <p className="muted opis-cal">{calMsg}</p> : null}
         </div>
 
@@ -316,8 +319,6 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
                 )}
               </div>
             </div>
-          ) : tour != null && kroki[tour] ? (
-            <Omowienie kroki={kroki} i={tour} gen={gen} onGo={goTour} />
           ) : (
             <Wynik
               W={W}

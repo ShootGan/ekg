@@ -16,6 +16,7 @@ export interface EcgPrintHandle {
   focusOn(t0: number, t1: number, lead: string, scale?: number): void;
   reset(): void;
   getLastDt(): number | null;
+  anchor(lead: string, t0?: number, t1?: number): DOMRect | null;
 }
 
 export interface EcgPrintProps {
@@ -23,10 +24,11 @@ export interface EcgPrintProps {
   seed: number;
   marks?: Mark[];
   onCal?: (dtMs: number | null) => void;
-  review?: { zaznaczenia?: Mark[]; focus?: string[] };
+  review?: { zaznaczenia?: Mark[]; focus?: string[]; dim?: boolean };
   reviewStatus?: (m: Mark) => 'ok' | 'brak' | 'zle';
   heightMm?: number;
   footer?: string;
+  onDraw?: () => void;
 }
 
 const MM = 4;
@@ -69,8 +71,9 @@ interface View {
   lastDt: number | null;
   onCal?: (dtMs: number | null) => void;
   marks: Mark[];
-  review?: { zaznaczenia?: Mark[]; focus?: string[] };
+  review?: { zaznaczenia?: Mark[]; focus?: string[]; dim?: boolean };
   status?: (m: Mark) => 'ok' | 'brak' | 'zle';
+  onDraw?: () => void;
   lead: (n: string, t: number) => number;
   setZoom: (z: string) => void;
   setCal: (t: string) => void;
@@ -120,6 +123,18 @@ function drawFocus(v: View, lw: (px: number) => number) {
   for (let r = 0; r < 3; r++)
     for (let c = 0; c < 4; c++) if (f.indexOf(LAY[r][c]) >= 0) box(36 + c * COLW, r * ROWH + TOP, COLW);
   if (f.indexOf('II') >= 0) box(36, v.yr, 4 * COLW);
+}
+
+function drawDim(v: View, paper: string) {
+  const f = v.review?.focus;
+  if (!v.review?.dim || !f || !f.length) return;
+  const g = v.g;
+  g.globalAlpha = 0.62;
+  g.fillStyle = paper;
+  for (let r = 0; r < 3; r++)
+    for (let c = 0; c < 4; c++) if (f.indexOf(LAY[r][c]) < 0) g.fillRect(36 + c * COLW, r * ROWH + TOP - ROWH * 0.55, COLW, ROWH);
+  if (f.indexOf('II') < 0 && f.indexOf('pasek') < 0) g.fillRect(36, v.yr - ROWH * 0.55, 4 * COLW, ROWH);
+  g.globalAlpha = 1;
 }
 
 function drawReview(v: View, lw: (px: number) => number) {
@@ -254,6 +269,7 @@ function draw(v: View) {
       g.stroke();
     }
   });
+  drawDim(v, paperBg);
   if (v.footer) {
     const fy = h - 3.2 * MM;
     g.font = '600 15px ui-monospace, Consolas, monospace';
@@ -285,6 +301,7 @@ function draw(v: View) {
   }
   drawMarks(v, lw);
   v.setZoom(v.s.toFixed(1).replace('.', ',') + '×');
+  v.onDraw?.();
 }
 
 function resize(v: View) {
@@ -354,7 +371,7 @@ function buildTrace(v: View, ecg: Record<string, unknown>, seed: number) {
 }
 
 export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPrint(props, ref) {
-  const { ecg, seed, marks, review, reviewStatus, onCal, footer } = props;
+  const { ecg, seed, marks, review, reviewStatus, onCal, footer, onDraw } = props;
   const hMm = Math.max(MIN_H_MM, props.heightMm ?? DEF_H_MM);
   const cvRef = useRef<HTMLCanvasElement | null>(null);
   const viewRef = useRef<View | null>(null);
@@ -484,6 +501,11 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
 
   useEffect(() => {
     const v = viewRef.current;
+    if (v) v.onDraw = onDraw;
+  }, [onDraw]);
+
+  useEffect(() => {
+    const v = viewRef.current;
     if (!v) return;
     buildTrace(v, JSON.parse(ecgKey) as Record<string, unknown>, seed);
     resize(v);
@@ -514,6 +536,29 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
       },
       getLastDt() {
         return viewRef.current?.lastDt ?? null;
+      },
+      anchor(lead: string, t0?: number, t1?: number) {
+        const v = viewRef.current;
+        if (!v) return null;
+        const y = rowY(v, lead);
+        if (y == null) return null;
+        let x0: number, x1: number;
+        if (t0 != null && t1 != null) {
+          x0 = tx(t0);
+          x1 = tx(t1);
+        } else if (lead === 'pasek') {
+          x0 = 36;
+          x1 = 36 + 4 * COLW;
+        } else {
+          const c = LAY.find((r) => r.includes(lead))?.indexOf(lead) ?? 0;
+          x0 = 36 + c * COLW;
+          x1 = x0 + COLW;
+        }
+        const sc = v.base * v.s;
+        const b = v.cv.getBoundingClientRect();
+        const left = b.left + v.ox + x0 * sc;
+        const top = b.top + v.oy + (y - ROWH * 0.55) * sc;
+        return new DOMRect(left, top, (x1 - x0) * sc, ROWH * 0.95 * sc);
       },
     }),
     []

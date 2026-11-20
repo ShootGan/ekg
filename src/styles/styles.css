@@ -692,3 +692,81 @@ h3,
   width: 100%;
   margin-bottom: 12px;
 }
+
+/* ---------- dymek omówienia na wydruku ------------------------------------ */
+
+.quiz-print {
+  position: relative;
+}
+
+.dymek {
+  position: absolute;
+  z-index: 5;
+  width: min(360px, calc(100% - 16px));
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  box-shadow: 0 8px 24px rgba(31, 27, 22, 0.14);
+  transition: top 220ms var(--ease), left 220ms var(--ease);
+}
+
+.dymek.hidden {
+  visibility: hidden;
+  top: 0;
+  left: 0;
+}
+
+.dymek::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--arrow, 50%) - 7px);
+  width: 14px;
+  height: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line-2);
+  transform: rotate(45deg);
+  display: none;
+}
+
+.dymek.pod::before {
+  display: block;
+  top: -8px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.dymek.nad::before {
+  display: block;
+  bottom: -8px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.dymek .tour-top {
+  margin-bottom: 12px;
+}
+
+.dymek .tour-body h3 {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.dymek .tour-body p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.tour-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dymek {
+    transition: none;
+  }
+}

@@ -247,16 +247,8 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
   const goTourRef = useRef(goTour);
   goTourRef.current = goTour;
 
-  const autoTour = useRef(false);
-  useEffect(() => {
-    if (!checked) {
-      autoTour.current = false;
-      return;
-    }
-    if (autoTour.current || !kroki.length) return;
-    autoTour.current = true;
-    goTourRef.current(0);
-  }, [checked, kroki]);
+  const [tick, setTick] = useState(0);
+  const bump = useCallback(() => setTick((t) => t + 1), []);
 
   const kryteria = useMemo(() => (round ? round.gen.key.elementy.map((t) => ({ t, ...kryterium(t) })) : []), [round]);
 
@@ -270,8 +262,8 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
     if (!checked || !round) return undefined;
     const all = round.gen.key.zaznaczenia;
     const marks = active ? marksFor(active, all) : diagnosticMarks(all, round.gen.key.id);
-    return { zaznaczenia: marks, focus: focus ?? undefined };
-  }, [checked, round, active, focus]);
+    return { zaznaczenia: marks, focus: focus ?? undefined, dim: tour != null };
+  }, [checked, round, active, focus, tour]);
 
   if (!round) return <div className="card">Ładowanie…</div>;
 
@@ -340,7 +332,17 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
 
       <div className="quiz-split">
         <div className="quiz-print" ref={printRef}>
-          <EcgPrint ref={ref} ecg={EX.ecg} seed={EX.seed} review={review} footer={printFooter(key.pomiary)} />
+          <EcgPrint
+            ref={ref}
+            ecg={EX.ecg}
+            seed={EX.seed}
+            review={review}
+            footer={printFooter(key.pomiary)}
+            onDraw={tour != null ? bump : undefined}
+          />
+          {checked && tour != null ? (
+            <Omowienie kroki={kroki} i={tour} gen={round.gen} onGo={goTour} print={ref.current} host={printRef.current} tick={tick} />
+          ) : null}
         </div>
 
         <div className="quiz-side">
@@ -398,9 +400,7 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
           </div>
 
           <div ref={resultRef} aria-live="polite">
-            {checked && tour != null && kroki[tour] ? (
-              <Omowienie kroki={kroki} i={tour} gen={round.gen} onGo={goTour} />
-            ) : checked ? (
+            {checked ? (
               <div className="card">
                 {kroki.length ? (
                   <button type="button" className="accent tour-start" onClick={() => goTour(0)}>

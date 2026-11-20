@@ -8,6 +8,7 @@ import { diagnosticMarks, marksFor, type Kryterium } from '../lib/kryteria';
 import { CECHY } from '../lib/cechy';
 import { PRZYPADKI } from '../data/przypadki';
 import { ATLAS_LINK, WYJASNIENIA } from '../data/wyjasnienia';
+import { Omowienie, pokazNaWydruku, type KrokOmowienia } from './Omowienie';
 import {
   CECHY_KROKU,
   KROKI,
@@ -43,6 +44,7 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
   const [W, setW] = useState<WynikOpisu | null>(null);
   const [active, setActive] = useState<Kryterium | null>(null);
   const [calMsg, setCalMsg] = useState('');
+  const [tour, setTour] = useState<number | null>(null);
   const ref = useRef<EcgPrintHandle | null>(null);
   const topRef = useRef<HTMLDivElement | null>(null);
 
@@ -58,7 +60,50 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
     setKrok(0);
     setW(null);
     setActive(null);
+    setTour(null);
   }, [seed, poziom, kat, id, real]);
+
+  const kroki = useMemo<KrokOmowienia[]>(
+    () => (W ? W.pozycje.map((p) => ({ c: p.c, st: p.w === 'zle' ? 'pul' : p.w })) : []),
+    [W]
+  );
+
+  const goTour = (i: number | null) => {
+    if (i == null || i < 0 || i >= kroki.length || !gen) {
+      setTour(null);
+      setActive(null);
+      ref.current?.reset();
+      return;
+    }
+    setTour(i);
+    const k = kroki[i];
+    setActive(k.st === 'pul' ? null : k.c.k);
+    pokazNaWydruku(k, gen, ref.current);
+  };
+  const goRef = useRef(goTour);
+  goRef.current = goTour;
+  const tourRef = useRef(tour);
+  tourRef.current = tour;
+
+  useEffect(() => {
+    if (W && kroki.length) goRef.current(0);
+  }, [W, kroki]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = tourRef.current;
+      if (t == null) return;
+      const tag = (e.target as HTMLElement | null)?.tagName ?? '';
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+      if (e.code === 'ArrowRight') goRef.current(t + 1);
+      else if (e.code === 'ArrowLeft') goRef.current(t - 1);
+      else if (e.code === 'Escape') goRef.current(null);
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
 
   const review = useMemo(() => {
     if (!W || !gen) return undefined;
@@ -128,6 +173,7 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
     setKrok(0);
     setW(null);
     setActive(null);
+    setTour(null);
   };
 
   const K = KROKI[krok];
@@ -270,8 +316,19 @@ export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: Tra
                 )}
               </div>
             </div>
+          ) : tour != null && kroki[tour] ? (
+            <Omowienie kroki={kroki} i={tour} gen={gen} onGo={goTour} />
           ) : (
-            <Wynik W={W} gen={gen} A={A} active={active} setActive={setActive} onRetry={retry} onNext={onNextSeed} />
+            <Wynik
+              W={W}
+              gen={gen}
+              A={A}
+              active={active}
+              setActive={setActive}
+              onRetry={retry}
+              onNext={onNextSeed}
+              onTour={kroki.length ? () => goTour(0) : undefined}
+            />
           )}
         </div>
       </div>
@@ -287,14 +344,20 @@ interface WynikProps {
   setActive: (k: Kryterium | null) => void;
   onRetry: () => void;
   onNext: () => void;
+  onTour?: () => void;
 }
 
-function Wynik({ W, gen, A, active, setActive, onRetry, onNext }: WynikProps) {
+function Wynik({ W, gen, A, active, setActive, onRetry, onNext, onTour }: WynikProps) {
   const { key, EX } = gen;
   const dxT = (id: string) => EX.rozp.find((r) => r.id === id)?.t ?? id;
   const postT = (p: string) => POSTEPOWANIE.find(([x]) => x === p)?.[1] ?? '';
   return (
     <div className="card">
+      {onTour ? (
+        <button type="button" className="accent tour-start" onClick={onTour}>
+          Omów zapis krok po kroku →
+        </button>
+      ) : null}
       <div className="opis-score">
         <b>{W.wynik}%</b>
         <span className="muted">zmiany {W.zmiany}% · rozpoznanie {W.dx.pkt}/2 · postępowanie {W.post.ok ? '1/1' : '0/1'}</span>

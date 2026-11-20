@@ -8,7 +8,7 @@ import { PRZYPADKI } from '../data/przypadki';
 import { useReal } from '../lib/real';
 import { RealToggle } from '../components/RealToggle';
 import { ATLAS_LINK, WYJASNIENIA } from '../data/wyjasnienia';
-import { JAK, nieTu } from '../data/jak';
+import { Omowienie, pokazNaWydruku, type KrokOmowienia } from './Omowienie';
 
 export interface QuizProps {
   seed: number;
@@ -221,8 +221,8 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
 
   const kroki = useMemo(() => {
     if (!checked || !round) return [];
-    const jest = round.items.filter((c) => c.jest).map((c) => ({ c, pulapka: false }));
-    const pul = round.items.filter((c) => !c.jest && sel.includes(c.id)).map((c) => ({ c, pulapka: true }));
+    const jest: KrokOmowienia[] = round.items.filter((c) => c.jest).map((c) => ({ c, st: sel.includes(c.id) ? 'ok' : 'miss' }));
+    const pul: KrokOmowienia[] = round.items.filter((c) => !c.jest && sel.includes(c.id)).map((c) => ({ c, st: 'pul' }));
     return [...jest, ...pul];
   }, [checked, round, sel]);
 
@@ -239,16 +239,9 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
     setTour(i);
     setHover(null);
     const k = kroki[i];
-    if (k.pulapka || !round) {
-      setPinned(null);
-      ref.current?.reset();
-      return;
-    }
-    setPinned({ kind: 'c', id: k.c.id });
-    const ms = marksFor(k.c.k, round.gen.key.zaznaczenia);
-    const leads = new Set(ms.map((m) => m.n));
-    if (ms.length && leads.size === 1) ref.current?.focusOn(ms[0].t0, ms[0].t1, ms[0].n, 2.5);
-    else ref.current?.reset();
+    if (!round) return;
+    setPinned(k.st === 'pul' ? null : { kind: 'c', id: k.c.id });
+    pokazNaWydruku(k, round.gen, ref.current);
     printRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
   const goTourRef = useRef(goTour);
@@ -406,45 +399,7 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
 
           <div ref={resultRef} aria-live="polite">
             {checked && tour != null && kroki[tour] ? (
-              <div className="card tour">
-                <div className="tour-top">
-                  <span className="tour-dots" aria-hidden>
-                    {kroki.map((k, i) => (
-                      <i key={k.c.id} className={(i === tour ? 'on ' : '') + (k.pulapka ? 'pul' : sel.includes(k.c.id) ? 'ok' : 'miss')} />
-                    ))}
-                  </span>
-                  <span className="tour-n">
-                    {tour + 1} z {kroki.length}
-                  </span>
-                  <button type="button" className="mini" onClick={() => goTour(null)}>
-                    Zamknij
-                  </button>
-                </div>
-                {(() => {
-                  const k = kroki[tour];
-                  const st = k.pulapka ? 'pul' : sel.includes(k.c.id) ? 'ok' : 'miss';
-                  return (
-                    <div key={k.c.id} className="tour-body">
-                      <div className={'tour-badge ' + st}>{st === 'ok' ? 'Trafione' : st === 'miss' ? 'Przeoczone' : 'Tego tu nie ma'}</div>
-                      <h3>{k.c.t}</h3>
-                      <p>{k.pulapka ? nieTu(k.c.id, round.gen) : JAK[k.c.id]}</p>
-                      {!k.pulapka && k.c.k.leads.length ? (
-                        <p className="tour-leads">
-                          Na wydruku: <b>{k.c.k.leads.join(', ')}</b>
-                        </p>
-                      ) : null}
-                    </div>
-                  );
-                })()}
-                <div className="opis-nav">
-                  <button type="button" onClick={() => goTour(tour - 1)} disabled={tour === 0}>
-                    ← Wstecz
-                  </button>
-                  <button type="button" className="accent" onClick={() => goTour(tour + 1)}>
-                    {tour === kroki.length - 1 ? 'Podsumowanie' : 'Dalej →'}
-                  </button>
-                </div>
-              </div>
+              <Omowienie kroki={kroki} i={tour} gen={round.gen} onGo={goTour} />
             ) : checked ? (
               <div className="card">
                 {kroki.length ? (

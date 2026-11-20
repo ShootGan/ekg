@@ -14,7 +14,6 @@ export interface TrainerCaseProps {
   poziom?: 1 | 2 | 3;
   kat?: string;
   id?: string;
-  drill?: string;
   navigate: (to: string) => void;
   onNextSeed: () => void;
 }
@@ -25,7 +24,7 @@ const BADGE: React.CSSProperties = {
   color: 'var(--muted)',
 };
 
-export function TrainerCase({ seed, poziom, kat, id, drill, navigate, onNextSeed }: TrainerCaseProps) {
+export function TrainerCase({ seed, poziom, kat, id, navigate, onNextSeed }: TrainerCaseProps) {
   const [gen, setGen] = useState<GenerateResult | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [real] = useReal();
@@ -120,8 +119,8 @@ export function TrainerCase({ seed, poziom, kat, id, drill, navigate, onNextSeed
       <div className="card">
         <h2>Trener</h2>
         <p style={{ color: 'var(--brak)' }}>{err}</p>
-        <button type="button" onClick={() => navigate('/trener')}>
-          ← Wybór przypadku
+        <button type="button" onClick={() => navigate('/trening?format=opis')}>
+          ← Trening
         </button>
       </div>
     );
@@ -141,10 +140,9 @@ export function TrainerCase({ seed, poziom, kat, id, drill, navigate, onNextSeed
           <span className="badge">seed {seed}</span>
           {poziom ? <span className="badge">poziom {poziom}</span> : null}
           {kat ? <span className="badge">{kat}</span> : null}
-          {drill ? <span className="badge">drill {drill}</span> : null}
           <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button type="button" className="mini" onClick={() => navigate('/trener')}>
-              ← Wybór
+            <button type="button" className="mini" onClick={() => navigate('/trening?format=opis')}>
+              ← Trening
             </button>
             <button type="button" className="mini" onClick={onNextSeed}>
               Losuj następny

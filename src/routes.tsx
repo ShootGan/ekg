@@ -9,13 +9,14 @@ export interface NavItem {
   path: string;
   label: string;
   page: ComponentType;
+  hidden?: boolean;
 }
 
 export const NAV: NavItem[] = [
   { path: '/', label: 'Start', page: Home },
   { path: '/atlas', label: 'Atlas', page: AtlasPage },
-  { path: '/trener', label: 'Trener', page: TrainerPage },
   { path: '/trening', label: 'Trening', page: TrainingPage },
+  { path: '/trener', label: 'Trener', page: TrainerPage, hidden: true },
   { path: '/postepy', label: 'Postępy', page: ProgressPage },
 ];
 

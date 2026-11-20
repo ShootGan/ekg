@@ -964,3 +964,128 @@
   line-height: 1.35;
   color: var(--muted);
 }
+
+/* ---------- TRENING: ekran wyboru ----------------------------------------- */
+
+.train-setup {
+  display: grid;
+  gap: 24px;
+  max-width: 880px;
+}
+
+.train-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.train-label {
+  font-size: 14px;
+  color: var(--muted);
+  padding-top: 8px;
+}
+
+.train-formats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.train-format {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  padding: 16px;
+  border-radius: var(--r-card);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+
+.train-format b {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.train-format span {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink-2);
+}
+
+.train-format:hover {
+  border-color: var(--line-2);
+}
+
+.train-format.on {
+  background: var(--panel);
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.train-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.train-go {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-left: 112px;
+}
+
+.train-go .btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.train-more {
+  padding-left: 112px;
+}
+
+.train-more summary {
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.train-row-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.train-row-inline select {
+  max-width: 380px;
+}
+
+.train-row-inline input {
+  width: 200px;
+  font-family: var(--mono);
+}
+
+@media (max-width: 700px) {
+  .train-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .train-label {
+    padding-top: 0;
+  }
+  .train-formats {
+    grid-template-columns: 1fr;
+  }
+  .train-go,
+  .train-more {
+    padding-left: 0;
+  }
+}

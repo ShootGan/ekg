@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { PaperStrip } from '../components/PaperStrip';
 import { PRZYPADKI } from '../data/przypadki';
 import { ZAB } from '../data/atlas';
 
-const HERO_CFG = { rhythm: 'sinus' as const, hr: 72 };
+const HERO_IDS = ['stemi-inf', 'af', 'av3', 'lbbb', 'afl', 'wenckebach', 'hiperk', 'vt', 'sinus'];
+const HERO = HERO_IDS.map((id) => ZAB.find((z) => z.id === id)).filter((z): z is (typeof ZAB)[number] => !!z);
+const HERO_CFGS = HERO.map((z) => z.cfg);
 
 const PODGLAD: { txt: string; meta: string; v: 'ok' | 'miss' | 'zle'; werdykt: string }[] = [
   { txt: 'Uniesienie ST', meta: 'II, III, aVF', v: 'ok', werdykt: 'poprawne' },
@@ -15,6 +18,9 @@ const WZORCE = ['sinus', 'av1', 'stemi-inf', 'af', 'lbbb'];
 const MINI = WZORCE.map((id) => ZAB.find((z) => z.id === id)).filter((z): z is (typeof ZAB)[number] => !!z);
 
 export function Home() {
+  const [now, setNow] = useState(0);
+  const cur = HERO[now];
+
   return (
     <div className="land">
       <section className="land-hero">
@@ -34,11 +40,19 @@ export function Home() {
       </section>
 
       <div className="land-strip">
-        <PaperStrip cfg={HERO_CFG} leads={['I', 'II', 'III']} live mmPx={6} rowMm={18} label="Zapis EKG rysowany na żywo w odprowadzeniach I, II i III" />
+        <PaperStrip cfg={HERO_CFGS} onCase={setNow} leads={['I', 'II', 'III']} live mmPx={6} rowMm={18} label="Zapis EKG rysowany na żywo w odprowadzeniach I, II i III" />
       </div>
       <div className="land-strip-cap">
-        <span>Ten sam wektor rzutowany na trzy osie. Odprowadzenie II leży prawie wzdłuż niego, dlatego ma najwyższe R.</span>
-        <span className="land-mono">25 mm/s · 10 mm/mV</span>
+        <span>
+          Teraz na pasku:{' '}
+          {cur ? (
+            <a className="land-link" href={'#/atlas/' + cur.id}>
+              {cur.name}
+            </a>
+          ) : null}
+          . Każdy przebieg pióra to inny wzorzec z atlasu.
+        </span>
+        <span className="land-mono">25 mm/s · 10 mm/mV · I, II, III</span>
       </div>
 
       <section className="land-sec">
@@ -66,7 +80,7 @@ export function Home() {
             </ul>
           </a>
           <div className="land-side">
-            <a href="#/trener">
+            <a href="#/trening?format=opis">
               <h3>Pełny opis</h3>
               <p>Rytm, przewodzenie, oś, QRS, ST i T, na koniec wniosek i postępowanie.</p>
             </a>

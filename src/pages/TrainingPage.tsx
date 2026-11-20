@@ -1,12 +1,147 @@
+import { useState } from 'react';
 import { useHashRoute } from '../lib/hash';
 import { randomSeed } from '../lib/generate';
+import { lastIds } from '../lib/historia';
+import { useReal } from '../lib/real';
 import { Quiz } from '../trainer/Quiz';
 import { KATY } from '../trainer/steps';
 import { PRZYPADKI } from '../data/przypadki';
 import { RealToggle } from '../components/RealToggle';
 
-const DRILLE = KATY.filter(([k]) => PRZYPADKI.some((p) => p.kat === k));
-const REAL_COUNT = PRZYPADKI.filter((p) => p.id.startsWith('real-')).length;
+type Format = 'quiz' | 'opis';
+
+const DZIALY = KATY.filter(([k]) => PRZYPADKI.some((p) => p.kat === k));
+
+const POZIOMY: { p: 1 | 2 | 3; t: string }[] = [
+  { p: 1, t: 'podstawy' },
+  { p: 2, t: 'średni' },
+  { p: 3, t: 'trudny' },
+];
+
+const FORMATY: { f: Format; t: string; opis: string }[] = [
+  { f: 'quiz', t: 'Quiz', opis: 'Lista zmian i pułapek. Zaznaczasz to, co naprawdę widzisz.' },
+  { f: 'opis', t: 'Pełny opis', opis: 'Opis krok po kroku od rytmu do wniosku, z punktacją i kluczem.' },
+];
+
+function Setup({ navigate, start }: { navigate: (to: string) => void; start: Format }) {
+  const [format, setFormat] = useState<Format>(start);
+  const [kat, setKat] = useState<string | null>(null);
+  const [poziom, setPoziom] = useState<1 | 2 | 3 | null>(null);
+  const [konkret, setKonkret] = useState('');
+  const [seed, setSeed] = useState('');
+  const [real] = useReal();
+
+  const baza = PRZYPADKI.filter((x) => (!kat || x.kat === kat) && (!poziom || x.poziom === poziom));
+  const realne = baza.filter((x) => x.id.startsWith('real-'));
+  const pula = real && realne.length ? realne.length : baza.length - realne.length;
+
+  const go = (s: number, extra?: Record<string, string>) => {
+    const p = new URLSearchParams();
+    if (poziom) p.set('poziom', String(poziom));
+    if (kat) p.set('kat', kat);
+    for (const [k, v] of Object.entries(extra || {})) p.set(k, v);
+    const q = p.toString();
+    if (format === 'quiz') navigate('/trening/quiz?seed=' + s + (q ? '&' + q : ''));
+    else navigate('/trener/' + s + (q ? '?' + q : ''));
+  };
+
+  const recent = lastIds(5);
+
+  return (
+    <>
+      <div className="page-head">
+        <h2>Trening</h2>
+        <RealToggle />
+      </div>
+
+      <div className="train-setup">
+        <div className="train-row">
+          <div className="train-label">Format</div>
+          <div className="train-formats">
+            {FORMATY.map((x) => (
+              <button
+                key={x.f}
+                type="button"
+                className={'train-format' + (format === x.f ? ' on' : '')}
+                aria-pressed={format === x.f}
+                onClick={() => setFormat(x.f)}
+              >
+                <b>{x.t}</b>
+                <span>{x.opis}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="train-row">
+          <div className="train-label">Dział</div>
+          <div className="train-chips">
+            <button type="button" className={kat === null ? 'on' : undefined} onClick={() => setKat(null)}>
+              Wszystkie
+            </button>
+            {DZIALY.map(([k, t]) => (
+              <button key={k} type="button" className={kat === k ? 'on' : undefined} onClick={() => setKat(kat === k ? null : k)}>
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="train-row">
+          <div className="train-label">Poziom</div>
+          <div className="train-chips">
+            <button type="button" className={poziom === null ? 'on' : undefined} onClick={() => setPoziom(null)}>
+              Każdy
+            </button>
+            {POZIOMY.map(({ p, t }) => (
+              <button key={p} type="button" className={poziom === p ? 'on' : undefined} onClick={() => setPoziom(poziom === p ? null : p)}>
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="train-go">
+          <button type="button" className="btn-primary" onClick={() => go(randomSeed())} disabled={!pula}>
+            Losuj zapis
+          </button>
+          <span className="muted">{pula ? pula + ' zapisów w puli' : 'Brak zapisów dla tych filtrów'}</span>
+        </div>
+
+        <details className="train-more">
+          <summary>Konkretny przypadek albo seed</summary>
+          <div className="train-row-inline">
+            <select value={konkret} onChange={(e) => setKonkret(e.target.value)}>
+              <option value="">Wybierz przypadek z banku</option>
+              {PRZYPADKI.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.id} · poziom {p.poziom} · {p.kat}
+                </option>
+              ))}
+            </select>
+            <button type="button" onClick={() => konkret && go(randomSeed(), { id: konkret })} disabled={!konkret}>
+              Otwórz
+            </button>
+          </div>
+          <div className="train-row-inline">
+            <input type="number" placeholder="seed, np. 123456" value={seed} onChange={(e) => setSeed(e.target.value)} />
+            <button
+              type="button"
+              onClick={() => {
+                const n = Number(seed);
+                if (n > 0 && isFinite(n)) go(Math.floor(n));
+              }}
+              disabled={!seed}
+            >
+              Otwórz seed
+            </button>
+          </div>
+          {recent.length ? <p className="muted">Ostatnio: {recent.join(', ')}</p> : null}
+        </details>
+      </div>
+    </>
+  );
+}
 
 export function TrainingPage() {
   const { path, params, navigate } = useHashRoute();
@@ -17,54 +152,11 @@ export function TrainingPage() {
     const poziomRaw = params.get('poziom');
     const poziom = poziomRaw === '1' ? 1 : poziomRaw === '2' ? 2 : poziomRaw === '3' ? 3 : undefined;
     const katRaw = params.get('kat');
-    const kat = katRaw && DRILLE.some(([k]) => k === katRaw) ? katRaw : undefined;
+    const kat = katRaw && DZIALY.some(([k]) => k === katRaw) ? katRaw : undefined;
     const idRaw = params.get('id');
     const id = idRaw && PRZYPADKI.some((p) => p.id === idRaw) ? idRaw : undefined;
     return <Quiz seed={seed} poziom={poziom} kat={kat} id={id} navigate={navigate} />;
   }
 
-  return (
-    <>
-      <div className="page-head">
-        <h2>Trening</h2>
-        <RealToggle />
-      </div>
-      <p className="page-lead">
-        Zapisy z modelu wektorowego serca. <b>Real</b> dokłada przypadki, w których nakłada się kilka zmian naraz — jak
-        na karetce, nie jak w podręczniku. {REAL_COUNT ? `Takich zapisów jest ${REAL_COUNT}.` : ''}
-      </p>
-
-      <div className="pick-grid">
-        <a className="pick-card primary" href={'#/trening/quiz?seed=' + randomSeed()}>
-          <h3>Quiz na zapisie</h3>
-          <p>
-            Wydruk i lista zmian — zaznaczasz te, które naprawdę widzisz, plus pułapki, których w zapisie nie ma. Po
-            sprawdzeniu wydruk pokazuje, gdzie każdą z nich widać.
-          </p>
-          <span className="pick-go">Zacznij quiz →</span>
-        </a>
-        <a className="pick-card" href={'#/trener/' + randomSeed()}>
-          <h3>Pełny opis</h3>
-          <p>Dziewięć kroków od rytmu do wniosku, z punktacją i porównaniem z kluczem przypadku.</p>
-          <span className="pick-go">Uruchom opis →</span>
-        </a>
-        <a className="pick-card" href="#/postepy">
-          <h3>Postępy i powtórka</h3>
-          <p>Wyniki według działów, osobno dla quizu i pełnego opisu, plus lista przypadków do powtórzenia.</p>
-          <span className="pick-go">Zobacz wyniki →</span>
-        </a>
-      </div>
-
-      <div className="kat-bar">
-        <span className="sub" style={{ margin: '0 4px 0 0' }}>
-          Quiz w jednym dziale
-        </span>
-        {DRILLE.map(([k, t]) => (
-          <button key={k} type="button" onClick={() => navigate('/trening/quiz?seed=' + randomSeed() + '&kat=' + k)}>
-            {t}
-          </button>
-        ))}
-      </div>
-    </>
-  );
+  return <Setup key={params.get('format') || 'quiz'} navigate={navigate} start={params.get('format') === 'opis' ? 'opis' : 'quiz'} />;
 }

@@ -43,8 +43,8 @@ export function App() {
             <small>atlas i trener opisu</small>
           </a>
           <nav className="nav" aria-label="Nawigacja główna">
-            {NAV.map((item) => (
-              <a key={item.path} href={'#' + item.path} aria-current={route === item ? 'page' : undefined}>
+            {NAV.filter((item) => !item.hidden).map((item) => (
+              <a key={item.path} href={'#' + item.path} aria-current={route === item || (route?.hidden && item.path === '/trening') ? 'page' : undefined}>
                 {item.label}
               </a>
             ))}

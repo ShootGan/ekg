@@ -13,8 +13,8 @@ export function NotFound() {
           <a className="badge" href="#/atlas">
             Atlas
           </a>
-          <a className="badge" href="#/trener">
-            Trener
+          <a className="badge" href="#/trening">
+            Trening
           </a>
         </p>
       </div>

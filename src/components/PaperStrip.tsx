@@ -4,7 +4,8 @@ import type { ECGConfig, Generator, SchedulerState } from '../model/ecg';
 import { mulberry32 } from '../lib/rng';
 
 export interface PaperStripProps {
-  cfg: ECGConfig;
+  cfg: ECGConfig | ECGConfig[];
+  onCase?: (i: number) => void;
   leads: string[];
   rowMm?: number;
   mmPx?: number;
@@ -53,8 +54,10 @@ function drawGrid(g: CanvasRenderingContext2D, w: number, h: number, mm: number)
   for (let j = 0; j * mm <= h; j++) line(0, Math.round(j * mm) + 0.5, w, Math.round(j * mm) + 0.5, j % 5 === 0);
 }
 
-export function PaperStrip({ cfg, leads, rowMm = 18, mmPx = 6, live = false, seed = 7, className, label }: PaperStripProps) {
+export function PaperStrip({ cfg, onCase, leads, rowMm = 18, mmPx = 6, live = false, seed = 7, className, label }: PaperStripProps) {
   const hostRef = useRef<HTMLDivElement | null>(null);
+  const onCaseRef = useRef(onCase);
+  onCaseRef.current = onCase;
   const cvRef = useRef<HTMLCanvasElement | null>(null);
   const cfgKey = JSON.stringify(cfg);
 
@@ -64,7 +67,18 @@ export function PaperStrip({ cfg, leads, rowMm = 18, mmPx = 6, live = false, see
     if (!host || !cv) return;
     const g = cv.getContext('2d');
     if (!g) return;
-    const src = source(JSON.parse(cfgKey) as ECGConfig, seed);
+    const parsed = JSON.parse(cfgKey) as ECGConfig | ECGConfig[];
+    const cfgs = Array.isArray(parsed) ? parsed : [parsed];
+    const srcs = new Map<number, Src>();
+    const srcFor = (i: number) => {
+      let s = srcs.get(i);
+      if (!s) {
+        s = source(cfgs[i], seed + i);
+        srcs.set(i, s);
+      }
+      return s;
+    };
+    let shown = -1;
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const animate = live && !reduced;
     const speed = SPEED_MM * mmPx;
@@ -80,7 +94,11 @@ export function PaperStrip({ cfg, leads, rowMm = 18, mmPx = 6, live = false, see
     let ink = '#1b1714';
     let pen = '#b4232c';
 
-    const value = (lead: string, p: number) => src.gen.lead(lead, (p / speed) % SPAN, src.S, {});
+    const caseAt = (p: number) => Math.floor(p / w) % cfgs.length;
+    const value = (lead: string, p: number) => {
+      const src = srcFor(caseAt(p));
+      return src.gen.lead(lead, (p / speed) % SPAN, src.S, {});
+    };
 
     const fill = (from: number, to: number) => {
       for (let p = from; p < to; p++) {
@@ -108,10 +126,12 @@ export function PaperStrip({ cfg, leads, rowMm = 18, mmPx = 6, live = false, see
       pen = cssVar('--pen', '#b4232c');
       ys = leads.map(() => new Float32Array(w).fill(NaN));
       drawn = 0;
+      shown = -1;
       t0 = performance.now();
       if (!animate) {
         fill(0, w);
         drawn = w;
+        onCaseRef.current?.(0);
       }
     };
 
@@ -157,6 +177,12 @@ export function PaperStrip({ cfg, leads, rowMm = 18, mmPx = 6, live = false, see
       if (target > drawn) {
         fill(drawn, target);
         drawn = target;
+        const c = caseAt(drawn);
+        if (c !== shown) {
+          shown = c;
+          onCaseRef.current?.(c);
+          if (srcs.size > 3) for (const k of srcs.keys()) if (k !== c && k !== (c + 1) % cfgs.length) srcs.delete(k);
+        }
       }
       render();
       raf = requestAnimationFrame(tick);

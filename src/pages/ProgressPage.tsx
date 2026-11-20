@@ -95,8 +95,8 @@ export function ProgressPage() {
           <button type="button" onClick={quizSlabe} disabled={!qworst}>
             Quiz: słabe strony{qworst ? ' (' + katLabel(qworst.kat) + ', ' + qworst.avg + '%)' : ''}
           </button>
-          <button type="button" onClick={() => navigate('/trener')}>
-            Losowy przypadek
+          <button type="button" onClick={() => navigate('/trening')}>
+            Trening
           </button>
           <button
             type="button"

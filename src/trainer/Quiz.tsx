@@ -8,6 +8,7 @@ import { PRZYPADKI } from '../data/przypadki';
 import { useReal } from '../lib/real';
 import { RealToggle } from '../components/RealToggle';
 import { ATLAS_LINK, WYJASNIENIA } from '../data/wyjasnienia';
+import { JAK, nieTu } from '../data/jak';
 
 export interface QuizProps {
   seed: number;
@@ -83,6 +84,7 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
   const [retry, setRetry] = useState<Retry[]>([]);
   const [hover, setHover] = useState<Focus | null>(null);
   const [pinned, setPinned] = useState<Focus | null>(null);
+  const [tour, setTour] = useState<number | null>(null);
   const ref = useRef<EcgPrintHandle | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
   const printRef = useRef<HTMLDivElement | null>(null);
@@ -94,6 +96,7 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
     setChecked(false);
     setHover(null);
     setPinned(null);
+    setTour(null);
   };
 
   useEffect(() => {
@@ -181,6 +184,16 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
       const tag = el?.tagName ?? '';
       if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
       const onControl = !!el?.closest?.('button, a, summary, [role="button"]');
+      if (checked && tourRef.current != null) {
+        if (e.code === 'ArrowRight' || (!onControl && (e.code === 'Enter' || e.code === 'Space'))) {
+          e.preventDefault();
+          goTourRef.current(tourRef.current + 1);
+        } else if (e.code === 'ArrowLeft') {
+          e.preventDefault();
+          goTourRef.current(tourRef.current - 1);
+        } else if (e.code === 'Escape') goTourRef.current(null);
+        return;
+      }
       if (checked) {
         if (onControl) return;
         if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
@@ -205,6 +218,52 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
   }, [checked, next, check, toggle, round]);
 
   const solved = useMemo(() => (done ? Math.round(pktSum / done) : 0), [done, pktSum]);
+
+  const kroki = useMemo(() => {
+    if (!checked || !round) return [];
+    const jest = round.items.filter((c) => c.jest).map((c) => ({ c, pulapka: false }));
+    const pul = round.items.filter((c) => !c.jest && sel.includes(c.id)).map((c) => ({ c, pulapka: true }));
+    return [...jest, ...pul];
+  }, [checked, round, sel]);
+
+  const tourRef = useRef<number | null>(null);
+  tourRef.current = tour;
+  const goTour = (i: number | null) => {
+    if (i == null || i < 0 || i >= kroki.length) {
+      setTour(null);
+      setPinned(null);
+      setHover(null);
+      ref.current?.reset();
+      return;
+    }
+    setTour(i);
+    setHover(null);
+    const k = kroki[i];
+    if (k.pulapka || !round) {
+      setPinned(null);
+      ref.current?.reset();
+      return;
+    }
+    setPinned({ kind: 'c', id: k.c.id });
+    const ms = marksFor(k.c.k, round.gen.key.zaznaczenia);
+    const leads = new Set(ms.map((m) => m.n));
+    if (ms.length && leads.size === 1) ref.current?.focusOn(ms[0].t0, ms[0].t1, ms[0].n, 2.5);
+    else ref.current?.reset();
+    printRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+  const goTourRef = useRef(goTour);
+  goTourRef.current = goTour;
+
+  const autoTour = useRef(false);
+  useEffect(() => {
+    if (!checked) {
+      autoTour.current = false;
+      return;
+    }
+    if (autoTour.current || !kroki.length) return;
+    autoTour.current = true;
+    goTourRef.current(0);
+  }, [checked, kroki]);
 
   const kryteria = useMemo(() => (round ? round.gen.key.elementy.map((t) => ({ t, ...kryterium(t) })) : []), [round]);
 
@@ -346,8 +405,53 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
           </div>
 
           <div ref={resultRef} aria-live="polite">
-            {checked ? (
+            {checked && tour != null && kroki[tour] ? (
+              <div className="card tour">
+                <div className="tour-top">
+                  <span className="tour-dots" aria-hidden>
+                    {kroki.map((k, i) => (
+                      <i key={k.c.id} className={(i === tour ? 'on ' : '') + (k.pulapka ? 'pul' : sel.includes(k.c.id) ? 'ok' : 'miss')} />
+                    ))}
+                  </span>
+                  <span className="tour-n">
+                    {tour + 1} z {kroki.length}
+                  </span>
+                  <button type="button" className="mini" onClick={() => goTour(null)}>
+                    Zamknij
+                  </button>
+                </div>
+                {(() => {
+                  const k = kroki[tour];
+                  const st = k.pulapka ? 'pul' : sel.includes(k.c.id) ? 'ok' : 'miss';
+                  return (
+                    <div key={k.c.id} className="tour-body">
+                      <div className={'tour-badge ' + st}>{st === 'ok' ? 'Trafione' : st === 'miss' ? 'Przeoczone' : 'Tego tu nie ma'}</div>
+                      <h3>{k.c.t}</h3>
+                      <p>{k.pulapka ? nieTu(k.c.id, round.gen) : JAK[k.c.id]}</p>
+                      {!k.pulapka && k.c.k.leads.length ? (
+                        <p className="tour-leads">
+                          Na wydruku: <b>{k.c.k.leads.join(', ')}</b>
+                        </p>
+                      ) : null}
+                    </div>
+                  );
+                })()}
+                <div className="opis-nav">
+                  <button type="button" onClick={() => goTour(tour - 1)} disabled={tour === 0}>
+                    ← Wstecz
+                  </button>
+                  <button type="button" className="accent" onClick={() => goTour(tour + 1)}>
+                    {tour === kroki.length - 1 ? 'Podsumowanie' : 'Dalej →'}
+                  </button>
+                </div>
+              </div>
+            ) : checked ? (
               <div className="card">
+                {kroki.length ? (
+                  <button type="button" className="accent tour-start" onClick={() => goTour(0)}>
+                    Omów zapis krok po kroku →
+                  </button>
+                ) : null}
                 <div style={{ fontSize: 14, marginBottom: 6, lineHeight: 1.5 }}>
                   {perfect ? (
                     <b style={{ color: 'var(--ok)' }}>Wszystko trafione.</b>

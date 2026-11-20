@@ -13,7 +13,7 @@ export interface Mark {
 }
 
 export interface EcgPrintHandle {
-  focusOn(t0: number, t1: number, lead: string): void;
+  focusOn(t0: number, t1: number, lead: string, scale?: number): void;
   reset(): void;
   getLastDt(): number | null;
 }
@@ -492,13 +492,13 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
   useImperativeHandle(
     ref,
     () => ({
-      focusOn(t0: number, t1: number, lead: string) {
+      focusOn(t0: number, t1: number, lead: string, scale = 5) {
         const v = viewRef.current;
         if (!v) return;
         const y = markY(v, lead, t0);
         if (y == null) return;
         const w = v.cv.clientWidth, h = v.cv.clientHeight;
-        v.s = 5;
+        v.s = scale;
         v.base = Math.min(w / W, h / (v.hMm * MM));
         v.ox = w / 2 - (tx(t0) + tx(t1)) / 2 * v.base * v.s;
         v.oy = h / 2 - y * v.base * v.s;

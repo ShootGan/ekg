@@ -604,3 +604,91 @@ h3,
   font-size: 13px;
   margin: 12px 0 0;
 }
+
+/* ---------- QUIZ: omówienie krok po kroku --------------------------------- */
+
+.tour-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.tour-dots {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.tour-dots i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--line-2);
+  transition: transform var(--t-fast) var(--ease);
+}
+
+.tour-dots i.ok { background: var(--ok); }
+.tour-dots i.miss { background: var(--brak); }
+.tour-dots i.pul { background: var(--ink-2); }
+.tour-dots i.on { transform: scale(1.5); }
+
+.tour-n {
+  font: 12px var(--mono);
+  color: var(--muted);
+}
+
+.tour-body {
+  animation: tour-in 260ms var(--ease) both;
+}
+
+@keyframes tour-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-body {
+    animation: none;
+  }
+}
+
+.tour-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+
+.tour-badge.ok { background: var(--okBg); color: var(--ok); }
+.tour-badge.miss { background: var(--brakBg); color: var(--brak); }
+.tour-badge.pul { background: var(--chip); color: var(--ink-2); }
+
+.tour-body h3 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.tour-body p {
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.tour-leads b {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.tour-start {
+  width: 100%;
+  margin-bottom: 12px;
+}

@@ -20,7 +20,7 @@ const POZIOMY: { p: 1 | 2 | 3; t: string }[] = [
 
 const FORMATY: { f: Format; t: string; opis: string }[] = [
   { f: 'quiz', t: 'Quiz', opis: 'Lista zmian i pułapek. Zaznaczasz to, co naprawdę widzisz.' },
-  { f: 'opis', t: 'Pełny opis', opis: 'Opis krok po kroku od rytmu do wniosku, z punktacją i kluczem.' },
+  { f: 'opis', t: 'Pełny opis', opis: 'Pięć kroków od rytmu do rozpoznania i postępowania. Przeoczone zmiany krytyczne są wyróżnione.' },
 ];
 
 function Setup({ navigate, start }: { navigate: (to: string) => void; start: Format }) {

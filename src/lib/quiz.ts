@@ -1,7 +1,7 @@
 import { PRZYPADKI } from '../data/przypadki';
 import { listaRozpoznan, type Rozp } from './generate';
 import { mulberry32 } from './rng';
-import { dxKeyFor } from './wniosek';
+import { dxKeyFor } from './opis';
 
 export interface QuizOption {
   id: string;

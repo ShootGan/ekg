@@ -450,3 +450,157 @@ h3,
     padding-left: 0;
   }
 }
+
+/* ---------- PEŁNY OPIS ---------------------------------------------------- */
+
+.opis-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: grid;
+  gap: 2px;
+}
+
+.opis-steps button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--r-ctl);
+  background: none;
+  color: var(--ink-2);
+  font-size: 14px;
+  text-align: left;
+}
+
+.opis-steps button span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font: 12px var(--mono);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+}
+
+.opis-steps button small {
+  margin-left: auto;
+  font: 12px var(--mono);
+  color: var(--muted);
+}
+
+.opis-steps button:hover {
+  background: var(--chip);
+  color: var(--ink);
+}
+
+.opis-steps button.on {
+  background: var(--chip);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.opis-steps button.on span {
+  background: var(--ink);
+  color: var(--panel);
+  box-shadow: none;
+}
+
+.opis-title {
+  margin: 0;
+}
+
+.opis-q {
+  font-size: 14px;
+  margin: 4px 0 12px;
+}
+
+.opis-pomiar {
+  display: grid;
+  grid-template-columns: 1fr 96px auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.opis-pomiar input {
+  font-family: var(--mono);
+}
+
+.opis-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.opis-cal {
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.opis-score {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.opis-score b {
+  font: 400 36px/1 Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.opis-score span {
+  font-size: 13px;
+}
+
+.opis-alarm {
+  padding: 10px 12px;
+  border-radius: var(--r-ctl);
+  background: #f9e3e1;
+  color: #8f1c23;
+  font-size: 14px;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.opis-group {
+  margin-bottom: 12px;
+}
+
+.opis-kryt {
+  color: var(--pen);
+  font-size: 12px;
+}
+
+.opis-meas {
+  font: 12px var(--mono);
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+
+.opis-line {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 4px 0 8px;
+}
+
+.opis-ok {
+  color: var(--ok);
+}
+
+.opis-bad {
+  color: var(--brak);
+}
+
+.opis-hint {
+  font-size: 13px;
+  margin: 12px 0 0;
+}

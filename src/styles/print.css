@@ -1,0 +1,67 @@
+@media print {
+  :root,
+  :root[data-theme='dark'],
+  :root[data-theme='light'] {
+    --bg: #fff;
+    --panel: #fff;
+    --ink: #000;
+    --muted: #444;
+    --line: #bbb;
+    --paper: #fff;
+    --gridMin: #f4c9c2;
+    --gridMaj: #e88d82;
+    --trace: #000;
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .site-header,
+  .site-footer,
+  .nav,
+  .no-print,
+  .hint {
+    display: none !important;
+  }
+
+  .main {
+    padding: 0;
+  }
+
+  .wrap {
+    max-width: none;
+    padding: 0;
+  }
+
+  .card {
+    border: 1px solid #bbb;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  canvas {
+    background: #fff !important;
+    border: 1px solid #bbb;
+  }
+
+  .ecgprint-scroll {
+    overflow: visible;
+  }
+
+  .ecgprint-scroll canvas {
+    min-width: 0;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}

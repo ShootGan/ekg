@@ -1,0 +1,191 @@
+// Wyjaśnienie każdego przypadku z banku: co dzieje się w sercu i dlaczego zapis wygląda właśnie tak.
+// ATLAS_LINK: przypadek → wzorzec w atlasie z animacją serca (gdy taki istnieje).
+
+export const WYJASNIENIA: Record<string, string> = {
+  'p-pulmonale':
+    'Prawy przedsionek jest pobudzany jako pierwszy i tworzy początkową część załamka P. Gdy jest powiększony (nadciśnienie płucne, POChP, zatorowość, wady wrodzone), jego składowa rośnie, ale nie wydłuża się – dlatego P jest wysoki (>2,5 mm) i szpiczasty, a nie szerszy. Najlepiej widać to w odprowadzeniach dolnych (II, III, aVF), bo wektor pobudzenia prawego przedsionka biegnie w dół.',
+  'p-mitrale':
+    'Lewy przedsionek pobudza się później niż prawy i tworzy drugą część załamka P. Gdy jest powiększony (wada mitralna, nadciśnienie, niewydolność LK), jego pobudzenie trwa dłużej – P robi się szeroki (≥120 ms) i dwugarbny („M”) w II, a w V1 ma głęboką ujemną końcówkę, bo lewy przedsionek leży z tyłu i jego wektor ucieka od V1.',
+  'stary-zawal-dolny':
+    'Martwica ściany dolnej zamieniła mięsień w bliznę, która nie pobudza się elektrycznie. Odprowadzenia patrzące na ścianę dolną (II, III, aVF) „widzą przez okno” w bliźnie pobudzenie przeciwległych ścian, które oddala się od nich – stąd głęboki, szeroki załamek Q. Brak uniesienia ST odróżnia stary zawał od świeżego.',
+  'stary-zawal-przedni':
+    'Blizna po zawale przegrody i ściany przedniej nie generuje sił elektrycznych skierowanych do przodu. Elektrody V1–V3 rejestrują więc tylko pobudzenie tylnych ścian oddalające się od nich – zamiast małego r i S powstaje zespół QS. Brak progresji R w V1–V3 i brak uniesienia ST przemawiają za zawałem przebytym.',
+  rvh: 'Przerośnięta prawa komora przeważa elektrycznie nad lewą, więc wypadkowy wektor QRS przesuwa się w prawo i do przodu: oś odchyla się w prawo, w V1 dominuje wysoki R, a w V5–V6 głębokie S. Przeciążenie daje wtórne obniżenie ST i ujemne T w prawych przedsercowych. Wysokie ciśnienie w krążeniu płucnym powiększa też prawy przedsionek (P pulmonale).',
+  'nadcisnienie-lvh-pm':
+    'Długotrwałe nadciśnienie pogrubia ścianę lewej komory – większa masa daje wyższe woltaże QRS (głębokie S w V1–V2, wysokie R w V5–V6). Gruba ściana repolaryzuje się nieprawidłowo, stąd asymetryczne obniżenie ST i ujemne T w odprowadzeniach lewokomorowych („strain”). Sztywna LK podnosi ciśnienie w lewym przedsionku, który się powiększa – P staje się szeroki i dwugarbny.',
+  'os-lewa-fizjologiczna':
+    'Oś opisuje kierunek średniego wektora depolaryzacji komór. U osób otyłych, starszych i z wysoko ustawioną przeponą serce leży bardziej poziomo, więc wektor kieruje się bardziej w lewo – QRS jest dodatni w I i II, a w aVF bliski zera. Do −30° to wariant normy; dopiero bardziej ujemna oś sugeruje blok przedniej wiązki.',
+  'os-pionowa':
+    'U osób szczupłych i młodych serce wisi pionowo, więc średni wektor QRS kieruje się w dół – ok. +80–90°. QRS w I jest wtedy prawie izoelektryczny, a w aVF i II wyraźnie dodatni. To wariant normy, o ile nie ma innych cech przeciążenia prawej komory.',
+  'sinus-norma':
+    'Węzeł zatokowy pobudza przedsionki od prawej góry w dół i w lewo – P dodatni w I, II, aVF i ujemny w aVR. Po fizjologicznym opóźnieniu w węźle AV (PR 120–200 ms) pobudzenie biegnie przez Hisa i obie odnogi, więc komory aktywują się niemal jednocześnie i QRS jest wąski. Repolaryzacja idzie od nasierdzia do wsierdzia, dlatego T ma ten sam kierunek co QRS.',
+  'bradykardia-zatokowa':
+    'Pobudzenia nadal powstają w węźle zatokowym i przewodzą się prawidłowo – zmienia się tylko częstość, która spada poniżej 50–60/min. Przyczyną bywa wysoki tonus nerwu błędnego (sportowcy, sen, ból, wymioty), leki (β-blokery, digoksyna), hipotermia, niedoczynność tarczycy, wzrost ciśnienia śródczaszkowego lub niedokrwienie ściany dolnej.',
+  'tachykardia-zatokowa':
+    'Węzeł zatokowy przyspiesza pod wpływem katecholamin – to zwykle odpowiedź na gorączkę, ból, lęk, hipowolemię, hipoksję, niedokrwistość lub zatorowość. Kolejność pobudzenia jest prawidłowa (P zatokowy przed każdym QRS), a częstość narasta i zwalnia stopniowo. Leczy się przyczynę, nie samą częstość.',
+  'af-normo':
+    'W przedsionkach krąży wiele chaotycznych fal (350–600/min), żadna nie obejmuje całych przedsionków, więc zamiast P widać drobne fale f. Węzeł AV przepuszcza tylko część pobudzeń, przypadkowo – RR są zupełnie niemiarowe. Przy sprawnym węźle lub lekach zwalniających odpowiedź komór jest prawidłowa (60–100/min), a QRS wąski.',
+  'af-rvr':
+    'Mechanizm przedsionkowy jak w każdym AF – chaotyczne fale f i niemiarowość zupełna. Węzeł AV przepuszcza jednak dużo pobudzeń (np. przy gorączce, odwodnieniu, wysiłku, tyreotoksykozie), więc komory biją >110/min. Krótkie rozkurcze pogarszają napełnianie komór i rzut serca – stąd duszność, spadek ciśnienia i ryzyko niedokrwienia.',
+  'flutter-2-1':
+    'W prawym przedsionku jedna duża fala krąży wokół zastawki trójdzielnej ok. 300 razy na minutę (makro-reentry przez cieśnię trójdzielno-żylną). Przedsionki są pobudzane bez przerwy, więc linia izoelektryczna znika, a fale F tworzą „zęby piły”, ujemne w II, III, aVF. Węzeł AV przepuszcza co drugą falę (blok czynnościowy 2:1) – komory ok. 150/min. Druga fala F często chowa się w QRS lub T.',
+  svt: 'Najczęściej to AVNRT: w węźle AV istnieją dwie drogi (wolna i szybka), które tworzą pętlę. Pobudzenie krąży w niej 150–250/min, przy każdym obiegu schodzi do komór przez prawidłowy układ Hisa (wąski QRS) i jednocześnie wstecznie do przedsionków – P ukrywa się w QRS albo tworzy pseudo-r′ w V1. Napad zaczyna się i kończy nagle; przerywa go Valsalva lub adenozyna.',
+  'vt-mono':
+    'Pobudzenia powstają w mięśniu komory – zwykle reentry wokół blizny pozawałowej. Fala szerzy się od komórki do komórki, bez szybkich włókien Purkinjego, więc QRS jest bardzo szeroki (>140 ms) i dziwaczny, a T przeciwne do QRS. Każdy zespół ma ten sam kształt (monomorficzny), bo pętla jest stała. Przedsionki często bije dalej węzeł zatokowy – rozkojarzenie AV, P „wędrują” przez zespoły.',
+  av1: 'Każde pobudzenie z przedsionków dochodzi do komór, ale wolniej – zwykle opóźnienie jest w węźle AV (leki, wysoki tonus nerwu błędnego, zwłóknienie, niedokrwienie ściany dolnej). PR jest stały i >200 ms, każdy P ma swój QRS. Samo w sobie nie daje objawów, ale bywa elementem cięższej choroby układu przewodzącego.',
+  'stemi-dolny':
+    'Zamknięcie prawej tętnicy wieńcowej (rzadziej okalającej) powoduje transmuralne niedokrwienie ściany dolnej. W fazie plateau między strefą uszkodzenia a zdrowym mięśniem płynie prąd uszkodzenia skierowany w dół – odprowadzenia dolne (II, III, aVF) pokazują uniesienie ST, a aVL i I, patrzące z przeciwnej strony, obniżenie (zmiany przeciwstawne). ST w III wyżej niż w II sugeruje prawą tętnicę wieńcową.',
+  'stemi-przednioprzegrodowy':
+    'Zamknięcie gałęzi przedniej zstępującej (LAD) niedokrwia przegrodę i ścianę przednią. Prąd uszkodzenia płynie do przodu, w stronę elektrod V1–V4, więc tam rośnie ST. Z czasem martwica przegrody usuwa małe r w V1–V3 (QS). Szybka reperfuzja ratuje dużą część lewej komory.',
+  lbbb: 'Lewa odnoga nie przewodzi, więc pobudzenie schodzi tylko prawą. Przegroda depolaryzuje się od prawej do lewej (odwrotnie niż normalnie – znika q w I i V6), a lewa komora jest pobudzana wolno, przez mięsień, bez sieci Purkinjego. Stąd QRS ≥120 ms, szerokie zazębione R w I, aVL, V5–V6 i głębokie S w V1. Repolaryzacja idzie w kolejności nieprawidłowej depolaryzacji – ST i T są przeciwne do QRS. Nowy LBBB z bólem w klatce traktuj jak STEMI.',
+  rbbb: 'Prawa odnoga nie przewodzi. Lewa komora i przegroda pobudzają się normalnie (początek QRS bez zmian), a prawa komora dopiero później, wolno przez mięsień. Ta spóźniona aktywność prawej komory, skierowana w prawo i do przodu, tworzy drugi załamek R′ w V1 (rSR′) i szerokie, „ociężałe” S w I i V6. QRS ≥120 ms; T w V1–V3 zwykle ujemne – to wtórne zmiany.',
+  wenckebach:
+    'Węzeł AV męczy się z każdym pobudzeniem – kolejne P przewodzą się coraz wolniej (PR się wydłuża), aż jedno zostaje zablokowane i wypada QRS. W czasie przerwy węzeł odpoczywa i cykl zaczyna się od nowa z krótkim PR. Blok leży zwykle w węźle AV, więc QRS jest wąski, a rokowanie dobre – często sportowcy, sen, leki lub zawał ściany dolnej.',
+  mobitz2:
+    'Blok leży poniżej węzła AV – w pęczku Hisa lub obu odnogach. Przewodzone pobudzenia mają stały PR, ale nagle, bez ostrzeżenia, P nie przechodzi do komór. Ponieważ uszkodzony jest układ Hisa–Purkinjego, często współistnieje blok odnogi (tu RBBB). Mobitz II grozi nagłym przejściem w blok całkowity z wolnym, niepewnym rytmem zastępczym – wymaga stymulacji.',
+  'av-2-1':
+    'Co drugi załamek P nie jest przewodzony do komór. Przy przewodzeniu 2:1 nie widać, czy PR wydłużał się przed blokiem, więc nie da się rozstrzygnąć, czy to Mobitz I, czy II. Pomaga szerokość QRS: wąski przemawia za blokiem w węźle AV (łagodniejszy), szeroki – za blokiem poniżej węzła (groźniejszy). Komory biją z połową częstości przedsionków.',
+  'av3-waskie':
+    'Żadne pobudzenie z przedsionków nie dochodzi do komór. Przedsionki bije dalej węzeł zatokowy, a komory – niezależny ośrodek zastępczy. Gdy blok jest w węźle AV, ośrodek leży w łączu AV lub pęczku Hisa: QRS jest wąski, częstość ok. 40–60/min, rytm dość stabilny. P i QRS są rozkojarzone – PR jest za każdym razem inny, P „wędrują” przez zespoły.',
+  'av3-szerokie':
+    'Całkowity blok poniżej węzła AV – przedsionki pracują swoim rytmem, a komory pobudza ośrodek zastępczy w mięśniu komory lub odległej części układu przewodzącego. Pobudzenie szerzy się wolno, więc QRS jest szeroki, a częstość bardzo niska (20–40/min) i niestabilna. To najgroźniejsza postać bloku – ryzyko asystolii, wskazana pilna stymulacja.',
+  'stemi-dolny-pk':
+    'Proksymalne zamknięcie prawej tętnicy wieńcowej niedokrwia ścianę dolną i prawą komorę. Do uniesienia ST w II, III, aVF dochodzi uniesienie ST w V1 i w prawokomorowym V4R, bo prąd uszkodzenia płynie też w prawo i do przodu. Prawa komora traci kurczliwość – pacjent jest zależny od obciążenia wstępnego: unikać azotanów, przy hipotensji płyny.',
+  'stemi-dolno-tylny':
+    'Zamknięcie dominującej prawej lub okalającej tętnicy wieńcowej obejmuje ścianę dolną i tylną. Ściana dolna daje uniesienie ST w II, III, aVF. Ściany tylnej nie „widzi” żadne standardowe odprowadzenie – elektrody V1–V3 patrzą na nią od przodu, więc prąd uszkodzenia skierowany do tyłu daje w nich obraz lustrzany: obniżenie ST i wysokie R. Potwierdzają to odprowadzenia V7–V9.',
+  'stemi-boczny-wysoki':
+    'Niedokrwienie wysokiej ściany bocznej (gałąź diagonalna lub marginalna) daje prąd uszkodzenia skierowany w lewo i w górę – uniesienie ST w I i aVL, często też V5–V6. Odprowadzenia dolne patrzą z przeciwnej strony, więc widzą obniżenie ST (III, aVF). Uniesienie bywa niewielkie, dlatego zmiany przeciwstawne są ważnym tropem.',
+  'stemi-przednioboczny':
+    'Proksymalne zamknięcie LAD niedokrwia przegrodę, ścianę przednią i boczną – dużą część lewej komory. Prąd uszkodzenia kieruje się do przodu i w lewo, więc ST rośnie w V2–V6, I i aVL, a III i aVF pokazują obniżenie. Rozległy obszar zagrożonego mięśnia oznacza ryzyko wstrząsu i arytmii – pilna reperfuzja.',
+  'zapalenie-osierdzia':
+    'Zapalenie obejmuje nasierdzie na całym obwodzie serca, a nie obszar jednej tętnicy. Prąd uszkodzenia płynie więc w stronę koniuszka z wielu kierunków – uniesienie ST jest rozlane, wklęsłe, w większości odprowadzeń, bez zmian przeciwstawnych (poza aVR i V1). Zapalenie przedsionków obniża odcinek PR. Tachykardia i ból zależny od pozycji pasują do obrazu.',
+  'nstemi-rozlane':
+    'Niedokrwienie obejmuje warstwę podwsierdziową prawie całej lewej komory (zwężenie pnia lewej tętnicy wieńcowej, choroba wielonaczyniowa lub ciężkie niedotlenienie). Prąd uszkodzenia płynie od nasierdzia do wsierdzia – do wnętrza jamy – więc większość odprowadzeń pokazuje obniżenie ST, a aVR, patrzące od strony jamy, uniesienie. To obraz bardzo dużego zagrożonego obszaru.',
+  hiperkaliemia:
+    'Wysoki potas zmniejsza potencjał spoczynkowy komórek i przyspiesza repolaryzację. Szybsza repolaryzacja daje wysokie, wąskie, szpiczaste T. Dalszy wzrost K⁺ zwalnia przewodzenie: P spłaszcza się i znika (przedsionki są wrażliwsze), PR i QRS się wydłużają, aż QRS zlewa się z T w falę sinusoidalną przed VF lub asystolią. Pierwszy ratunek to wapń dożylnie.',
+  'pvc-czeste':
+    'Ognisko w mięśniu komory wyładowuje się przed kolejnym pobudzeniem zatokowym. Pobudzenie idzie od komórki do komórki, z pominięciem układu Purkinjego – QRS jest szeroki, dziwaczny, bez poprzedzającego P, a T przeciwne do QRS. Węzeł zatokowy bije dalej równo, więc po PVC jest pauza wyrównawcza (dwa odstępy RR). Częste PVC wymagają szukania przyczyny: elektrolity, niedokrwienie, kardiomiopatia.',
+  pac: 'Ognisko w przedsionku wyładowuje się wcześniej niż węzeł zatokowy. Przedwczesny P ma inny kształt, bo pobudzenie startuje z innego miejsca, ale dalej przewodzi się prawidłowo – QRS jest wąski. Ognisko „resetuje” węzeł zatokowy, więc pauza po pobudzeniu jest zwykle niepełna. Bardzo wczesny P może zostać zablokowany w węźle AV albo przewieziony z aberracją.',
+  lafb: 'Przednia wiązka lewej odnogi nie przewodzi, więc przednio-górna część lewej komory pobudza się z opóźnieniem, przez mięsień, od dołu. Ta spóźniona aktywność kieruje wektor QRS w górę i w lewo – oś poniżej −45°, qR w I i aVL, rS w II, III, aVF. QRS pozostaje prawie wąski (<120 ms), bo reszta układu przewodzi normalnie.',
+  prawogram:
+    'Średni wektor depolaryzacji komór kieruje się w prawo (>+90°): QRS ujemny w I, dodatni w aVF. Fizjologicznie zdarza się u dzieci i bardzo szczupłych osób. U dorosłych szukaj przyczyny: przerost lub przeciążenie prawej komory (POChP, zatorowość, nadciśnienie płucne), blok tylnej wiązki, zamiana elektrod rąk.',
+  wezlowy:
+    'Węzeł zatokowy milknie lub zwalnia, a rytm przejmuje ośrodek w łączu AV (40–60/min). Pobudzenie biegnie w dół prawidłowym układem Hisa – QRS jest wąski – i jednocześnie wstecznie do przedsionków. P jest więc ujemny w II, III, aVF i leży tuż przed QRS z krótkim PR, ukryty w nim albo tuż za nim. Częste przy lekach, zatruciu digoksyną, niedokrwieniu ściany dolnej.',
+  lvh: 'Gruba ściana lewej komory daje większe siły elektryczne – wysokie R w V5–V6 i aVL, głębokie S w V1–V2 (np. kryterium Sokolowa-Lyona). Pogrubiały mięsień repolaryzuje się nieprawidłowo i bywa względnie niedokrwiony, stąd asymetryczne obniżenie ST z ujemnym T w odprowadzeniach lewokomorowych („strain”). Przyczyną jest zwykle nadciśnienie lub stenoza aortalna.',
+  'af-wolne':
+    'Przedsionki migoczą jak w każdym AF, ale węzeł AV przepuszcza bardzo mało pobudzeń – komory biją <60/min. Przyczyną może być choroba układu przewodzącego, ale przy digoksynie trzeba myśleć o zatruciu: lek silnie hamuje węzeł AV i daje „nieckowate” obniżenie ST. Niemiarowość może się wtedy paradoksalnie wyrównywać (rytm zastępczy z łącza).',
+  'zatrzymanie-komor':
+    'Przedsionki dalej pobudza węzeł zatokowy – widać regularne P – ale żadne pobudzenie nie dochodzi do komór, a ośrodek zastępczy w komorach się nie włączył. Komory stoją, nie ma rzutu – to NZK z rytmem niedefibrylacyjnym, leczony jak asystolia (RKO, adrenalina), z rozważeniem stymulacji przezskórnej.',
+  'stemi-tylny':
+    'Zamknięcie tętnicy okalającej lub tylnej gałęzi prawej tętnicy niedokrwia ścianę tylną. Standardowe odprowadzenia patrzą na nią tylko od przodu, przez klatkę piersiową – V1–V3 widzą więc lustrzane odbicie: poziome obniżenie ST, wysokie R i dodatnie T. Uniesienie ST pojawia się dopiero w odprowadzeniach tylnych V7–V9. Taki obraz przy bólu to równoważnik STEMI.',
+  wellens:
+    'Krytyczne zwężenie proksymalnej LAD z okresowym niedokrwieniem, które ustąpiło. Mięsień ściany przedniej jest „ogłuszony” i repolaryzuje się nieprawidłowo – w okresie bez bólu T w V2–V4 są głęboko, symetrycznie odwrócone, przy prawie prawidłowym ST i bez Q. To znak ostrzegawczy przed rozległym zawałem przednim; próba wysiłkowa jest przeciwwskazana.',
+  'hiperostre-t':
+    'Najwcześniejsza faza zamknięcia tętnicy, zanim rozwinie się pełne uniesienie ST. Niedokrwione komórki szybciej się repolaryzują, a lokalnie rośnie stężenie potasu – T w odprowadzeniach nad strefą niedokrwienia (V2–V4) robią się wysokie, szerokie u podstawy i symetryczne. Kolejne zapisy co kilka–kilkanaście minut zwykle pokazują narastające uniesienie ST.',
+  wpw: 'Poza węzłem AV istnieje dodatkowa droga (pęczek Kenta) łącząca przedsionek z komorą bez opóźnienia. Część komory jest pobudzana przedwcześnie, wolno przez mięsień – stąd krótkie PR (<120 ms) i fala delta, czyli powolny, „rozmyty” początek QRS. Reszta komór pobudza się prawidłowo, więc QRS jest zespołem zlewnym, poszerzonym. Droga dodatkowa umożliwia częstoskurcze nawrotne (AVRT), a przy AF – bardzo szybkie przewodzenie do komór.',
+  hipotermia:
+    'Zimno zwalnia wszystkie procesy elektryczne: węzeł zatokowy zwalnia, przewodzenie i repolaryzacja się wydłużają (PR, QRS, QT). Charakterystyczna fala J (Osborna) to garb na styku QRS i ST – wynika z różnic w repolaryzacji między warstwami ściany, rośnie wraz ze spadkiem temperatury. Drżenie mięśni daje artefakty. Poniżej ok. 28 °C rośnie ryzyko VF.',
+  hipokaliemia:
+    'Niski potas spowalnia i wydłuża repolaryzację komór. Załamki T spłaszczają się, a wyraźnie widoczne stają się fale U (repolaryzacja włókien Purkinjego i warstw środkowych). T i U zlewają się, co udaje wydłużone QT (właściwie QU), a ST bywa obniżony. Grozi to arytmiami, zwłaszcza przy digoksynie lub lekach wydłużających QT.',
+  'dlugie-qt':
+    'Repolaryzacja komór trwa za długo – najczęściej przez leki blokujące kanał potasowy (haloperidol, makrolidy, fluorochinolony, niektóre leki przeciwarytmiczne), zaburzenia elektrolitowe lub wrodzone kanałopatie. W wydłużonym okresie repolaryzacji mogą powstać wczesne potencjały następcze, które wyzwalają torsade de pointes. QTc >500 ms to duże ryzyko.',
+  tdp: 'Na tle wydłużonego QT wczesne potencjały następcze wyzwalają polimorficzny częstoskurcz komorowy. Ognisko i pętla stale zmieniają położenie, więc oś QRS obraca się wokół linii izoelektrycznej – zespoły narastają i maleją jak skręcona wstęga. Napad bywa samoistnie ustępujący, ale może przejść w VF. Lek z wyboru: siarczan magnezu; bez tętna – defibrylacja.',
+  'niski-woltaz-tamponada':
+    'Płyn w worku osierdziowym oddala serce od elektrod i przewodzi prąd „na boki”, więc QRS jest niski we wszystkich odprowadzeniach. Gdy płynu jest dużo, serce kołysze się w nim i amplituda QRS zmienia się co ewolucję (naprzemienność elektryczna). Uciśnięte jamy napełniają się słabo – kompensacyjna tachykardia. Niski woltaż daje też otyłość, rozedma i obrzęk śluzowaty.',
+  zatorowosc:
+    'Duży materiał zatorowy nagle podnosi opór w tętnicy płucnej. Prawa komora rozciąga się i przeciąża: pojawia się blok prawej odnogi, odchylenie osi w prawo i ujemne T w V1–V3, a czasem S1Q3T3 (głębokie S w I, Q i ujemne T w III). Tachykardia zatokowa to najczęstszy objaw. EKG może być prawidłowe – nie wyklucza zatorowości.',
+  'zatorowosc-subtelna':
+    'Przy mniejszym obciążeniu prawej komory zmiany są subtelne: tachykardia zatokowa, niewielkie S w I, małe q i ujemne T w III (S1Q3T3) oraz płytko ujemne T w V1–V2. Żadna z tych cech nie jest swoista, ale razem z kliniką (nagła duszność, tachykardia, czynniki ryzyka) powinny skłonić do diagnostyki w kierunku zatorowości płucnej.',
+  'dwuwiazkowy-av1':
+    'Uszkodzone są dwie z trzech dróg przewodzenia do komór: prawa odnoga (RBBB) i przednia wiązka lewej odnogi (LAFB – oś skrajnie w lewo). Wszystkie pobudzenia przechodzą jedyną zachowaną drogą – tylną wiązką – a wydłużony PR sugeruje, że i ona przewodzi z trudem. Przy omdleniach to wskazanie do pilnej oceny, bo grozi blok całkowity.',
+  brugada:
+    'Wrodzona kanałopatia sodowa (często mutacja SCN5A) zmniejsza prąd sodowy w nasierdziu drogi odpływu prawej komory. Między nasierdziem a wsierdziem powstaje różnica potencjałów na początku repolaryzacji – w V1–V2 widać wysoki punkt J i łukowate (coved) ST opadające w ujemne T. Gorączka, alkohol i niektóre leki nasilają zjawisko i mogą wyzwolić VF, zwykle w spoczynku lub we śnie.',
+  helmet:
+    'Objaw hełmu to uniesienie odcinka ST zaczynające się jeszcze przed QRS, z kopulastym ST zlanym z T – kształtem przypomina pruski hełm z kolcem. Opisywany u ciężko chorych (wzrost ciśnienia w jamie brzusznej, krwawienie, sepsa); prawdopodobnie część „uniesienia” wynika z ruchu przepony i elektrod. Naśladuje STEMI, ale jest wskaźnikiem bardzo ciężkiego stanu i złego rokowania.',
+  'flutter-4-1':
+    'Mechanizm przedsionkowy jak w każdym trzepotaniu – fala krąży w prawym przedsionku ok. 300/min. Węzeł AV przepuszcza jednak tylko co czwartą falę (przy lekach lub chorobie węzła), więc komory biją ok. 75/min, a między QRS widać po 3–4 „zęby piły”. Wolna, miarowa czynność komór łatwo maskuje rozpoznanie – szukaj fal F w II, III, aVF.',
+  'niemiarowosc-zatokowa':
+    'Częstość węzła zatokowego zmienia się z oddechem: przy wdechu spada tonus nerwu błędnego i rytm przyspiesza, przy wydechu zwalnia. P ma stały kształt i stały PR, zmieniają się tylko odstępy PP i RR, cyklicznie. To wariant normy, typowy u młodych – świadczy o sprawnej regulacji autonomicznej.',
+  'sa-blok-typ2':
+    'Węzeł zatokowy wyładowuje się równo, ale pobudzenie czasem nie przechodzi z węzła do przedsionków. Wypada wtedy cały cykl – P i QRS – a pauza trwa dokładnie dwa odstępy PP. To odróżnia blok SA od zahamowania zatokowego, gdzie pauza nie jest wielokrotnością PP. Przyczyny: choroba węzła zatokowego, leki, niedokrwienie, wysoki tonus błędnika.',
+  'sa-blok-wenckebach':
+    'Wyjście pobudzenia z węzła zatokowego do przedsionków wydłuża się z każdym cyklem, aż jedno nie przechodzi. Sam węzeł zatokowy na EKG jest niewidoczny – widać tylko skutek: odstępy PP się skracają, potem pauza krótsza niż dwa PP, i cykl wraca. PR pozostaje stały, co odróżnia ten obraz od bloku Wenckebacha w węźle AV.',
+  'zahamowanie-zatokowe':
+    'Węzeł zatokowy przestaje na chwilę wytwarzać pobudzenia – nie ma P ani QRS, a pauza nie jest wielokrotnością podstawowego PP (inaczej niż w bloku SA). Długie pauzy (>3 s) dają zawroty i omdlenia. To typowy objaw choroby węzła zatokowego; przyczyną mogą być też leki, hiperkaliemia lub nadwrażliwość zatoki szyjnej.',
+  'niepelny-rbbb':
+    'Przewodzenie w prawej odnodze jest spowolnione, ale nie całkowicie zablokowane. Prawa komora pobudza się z niewielkim opóźnieniem – w V1 pojawia się końcowe r′ (rSr′), a QRS nie przekracza 120 ms. Często spotykany u zdrowych, u sportowców; bywa też objawem przeciążenia prawej komory (np. ubytek przegrody międzyprzedsionkowej).',
+  ivcd: 'Przewodzenie w komorach jest rozlane spowolnione – w mięśniu lub w obwodowych gałęziach układu przewodzącego, a nie w jednej odnodze. QRS jest szeroki (≥120 ms), ale nie ma typowych cech LBBB ani RBBB. Przyczyną bywa kardiomiopatia, blizny po zawałach, hiperkaliemia lub leki blokujące kanał sodowy.',
+  lpfb: 'Tylna wiązka lewej odnogi nie przewodzi, więc dolno-tylna część lewej komory pobudza się z opóźnieniem, przez mięsień. Wektor QRS przesuwa się w prawo i w dół – oś >+90°, rS w I i aVL, qR w III i aVF, QRS prawie wąski. Rozpoznanie wymaga wykluczenia innych przyczyn prawogramu (przerost prawej komory, zatorowość, budowa ciała), bo izolowany LPFB jest rzadki.',
+  'real-af-q-dolny':
+    'W przedsionkach krąży wiele chaotycznych fal, więc nie ma załamków P, a węzeł AV przepuszcza pobudzenia nieregularnie – stąd niemiarowość zupełna i szybka czynność komór. Niezależnie od tego blizna po dawnym zawale ściany dolnej nie przewodzi pobudzenia: elektrody dolne „patrzą” przez martwe okno na odchodzącą od nich aktywację przeciwległej ściany i rejestrują głębokie Q w II, III, aVF. Dwie zmiany, dwa różne procesy – rytm i blizna.',
+  'real-stemi-dolny-pk-av1':
+    'Zamknięcie prawej tętnicy wieńcowej niedokrwia ścianę dolną, a gdy zamknięcie jest proksymalne – także prawą komorę. Prąd uszkodzenia płynie w dół i w prawo, więc ST rośnie w II, III, aVF (wyżej w III niż w II) oraz w V1, a w I i aVL spada. Ta sama tętnica zwykle zaopatruje węzeł zatokowy i węzeł AV: węzeł zatokowy zwalnia (bradykardia), a niedokrwiony węzeł AV przewodzi wolniej – PR się wydłuża.',
+  'real-stemi-dolny-wenck':
+    'Zamknięta tętnica (najczęściej prawa wieńcowa) niedokrwia ścianę dolną – ST unosi się w II, III, aVF, a lustrzanie spada w I i aVL. Ta sama tętnica zaopatruje węzeł AV; niedokrwiony węzeł męczy się z każdym pobudzeniem, więc PR wydłuża się coraz bardziej, aż jedno pobudzenie z przedsionków w ogóle nie przechodzi do komór i wypada QRS. Po pauzie węzeł „odpoczywa” i cykl zaczyna się od nowa.',
+  'real-stemi-przedni-rbbb':
+    'Proksymalne zamknięcie przedniej zstępującej niedokrwia przednią ścianę i przegrodę, a tętnice przegrodowe z LAD zaopatrują też prawą odnogę pęczka Hisa. Prawa odnoga przestaje przewodzić, więc prawa komora pobudza się późno przez mięsień – w V1 powstaje rSR′, a w I i V6 szerokie S. Prąd uszkodzenia nakłada się na to i unosi ST w V1–V3, choć w samym RBBB ST w tych odprowadzeniach powinien być raczej obniżony.',
+  'real-tamponada-alternans':
+    'Płyn w worku osierdziowym tłumi sygnał elektryczny na powierzchni skóry – stąd niski woltaż QRS. Serce „pływa” w płynie i przy każdym skurczu zmienia położenie, więc oś elektryczna kołysze się co drugie pobudzenie i amplituda QRS na przemian rośnie i maleje (naprzemienność elektryczna). Ucisk na prawą stronę serca ogranicza napełnianie, więc rzut spada, a organizm odpowiada tachykardią zatokową.',
+  'real-hipotermia':
+    'Chłód zwalnia wszystkie procesy elektryczne: węzeł zatokowy wolniej się depolaryzuje (bradykardia), węzeł AV wolniej przewodzi (dłuższy PR), a repolaryzacja się wydłuża (długi QT). Różnica w przebiegu repolaryzacji nasierdzia i wsierdzia daje dodatnie ugięcie na przejściu QRS–ST, czyli falę J Osborna – tym wyższą, im niższa temperatura.',
+  'real-lbbb-pvc-av1':
+    'Układ przewodzący jest chory w kilku miejscach naraz: węzeł AV przewodzi wolno (PR >200 ms), a lewa odnoga nie przewodzi wcale, więc pobudzenie schodzi tylko prawą odnogą i lewa komora aktywuje się wolno przez mięsień – QRS jest szeroki, zazębiony, z ST i T przeciwnymi do QRS. Dodatkowo ognisko w mięśniu komór wyładowuje się przedwcześnie: szerokie pobudzenie bez P, po którym jest pauza wyrównawcza.',
+  'real-hiperk-dializa':
+    'Nadmiar potasu zmniejsza spoczynkowy potencjał błonowy – komórki najpierw szybciej się repolaryzują (wysokie, szpiczaste T), potem słabnie przewodzenie na każdym poziomie: w przedsionkach (P się spłaszcza), w węźle AV (PR się wydłuża) i w komorach (QRS się poszerza). Węzeł zatokowy zwalnia. Każda z tych zmian to kolejny etap tego samego procesu – im więcej ich naraz, tym bliżej sinusoidy i zatrzymania.',
+  'real-lvh-nstemi':
+    'Wieloletnie nadciśnienie pogrubia lewą komorę (wysokie QRS) i przeciąża lewy przedsionek, który się powiększa – P staje się szeroki i dwugarbny. Pogrubiała komora repolaryzuje się nieprawidłowo (strain), a gdy dochodzi ostre niedokrwienie podwsierdziowe, ST spada w wielu odprowadzeniach, a w aVR – patrzącym na wnękę komór – unosi się. Zbyt rozległe obniżenie ST przy bólu nie mieści się w samym strain.',
+  'real-af-lbbb':
+    'Chaotyczna aktywność przedsionków nie daje załamków P, a węzeł AV przepuszcza pobudzenia w nieregularnych odstępach – niemiarowość zupełna. Każde przewiedzione pobudzenie trafia na zablokowaną lewą odnogę, schodzi prawą, a lewa komora pobudza się wolno przez mięsień – dlatego wszystkie QRS są szerokie i mają kształt LBBB. Szeroki i niemiarowy rytm to AF z blokiem, nie częstoskurcz komorowy.',
+  'real-af-lvh-strain':
+    'Wieloletnie nadciśnienie przerabia serce na dwa sposoby: rozciągnięty, zwłókniały lewy przedsionek przestaje się kurczyć skoordynowanie (migotanie przedsionków – brak P, niemiarowość zupełna), a pogrubiała lewa komora daje wysokie QRS. Gruba ściana repolaryzuje się nieprawidłowo, więc w V5–V6 ST opada, a T staje się asymetrycznie ujemne – strain.',
+  'real-pochp':
+    'Rozdęte płuca odsuwają serce od elektrod i tłumią sygnał – niski woltaż. Przewlekła hipoksja obkurcza naczynia płucne, prawa komora pracuje pod wysokim ciśnieniem, a prawy przedsionek się powiększa – stąd wysokie, szpiczaste P, przesunięcie osi w prawo i opóźnione pobudzenie prawej komory (rSr′ w V1). Hipoksja, β2-mimetyki i rozciągnięte przedsionki sprzyjają tachykardii i pobudzeniom przedwczesnym.',
+  'real-hipok-pvc':
+    'Niedobór potasu spowalnia i wydłuża repolaryzację komór: T się spłaszcza, a za nim pojawia się fala U, która zlewa się z T i wydłuża odstęp QT(U). Niestabilna, wydłużona repolaryzacja zwiększa pobudliwość komórek mięśnia komór – pojawiają się przedwczesne pobudzenia komorowe, a przy dalszym spadku potasu i magnezu – ryzyko torsade de pointes.',
+  'real-lvh-lafb-av1':
+    'U starszego pacjenta z nadciśnieniem zwłóknienie obejmuje układ przewodzący w kilku miejscach: węzeł AV przewodzi wolniej (PR >200 ms), a przednia wiązka lewej odnogi przestaje przewodzić – górno-boczna część lewej komory pobudza się z opóźnieniem, więc wektor QRS kieruje się w górę i w lewo (lewogram, qR w I i aVL, rS w II, III, aVF). Pogrubiała lewa komora daje wysokie QRS. Chory układ przewodzący może okresowo blokować się całkowicie – stąd omdlenie.',
+  'real-af-wolne-q-przedni':
+    'Migoczące przedsionki nie dają P, a węzeł AV – dodatkowo hamowany β-blokerem i digoksyną – przepuszcza niewiele pobudzeń i nieregularnie, więc czynność komór jest wolna i niemiarowa. Blizna po zawale przednio-przegrodowym nie generuje sił elektrycznych, więc w V1–V3 zamiast narastającego R widać zespoły QS.',
+};
+
+export const ATLAS_LINK: Record<string, string> = {
+  'sinus-norma': 'sinus',
+  'tachykardia-zatokowa': 'stach',
+  'af-normo': 'af',
+  'af-rvr': 'af',
+  'af-wolne': 'af',
+  'flutter-2-1': 'afl',
+  'flutter-4-1': 'afl',
+  svt: 'avnrt',
+  'vt-mono': 'vt',
+  av1: 'av1',
+  wenckebach: 'wenckebach',
+  mobitz2: 'mobitz2',
+  'av-2-1': 'mobitz2',
+  'av3-waskie': 'av3',
+  'av3-szerokie': 'av3',
+  lbbb: 'lbbb',
+  rbbb: 'rbbb',
+  'niepelny-rbbb': 'rbbb',
+  wpw: 'wpw',
+  'stemi-dolny': 'stemi-inf',
+  'stemi-dolny-pk': 'stemi-inf',
+  'stemi-dolno-tylny': 'stemi-inf',
+  'stemi-przednioprzegrodowy': 'stemi-ant',
+  'stemi-przednioboczny': 'stemi-ant',
+  'hiperostre-t': 'stemi-ant',
+  lvh: 'lvh',
+  'nadcisnienie-lvh-pm': 'lvh',
+  hiperkaliemia: 'hiperk',
+  'real-af-q-dolny': 'af',
+  'real-stemi-dolny-pk-av1': 'stemi-inf',
+  'real-stemi-dolny-wenck': 'wenckebach',
+  'real-stemi-przedni-rbbb': 'stemi-ant',
+  'real-lbbb-pvc-av1': 'lbbb',
+  'real-hiperk-dializa': 'hiperk',
+  'real-lvh-nstemi': 'lvh',
+  'real-af-lbbb': 'af',
+  'real-af-lvh-strain': 'af',
+  'real-lvh-lafb-av1': 'av1',
+  'real-af-wolne-q-przedni': 'af',
+};

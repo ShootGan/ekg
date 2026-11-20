@@ -3,7 +3,6 @@ import { useHashRoute } from './lib/hash';
 import { NAV, matchRoute } from './routes';
 import { NotFound } from './pages/NotFound';
 import { PulseMark } from './components/PulseMark';
-import { StylePicker } from './components/StylePicker';
 
 class Guard extends Component<{ children: ReactNode; resetKey: string }, { err: Error | null; key: string }> {
   state = { err: null as Error | null, key: this.props.resetKey };
@@ -49,7 +48,6 @@ export function App() {
               </a>
             ))}
           </nav>
-          <StylePicker compact />
         </div>
       </header>
       <main className="main">

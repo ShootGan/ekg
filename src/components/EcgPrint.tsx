@@ -478,22 +478,6 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
   }, [marks, review, reviewStatus, footer]);
 
   useEffect(() => {
-    const onTheme = () => {
-      const v = viewRef.current;
-      if (v) draw(v);
-    };
-    const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
-    mq?.addEventListener?.('change', onTheme);
-    window.addEventListener('ekg-theme', onTheme);
-    window.addEventListener('ekg-style', onTheme);
-    return () => {
-      mq?.removeEventListener?.('change', onTheme);
-      window.removeEventListener('ekg-theme', onTheme);
-      window.removeEventListener('ekg-style', onTheme);
-    };
-  }, []);
-
-  useEffect(() => {
     const v = viewRef.current;
     if (v) v.onCal = onCal;
   }, [onCal]);

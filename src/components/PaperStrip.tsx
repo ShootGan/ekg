@@ -198,15 +198,9 @@ export function PaperStrip({ cfg, onCase, leads, rowMm = 18, mmPx = 6, live = fa
       if (!animate) render();
     });
     ro.observe(host);
-    const onTheme = () => {
-      setup();
-      if (!animate) render();
-    };
-    window.addEventListener('ekg-style', onTheme);
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
-      window.removeEventListener('ekg-style', onTheme);
     };
   }, [cfgKey, leads.join(','), rowMm, mmPx, live, seed]);
 

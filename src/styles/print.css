@@ -1,7 +1,5 @@
 @media print {
-  :root,
-  :root[data-theme='dark'],
-  :root[data-theme='light'] {
+  :root {
     --bg: #fff;
     --panel: #fff;
     --ink: #000;

@@ -5,8 +5,6 @@ import { quizCech, type CechaQ } from '../lib/cechy';
 import { saveEntry } from '../lib/historia';
 import { diagnosticMarks, kryterium, marksFor, type Kryterium } from '../lib/kryteria';
 import { PRZYPADKI } from '../data/przypadki';
-import { useReal } from '../lib/real';
-import { RealToggle } from '../components/RealToggle';
 import { WYJASNIENIA } from '../data/wyjasnienia';
 import { Omowienie, pokazNaWydruku, type KrokOmowienia } from './Omowienie';
 
@@ -42,12 +40,12 @@ function printFooter(pomiary: string): string {
   return `25 mm/s  10 mm/mV    HR ${hr}/min   PR ${pr} ms   QRS ${qrs} ms   QT/QTc ${qt} ms   P/QRS/T ${ax}°`;
 }
 
-function makeRound(seed: number, poziom?: 1 | 2 | 3, kat?: string, exclude: string[] = [], id?: string, real = false): Round {
+function makeRound(seed: number, poziom?: 1 | 2 | 3, kat?: string, exclude: string[] = [], id?: string): Round {
   let gen: GenerateResult;
   try {
-    gen = generateCase({ seed, poziom, kat, excludeIds: exclude, id, real });
+    gen = generateCase({ seed, poziom, kat, excludeIds: exclude, id });
   } catch {
-    gen = generateCase({ seed, excludeIds: exclude, real });
+    gen = generateCase({ seed, excludeIds: exclude });
   }
   return { seed, gen, items: quizCech(gen, seed) };
 }
@@ -87,8 +85,6 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
   const ref = useRef<EcgPrintHandle | null>(null);
   const resultRef = useRef<HTMLDivElement | null>(null);
   const printRef = useRef<HTMLDivElement | null>(null);
-  const [real] = useReal();
-  const realRef = useRef(real);
 
   const reset = () => {
     setSel([]);
@@ -99,15 +95,7 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
   };
 
   useEffect(() => {
-    if (realRef.current === real) return;
-    realRef.current = real;
-    if (!round || checked) return;
-    setRound(makeRound(round.seed, poziom, kat, [], undefined, real));
-    reset();
-  }, [real, round, checked, poziom, kat]);
-
-  useEffect(() => {
-    const r = makeRound(seed, poziom, kat, [], id, realRef.current);
+    const r = makeRound(seed, poziom, kat, [], id);
     setRound(r);
     setSeen([r.gen.key.id]);
     reset();
@@ -122,14 +110,14 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
     }
     const due = retry.find((r) => r.due <= total);
     const s = randomSeed();
-    const r = due ? makeRound(s, undefined, undefined, [], due.id, real) : makeRound(s, poziom, kat, seen, undefined, real);
+    const r = due ? makeRound(s, undefined, undefined, [], due.id) : makeRound(s, poziom, kat, seen);
     if (due) setRetry((q) => q.filter((x) => x !== due));
     setRound(r);
     setSeen((v) => [...v, r.gen.key.id].slice(-24));
     reset();
     syncUrl(s, poziom, kat);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [done, retry, total, poziom, kat, seen, real]);
+  }, [done, retry, total, poziom, kat, seen]);
 
   const toggle = useCallback(
     (cid: string) => {
@@ -313,7 +301,6 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
           ) : null}
         </span>
         <div className="actions">
-          <RealToggle compact />
           {checked ? (
             <button type="button" className="accent mini" onClick={next}>
               {endOfSeries ? 'Nowa seria →' : 'Następne EKG →'}
@@ -344,6 +331,7 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
               {EX.plec}, {EX.wiek} l. · seed {round.seed}
               {touch ? '' : ` · 1–${round.items.length} zaznacza, Enter sprawdza`}
             </div>
+            {PRZYPADKI.find((p) => p.id === key.id)?.poziom === 3 ? <span className="trudny">Trudny</span> : null}
             <h3 style={{ marginTop: 0, marginBottom: 4 }}>Co widzisz na tym zapisie?</h3>
             <p className="muted" style={{ fontSize: 12.5, margin: '0 0 12px', lineHeight: 1.5 }}>
               Na liście są wszystkie zmiany z tego zapisu i kilka pułapek. Zaznacz te, które naprawdę widzisz.

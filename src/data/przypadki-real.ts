@@ -3,7 +3,7 @@ import type { Case } from './przypadki';
 // Przypadki „z karetki”: jak w prawdziwym życiu – w jednym zapisie współistnieje kilka zmian
 // (rytm + przewodzenie + blizna/przerost + niedokrwienie/elektrolity), a nie jeden podręcznikowy wzorzec.
 export const PRZYPADKI_REAL: Case[] = [
-  { id: 'real-af-q-dolny', poziom: 2, kat: 'rytm', wiek: [68, 88], plec: null,
+  { id: 'real-af-q-dolny', poziom: 3, kat: 'rytm', wiek: [68, 88], plec: null,
     ecg: { rhythm: 'af', hr: 132, qWave: 'inferior', tAxis: -30 },
     kontekst: 'Dom opieki, od rana „kołacze serce” i jest osłabiony. RR 105/65, SpO₂ 94%. W karcie: zawał dolny przed laty, bez antykoagulantu.',
     rozpoznanie: 'Migotanie przedsionków z szybką czynnością komór + patologiczne Q w II, III, aVF (przebyty zawał ściany dolnej)',
@@ -51,7 +51,7 @@ export const PRZYPADKI_REAL: Case[] = [
     pulapki: ['fale J mogą być wzięte za uniesienie ST i „STEMI” – kontekst i temperatura rozstrzygają', 'bradykardia w hipotermii jest fizjologiczna – atropina zwykle nie działa, nie stymuluj rutynowo', 'ryzyko VF przy gwałtownym przenoszeniu'],
     postepowanie: 'Delikatnie, w poziomie, zdjąć mokre ubranie, izolacja termiczna, ogrzane wlewy, tlen. Bez gwałtownych ruchów. Przy NZK – resuscytacja wg algorytmu hipotermii. Transport do ośrodka z ECMO wg stanu.' },
 
-  { id: 'real-lbbb-pvc-av1', poziom: 2, kat: 'przewodzenie', wiek: [65, 90], plec: null,
+  { id: 'real-lbbb-pvc-av1', poziom: 3, kat: 'przewodzenie', wiek: [65, 90], plec: null,
     ecg: { rhythm: 'sinus', hr: 82, bbb: 'L', pvc: 0.28, av: 1, pr: 240 },
     kontekst: 'Duszność nocna i kołatanie serca, „serce wypada”. Kardiolog „wpisał blok lewej odnogi”, ale wypisu nie ma. Bez bólu w klatce, RR 140/85.',
     rozpoznanie: 'Rytm zatokowy + blok AV I° + blok lewej odnogi pęczka Hisa + częste przedwczesne pobudzenia komorowe',
@@ -75,7 +75,7 @@ export const PRZYPADKI_REAL: Case[] = [
     pulapki: ['strain LVH daje obniżenie ST i ujemne T w V5–V6, które naśladują niedokrwienie – rozstrzyga dynamika, ból i porównanie ze starym EKG', 'obniżenia ST w ≥6 odprowadzeniach z uniesieniem w aVR to obraz wysokiego ryzyka – nie bagatelizuj, bo „jest LVH”'],
     postepowanie: 'Seryjne EKG co kilkanaście minut, ASA, nitrogliceryna s.l. przy RR >110 i braku przeciwwskazań, monitorowanie. Teletransmisja i konsultacja; transport do ośrodka z całodobową hemodynamiką.' },
 
-  { id: 'real-af-lbbb', poziom: 2, kat: 'przewodzenie', wiek: [70, 92], plec: null,
+  { id: 'real-af-lbbb', poziom: 3, kat: 'przewodzenie', wiek: [70, 92], plec: null,
     ecg: { rhythm: 'af', hr: 104, bbb: 'L' },
     kontekst: 'Narastająca duszność od tygodnia, obrzęki podudzi, śpi na trzech poduszkach. Trzeszczenia u podstaw płuc. RR 150/90.',
     rozpoznanie: 'Migotanie przedsionków + blok lewej odnogi pęczka Hisa',
@@ -83,7 +83,7 @@ export const PRZYPADKI_REAL: Case[] = [
     pulapki: ['szerokie QRS + niemiarowość zupełna to nie VT – VT jest prawie miarowy', 'AF z szerokimi QRS u młodego pacjenta z bardzo szybką akcją – pomyśl o WPW', 'LBBB utrudnia ocenę niedokrwienia – kryteria Sgarbossy przy bólu'],
     postepowanie: 'Pozycja siedząca, tlen przy hipoksji, diuretyk i nitraty wg protokołu przy obrzęku płuc i RR >110. Monitorowanie, transport na SOR.' },
 
-  { id: 'real-af-lvh-strain', poziom: 2, kat: 'rytm', wiek: [65, 90], plec: null,
+  { id: 'real-af-lvh-strain', poziom: 3, kat: 'rytm', wiek: [65, 90], plec: null,
     ecg: { rhythm: 'af', hr: 88, lvh: true, lvhStrain: true },
     kontekst: 'Wieloletnie nadciśnienie, „arytmia od lat”, dziś zawroty głowy. Bez bólu w klatce. RR 175/95.',
     rozpoznanie: 'Migotanie przedsionków z prawidłową czynnością komór + przerost lewej komory z wtórnymi zmianami ST-T (strain)',
@@ -115,7 +115,7 @@ export const PRZYPADKI_REAL: Case[] = [
     pulapki: ['LAFB obniża R w odprowadzeniach dolnych i podwyższa w aVL – kryterium woltażowe aVL może być fałszywie dodatnie', 'blok AV I° + LAFB + omdlenie = podejrzenie przemijającego bloku wyższego stopnia – nie bagatelizuj „dobrego samopoczucia”'],
     postepowanie: 'Monitorowanie w transporcie, elektrody do stymulacji w gotowości. Glikemia, ortostaza, wywiad lekowy (β-bloker, werapamil, digoksyna). Transport na SOR – omdlenie z chorobą układu przewodzącego wymaga obserwacji.' },
 
-  { id: 'real-af-wolne-q-przedni', poziom: 2, kat: 'rytm', wiek: [70, 92], plec: null,
+  { id: 'real-af-wolne-q-przedni', poziom: 3, kat: 'rytm', wiek: [70, 92], plec: null,
     ecg: { rhythm: 'af', hr: 48, qWave: 'anteroseptal', tAnt: -0.3 },
     kontekst: 'Słabość od dwóch dni, „zwolnione tętno” na ciśnieniomierzu. Po zawale przednim, bierze bisoprolol i digoksynę. RR 110/70.',
     rozpoznanie: 'Migotanie przedsionków z wolną czynnością komór + zespoły QS w V1–V3 (przebyty zawał przednio-przegrodowy)',

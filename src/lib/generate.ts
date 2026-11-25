@@ -86,7 +86,6 @@ export interface GenerateOpts {
   id?: string;
   bezKontekstu?: boolean;
   excludeIds?: string[];
-  real?: boolean;
 }
 
 type Ecg = ECGConfig & { avN?: number };
@@ -154,8 +153,6 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
   else {
     if (opts.poziom) pula = pula.filter((p) => p.poziom === opts.poziom);
     if (opts.kat) pula = pula.filter((p) => p.kat === opts.kat);
-    const real = pula.filter((p) => p.id.startsWith('real-'));
-    pula = opts.real && real.length ? real : pula.filter((p) => !p.id.startsWith('real-'));
     if (opts.excludeIds && opts.excludeIds.length) {
       const last = new Set(opts.excludeIds.slice(-12));
       const swieze = pula.filter((p) => !last.has(p.id));

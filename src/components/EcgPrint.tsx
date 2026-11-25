@@ -377,8 +377,8 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
   const viewRef = useRef<View | null>(null);
   const toggleCalRef = useRef<() => void>(() => {});
   const [zoom, setZoom] = useState('1,0×');
-  const [calText, setCalText] = useState('');
-  const [calOn, setCalOnState] = useState(false);
+  const [, setCalText] = useState('');
+  const [, setCalOnState] = useState(false);
   const ecgKey = JSON.stringify(ecg);
 
   useEffect(() => {
@@ -410,7 +410,7 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
     const onDown = (e: PointerEvent) => {
       cv.setPointerCapture(e.pointerId);
       pts[e.pointerId] = [e.clientX, e.clientY];
-      if ((v.calOn || e.shiftKey) && Object.keys(pts).length === 1) {
+      if (false && Object.keys(pts).length === 1) {
         const w = toWorld(v, e);
         v.cal = [w, w];
         v.calDrag = true;
@@ -454,8 +454,7 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement | null)?.tagName ?? '';
       if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
-      if (e.key === 'c' || e.key === 'C') setCal(!v.calOn);
-      else if (e.key === 'Escape') {
+      if (false) {
         v.cal = null;
         calibrate(v);
         draw(v);
@@ -594,17 +593,6 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
         <button type="button" onClick={resetView}>
           Reset
         </button>
-        <button
-          type="button"
-          aria-pressed={calOn}
-          title="Tryb kalibracji / cyrkiel (klawisz C albo Shift): przeciągnij między dwoma punktami"
-          onClick={() => toggleCalRef.current()}
-        >
-          Cyrkiel (kalibracja)
-        </button>
-        <span className="mono" style={{ color: 'var(--accent)' }}>
-          {calText}
-        </span>
       </div>
       <div className="ecgprint-scroll">
         <canvas
@@ -617,14 +605,13 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
             borderRadius: 4,
             border: '1px solid var(--line)',
             touchAction: 'none',
-            cursor: calOn ? 'crosshair' : 'grab',
+            cursor: 'grab',
           }}
         />
       </div>
       <p className="hint no-print">
         25 mm/s · 10 mm/mV · mała kratka = 40 ms / 0,1 mV, duża = 200 ms / 0,5 mV. Kółko myszy lub szczypanie dwoma
-        palcami = zoom, przeciąganie = przesuw. Cyrkiel (C albo Shift): przeciągnij między punktami, wynik zostaje na
-        wydruku. Esc czyści.
+        palcami = zoom, przeciąganie = przesuw.
       </p>
     </div>
   );

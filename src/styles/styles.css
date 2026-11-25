@@ -852,3 +852,71 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.quiz-print {
+  scroll-margin-top: 72px;
+}
+
+.dymek.sheet {
+  position: fixed;
+  top: auto;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  width: auto;
+  max-height: 55vh;
+  overflow-y: auto;
+  z-index: 30;
+  box-shadow: 0 -4px 24px rgba(31, 27, 22, 0.18);
+  transition: none;
+}
+
+.dymek.sheet .tour-body h3 {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.dymek.sheet .tour-body p {
+  font-size: 14px;
+}
+
+@media (max-width: 700px) {
+  .menu-head {
+    margin: 4px 0 20px;
+  }
+  .menu-head p {
+    font-size: 15px;
+    line-height: 23px;
+  }
+  .menu .menu-poziomy {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .menu .train-format {
+    padding: 12px;
+  }
+  .menu .train-format b {
+    font-size: 17px;
+    line-height: 22px;
+  }
+  .menu .train-format span {
+    font-size: 12.5px;
+    line-height: 17px;
+  }
+  .menu .train-setup {
+    gap: 16px;
+  }
+  .menu .train-go {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    margin: 0 -16px;
+    padding: 12px 16px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+  }
+  .menu .train-go .btn-primary {
+    flex: 0 0 auto;
+    padding: 12px 28px;
+  }
+}

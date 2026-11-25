@@ -37,9 +37,9 @@ export const JAK: Record<string, string> = {
   szerQRS: 'QRS trwa 120 ms albo dłużej.',
   LBBB: 'QRS co najmniej 120 ms, szerokie R z zazębieniem w I, aVL, V5–V6 i głęboki S w V1.',
   RBBB: "QRS co najmniej 120 ms, rSR' w V1–V2 i szeroki S w I oraz V6.",
-  iRBBB: "rSR' w V1, ale QRS krótszy niż 120 ms.",
+  iRBBB: "rSR' w V1 przy QRS 110–119 ms. Przy węższym QRS bywa wariantem normy.",
   LAFB: 'Oś poniżej −45°, qR w aVL, rS w II, III i aVF.',
-  LPFB: 'Oś powyżej +90°, rS w I i aVL, qR w III, po wykluczeniu przerostu prawej komory.',
+  LPFB: 'Oś zwykle +100° i więcej, rS w I i aVL, qR w III i aVF, po wykluczeniu przerostu prawej komory i budowy ciała.',
   osL: 'QRS dodatni w I i ujemny w II oraz aVF, oś poniżej −30°.',
   osP: 'QRS ujemny w I i dodatni w aVF, oś powyżej +90°.',
   pulm: 'Wysokie, szpiczaste P, co najmniej 2,5 mm w II, III i aVF.',
@@ -49,20 +49,20 @@ export const JAK: Record<string, string> = {
   rvh: 'Dominujące R w V1, prawogram, głębokie S w V5–V6.',
   niski: 'Amplituda QRS poniżej 5 mm we wszystkich odprowadzeniach kończynowych albo poniżej 10 mm w przedsercowych.',
   alternans: 'Wysokość QRS zmienia się co drugi zespół.',
-  q: 'Q szerokie na 40 ms albo głębokie na co najmniej 25% R, w co najmniej dwóch sąsiednich odprowadzeniach.',
+  q: 'Q szerokie na 30 ms i głębokie na 1 mm (w V2–V3 każde Q od 20 ms albo QS), w dwóch sąsiednich odprowadzeniach. Samo Q w III, aVR i QS w V1 bywa prawidłowe.',
   s1q3t3: 'Głęboki S w I, załamek Q i ujemne T w III.',
   fJ: 'Garb na przejściu QRS w ST (w punkcie J), najlepiej widoczny w V3–V6.',
   brugada: 'Łukowate uniesienie ST o co najmniej 2 mm w V1–V2, przechodzące w ujemne T.',
-  helmet: 'Uniesienie ST zaczyna się jeszcze przed QRS i układa w kształt hełmu.',
-  stUp: 'Punkt J co najmniej 1 mm nad linią izoelektryczną w dwóch sąsiednich odprowadzeniach. W V2–V3 próg to 2 mm u mężczyzn i 1,5 mm u kobiet.',
-  stDn: 'ST co najmniej 0,5 mm poniżej linii izoelektrycznej w dwóch sąsiednich odprowadzeniach.',
+  helmet: 'QRS zlewa się z uniesionym ST w jeden trójkątny kształt, punkt J jest zatarty. Spotykany w ciężkim stanie ogólnym, nie jest swoisty dla zawału.',
+  stUp: 'Punkt J co najmniej 1 mm nad linią izoelektryczną w dwóch sąsiednich odprowadzeniach. W V2–V3 próg to 2 mm u mężczyzn od 40 r.ż., 2,5 mm u młodszych i 1,5 mm u kobiet.',
+  stDn: 'Poziome albo skośne w dół obniżenie ST o co najmniej 0,5 mm w dwóch sąsiednich odprowadzeniach.',
   perikard: 'Rozlane, wklęsłe uniesienie ST w wielu ścianach naraz i obniżenie PR, bez zmian przeciwstawnych poza aVR.',
   tNeg: 'Ujemne T tam, gdzie QRS jest dodatni. W aVR to norma, w III i V1 bywa normą.',
   szpicz: 'Wąskie, wysokie, symetryczne T z ostrym szczytem, jak namiot.',
   hiper: 'Wysokie T szerokie u podstawy nad ścianą, w której zaczyna się zawał, często zanim uniesie się ST.',
   plaskie: 'Załamki T niskie, ledwo odróżnialne od linii izoelektrycznej.',
   U: 'Mały garb po załamku T, najlepiej widoczny w V2–V3.',
-  qtDl: 'QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. T kończy się dalej niż w połowie odstępu RR.',
+  qtDl: 'QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Na oko: T kończy się dalej niż w połowie RR, ale tylko przy częstości ok. 60–90/min.',
 };
 
 export function nieTu(id: string, g: GenerateResult): string {
@@ -89,7 +89,11 @@ export function nieTu(id: string, g: GenerateResult): string {
   if (id === 'tachykardia' && hr != null && hr <= 100) return `Komory biją ${hr}/min, a tachykardia to więcej niż 100/min.`;
   const blokAV = ['wenck', 'mob2', '21', 'av3'].some((x) => jest.has(x));
   if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && jest.has('zatokowy') && blokAV)
-    return 'Załamki P są widoczne i biją miarowo z węzła zatokowego. Nieregularność komór bierze się z bloku AV, nie z innego rytmu.';
+    return 'Załamki P są widoczne i biją miarowo z węzła zatokowego. Wolną albo nieregularną czynność komór tłumaczy blok AV, a nie inny rytm.';
+  if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && jest.has('zatokowy') && (jest.has('pac') || jest.has('pvc')))
+    return 'Rytm podstawowy jest zatokowy: przed QRS jest P o stałym kształcie. Nieregularność wynika tylko z pobudzeń przedwczesnych.';
+  if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && jest.has('zatokowy') && jest.has('pPlaskie'))
+    return 'P jest spłaszczone, ale widoczne przed każdym QRS ze stałym PR. To rytm zatokowy.';
   if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && jest.has('zatokowy') && !jest.has('sa')) return 'Przed każdym QRS jest prawidłowy załamek P, a odstępy RR są równe. To rytm zatokowy.';
   if (['wenck', 'mob2', '21', 'av3'].includes(id) && pr != null && !['wenck', 'mob2', '21', 'av3'].some((x) => jest.has(x)))
     return `Każde P przechodzi do komór, a PR jest stały (${pr} ms).`;

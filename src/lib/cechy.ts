@@ -246,6 +246,22 @@ export function cechyZapisu(g: GenerateResult): CechyZapisu {
   if (K.qtK.length === 1 && K.qtK[0] === 'dl') add('qtDl');
   else if (!K.qtK.length || K.qtK.includes('dl')) niepewne.add('qtDl');
 
+  if (e.s1q3t3 && K.leads.tNeg.req.length >= 2) add('tNeg', K.leads.tNeg.req);
+  const dwuznaczne: [boolean, string[]][] = [
+    [jest.has('pvc'), ['szerQRS', 'LBBB', 'RBBB']],
+    [jest.has('stUp') || jest.has('stDn'), ['tNeg']],
+    [jest.has('stUp'), ['hiper']],
+    [jest.has('RBBB') && jest.has('stUp'), ['brugada']],
+    [jest.has('wenck'), ['av1']],
+    [jest.has('av3'), ['wezlowy']],
+    [jest.has('flutter'), ['21']],
+    [jest.has('LBBB'), ['lvh']],
+    [jest.has('osP'), ['rvh', 'pulm']],
+    [K.pr != null && K.pr >= 190 && K.pr <= 210, ['av1']],
+    [Number(e.tAmp ?? 1) < 0.8 || jest.has('hiperk'), ['stDn']],
+  ];
+  for (const [warunek, ids] of dwuznaczne) if (warunek) ids.forEach((x) => !jest.has(x) && niepewne.add(x));
+
   const patol = [...jest.keys()].filter((x) => x !== 'zatokowy');
   if (!patol.length) add('norma');
   else if (patol.every((x) => x === 'niemiarSin')) {

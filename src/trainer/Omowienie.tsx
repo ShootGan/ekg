@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import type { Cecha } from '../lib/cechy';
 import type { GenerateResult } from '../lib/generate';
 import type { EcgPrintHandle } from '../components/EcgPrint';
@@ -15,6 +16,9 @@ export interface KrokOmowienia {
 const ETYKIETA: Record<KrokSt, string> = { ok: 'Trafione', miss: 'Przeoczone', pul: 'Tego tu nie ma' };
 const GAP = 12;
 const EDGE = 8;
+const WASKI = '(max-width: 760px)';
+
+const waski = () => typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia(WASKI).matches;
 
 export function pokazNaWydruku(k: KrokOmowienia, gen: GenerateResult, print: EcgPrintHandle | null) {
   if (!print) return;
@@ -24,7 +28,7 @@ export function pokazNaWydruku(k: KrokOmowienia, gen: GenerateResult, print: Ecg
   }
   const ms = marksFor(k.c.k, gen.key.zaznaczenia);
   const leads = new Set(ms.map((m) => m.n));
-  if (ms.length && leads.size === 1) print.focusOn(ms[0].t0, ms[0].t1, ms[0].n, 2.5);
+  if (ms.length && leads.size === 1 && !waski()) print.focusOn(ms[0].t0, ms[0].t1, ms[0].n, 2.5);
   else print.reset();
 }
 
@@ -57,9 +61,29 @@ export function Omowienie({ kroki, i, gen, onGo, print, host, tick }: OmowienieP
   const [poz, setPoz] = useState<Poz | null>(null);
   const k = kroki[i];
 
+  const sheet = waski();
+
+  useLayoutEffect(() => {
+    if (!sheet || !k || !host || !print) return;
+    const r = kotwica(k, gen, print);
+    if (!r) {
+      host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    const sc = host.querySelector('.ecgprint-scroll');
+    if (sc) {
+      const sr = sc.getBoundingClientRect();
+      sc.scrollTo({ left: sc.scrollLeft + r.left - sr.left - sr.width / 2 + r.width / 2, behavior: 'smooth' });
+    }
+    const box = boxRef.current;
+    const wolne = window.innerHeight - (box?.offsetHeight ?? 0) - 16;
+    const cel = window.scrollY + r.top - Math.max(72, (wolne - r.height) / 2);
+    window.scrollTo({ top: Math.max(0, cel), behavior: 'smooth' });
+  }, [sheet, k, gen, print, host]);
+
   useLayoutEffect(() => {
     const box = boxRef.current;
-    if (!k || !box || !host) return;
+    if (sheet || !k || !box || !host) return;
     const hr = host.getBoundingClientRect();
     const bw = box.offsetWidth;
     const bh = box.offsetHeight;
@@ -100,14 +124,14 @@ export function Omowienie({ kroki, i, gen, onGo, print, host, tick }: OmowienieP
     }
     const arrow = r && best.below != null ? Math.min(Math.max(16, r.left - hr.left + r.width / 2 - best.left), bw - 16) : null;
     setPoz({ top: best.top, left: best.left, arrow, below: !!best.below });
-  }, [k, gen, print, host, tick]);
+  }, [sheet, k, gen, print, host, tick]);
 
   if (!k) return null;
-  return (
+  const el = (
     <div
       ref={boxRef}
-      className={'dymek' + (poz ? '' : ' hidden') + (poz && poz.arrow != null ? (poz.below ? ' pod' : ' nad') : '')}
-      style={poz ? { top: poz.top, left: poz.left, ['--arrow' as string]: (poz.arrow ?? 0) + 'px' } : undefined}
+      className={sheet ? 'dymek sheet' : 'dymek' + (poz ? '' : ' hidden') + (poz && poz.arrow != null ? (poz.below ? ' pod' : ' nad') : '')}
+      style={!sheet && poz ? { top: poz.top, left: poz.left, ['--arrow' as string]: (poz.arrow ?? 0) + 'px' } : undefined}
       role="dialog"
       aria-label={'Omówienie: ' + k.c.t}
     >
@@ -144,4 +168,5 @@ export function Omowienie({ kroki, i, gen, onGo, print, host, tick }: OmowienieP
       </div>
     </div>
   );
+  return sheet ? createPortal(el, document.body) : el;
 }

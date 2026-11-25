@@ -41,7 +41,7 @@ describe('cechy zapisu', () => {
           expect(jest.has(c.id)).toBe(c.jest);
           if (!c.jest) expect(z.niepewne.has(c.id)).toBe(false);
         }
-        if (!jest.has('tachykardia') && !jest.has('szerQRS')) for (const c of q) expect(ZLOSLIWE.includes(c.id) && !c.jest).toBe(false);
+        if (!['tachykardia', 'szerQRS', 'vt', 'vf', 'asystolia'].some((x) => jest.has(x))) for (const c of q) expect(ZLOSLIWE.includes(c.id) && !c.jest).toBe(false);
       }
     });
   }

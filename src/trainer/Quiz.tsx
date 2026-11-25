@@ -493,22 +493,6 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
                   </button>
                 ) : null}
 
-                <details style={{ marginBottom: 12 }}>
-                  <summary style={{ cursor: 'pointer', color: 'var(--accent)', fontSize: 13 }}>Pułapki i postępowanie</summary>
-                  {key.pulapki.length ? (
-                    <>
-                      <div className="sub">Pułapki</div>
-                      <ul style={{ marginTop: 4 }}>
-                        {key.pulapki.map((x) => (
-                          <li key={x}>{x}</li>
-                        ))}
-                      </ul>
-                    </>
-                  ) : null}
-                  <div className="sub">Postępowanie</div>
-                  <p style={{ marginTop: 4, lineHeight: 1.55 }}>{key.postepowanie}</p>
-                </details>
-
                 {endOfSeries ? (
                   <div className="note" style={{ marginBottom: 12 }}>
                     <b>Koniec serii:</b> {right} / {SERIA} bezbłędnych, średnio {solved}% poprawnych odpowiedzi, najdłuższa

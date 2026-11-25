@@ -247,6 +247,11 @@ export function cechyZapisu(g: GenerateResult): CechyZapisu {
   else if (!K.qtK.length || K.qtK.includes('dl')) niepewne.add('qtDl');
 
   if (e.s1q3t3 && K.leads.tNeg.req.length >= 2) add('tNeg', K.leads.tNeg.req);
+  if (!wide && K.leads.stUp.req.length === 1 && K.leads.stUp.req[0] === 'aVR' && K.leads.stDn.req.length >= 4) add('stUp', ['aVR']);
+  if (ry === 'asystolia' && jest.has('av3')) {
+    jest.delete('av3');
+    niepewne.add('av3');
+  }
   const dwuznaczne: [boolean, string[]][] = [
     [jest.has('pvc'), ['szerQRS', 'LBBB', 'RBBB']],
     [jest.has('stUp') || jest.has('stDn'), ['tNeg']],
@@ -300,7 +305,10 @@ export function quizCech(g: GenerateResult, seed: number, min = 5): CechaQ[] {
 
   const ileFalsz = Math.max(2, min - prawdziwe.length);
   const wybrane: string[] = [];
-  const bliskie = shuffle([...new Set(prawdziwe.flatMap((c) => MYLI[c.id] ?? []))].filter(ok), rnd);
+  const OGOLNE = ['bradykardia', 'tachykardia', 'szerQRS', 'niemiarSin', 'zatokowy'];
+  const glowne = prawdziwe.filter((c) => !OGOLNE.includes(c.id));
+  const pierwsze = glowne.map((c) => MYLI[c.id]?.[0]).filter((x): x is string => !!x && ok(x));
+  const bliskie = [...new Set([...shuffle(pierwsze, rnd), ...shuffle([...new Set(prawdziwe.flatMap((c) => MYLI[c.id] ?? []))].filter(ok), rnd)])];
   for (const id of bliskie) if (wybrane.length < ileFalsz) wybrane.push(id);
   if (wybrane.length < ileFalsz) {
     const reszta = shuffle(CECHY.map((c) => c.id).filter((id) => ok(id) && !wybrane.includes(id)), rnd);

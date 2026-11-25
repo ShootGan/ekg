@@ -372,7 +372,7 @@ const BAZA: Case[] = [
   { id: 'wellens', poziom: 3, kat: 'niedokrwienie', wiek: [45, 75], plec: 'M',
     ecg: { rhythm: 'sinus', hr: 66, tAnt: -1.3 },
     kontekst: 'Wczoraj ból w klatce przez 30 minut, sam ustąpił. Teraz bez bólu, chce tylko „sprawdzić”.',
-    rozpoznanie: 'Zespół Wellensa (typ B): głęboko odwrócone T w V2–V4 – krytyczne zwężenie proksymalnej LAD',
+    rozpoznanie: 'Zespół Wellensa (typ B): głęboko odwrócone T w V2–V3 – krytyczne zwężenie proksymalnej LAD',
     elementy: ['symetrycznie, głęboko odwrócone załamki T w V1–V3 (± V4)', 'brak uniesienia ST', 'brak patologicznych Q, zachowana progresja R', 'w okresie bez bólu', 'wniosek: wysokie ryzyko rozległego zawału przedniego'],
     pulapki: ['„pacjent bez bólu, EKG bez STEMI” – nie zostawiać w domu', 'próba wysiłkowa przeciwwskazana'],
     postepowanie: 'Transport do szpitala z PCI, teletransmisja/konsultacja kardiologiczna. Nie pozostawiać w domu.' },

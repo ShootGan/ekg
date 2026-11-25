@@ -65,6 +65,12 @@ export const JAK: Record<string, string> = {
   qtDl: 'QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Na oko: T kończy się dalej niż w połowie RR, ale tylko przy częstości ok. 60–90/min.',
 };
 
+export function jakTekst(c: { id: string; k: { leads: string[] } }): string {
+  if (c.id === 'stUp' && c.k.leads.length === 1 && c.k.leads[0] === 'aVR')
+    return 'Tu tylko w aVR, i to jest wyjątek od reguły dwóch sąsiednich odprowadzeń: uniesienie ST w aVR (od 1 mm) razem z rozlanym obniżeniem ST w wielu odprowadzeniach sugeruje zwężenie pnia lewej tętnicy wieńcowej albo chorobę wielonaczyniową.';
+  return JAK[c.id] ?? '';
+}
+
 export function nieTu(id: string, g: GenerateResult): string {
   const K = g.key.klucz;
   const qrs = g.M.qrs;

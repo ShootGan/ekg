@@ -4,7 +4,7 @@ import type { Cecha } from '../lib/cechy';
 import type { GenerateResult } from '../lib/generate';
 import type { EcgPrintHandle } from '../components/EcgPrint';
 import { marksFor } from '../lib/kryteria';
-import { JAK, nieTu } from '../data/jak';
+import { jakTekst, nieTu } from '../data/jak';
 
 export type KrokSt = 'ok' | 'miss' | 'pul';
 
@@ -151,7 +151,7 @@ export function Omowienie({ kroki, i, gen, onGo, print, host, tick }: OmowienieP
       <div key={k.c.id} className="tour-body">
         <div className={'tour-badge ' + k.st}>{ETYKIETA[k.st]}</div>
         <h3>{k.c.t}</h3>
-        <p>{k.st === 'pul' ? nieTu(k.c.id, gen) : JAK[k.c.id]}</p>
+        <p>{k.st === 'pul' ? nieTu(k.c.id, gen) : jakTekst(k.c)}</p>
         {k.st !== 'pul' && k.c.k.leads.length ? (
           <p className="tour-leads">
             Obrysowane: <b>{k.c.k.leads.join(', ')}</b>

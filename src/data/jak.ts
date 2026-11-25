@@ -15,7 +15,7 @@ export const JAK: Record<string, string> = {
   norma: 'Rytm zatokowy 60–100/min, PR 120–200 ms, QRS poniżej 120 ms, bez zmian ST-T.',
   zatokowy: 'Dodatni załamek P w II, ujemny w aVR, P pojawiają się miarowo (stałe PP). Przy prawidłowym przewodzeniu AV P jest przed każdym QRS, a PR jest stały.',
   niemiarSin: 'Rytm zatokowy, ale odstępy RR różnią się o ponad 120 ms, zwykle w rytm oddechu.',
-  af: 'Brak załamków P, linia izoelektryczna falista, odstępy RR całkowicie nieregularne. Przy zatruciu digoksyną RR mogą być prawie równe (blok AV z rytmem zastępczym).',
+  af: 'Brak załamków P, linia izoelektryczna falista, odstępy RR całkowicie nieregularne.',
   flutter: 'Fale F jak zęby piły w II, III i aVF, około 300/min. Przy przewodzeniu 2:1 komory biją około 150/min, przy 4:1 około 75/min (między QRS widać 3 fale F).',
   wezlowy: 'Brak P albo P ujemne tuż przed lub tuż po QRS w II, QRS wąskie, częstość zwykle 40–60/min.',
   svt: 'Miarowy częstoskurcz z wąskimi QRS, zwykle 150–250/min, załamki P niewidoczne albo ukryte w ST.',

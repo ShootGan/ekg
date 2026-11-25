@@ -7,7 +7,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'af', hr: 132, qWave: 'inferior', tAxis: -30 },
     kontekst: 'Dom opieki, od rana „kołacze serce” i jest osłabiony. RR 105/65, SpO₂ 94%. W karcie: zawał dolny przed laty, bez antykoagulantu.',
     rozpoznanie: 'Migotanie przedsionków z szybką czynnością komór + patologiczne Q w II, III, aVF (przebyty zawał ściany dolnej)',
-    elementy: ['rytm niemiarowy zupełnie, bez załamków P – migotanie przedsionków', 'szybka czynność komór (>110/min)', 'patologiczne załamki Q w II, III, aVF – blizna po zawale ściany dolnej', 'odwrócone T w II, III, aVF'],
+    elementy: ['rytm niemiarowy zupełnie, bez załamków P – migotanie przedsionków', 'szybka czynność komór (>100/min)', 'patologiczne załamki Q w II, III, aVF – blizna po zawale ściany dolnej', 'odwrócone T w II, III, aVF'],
     pulapki: ['stare Q w II, III, aVF bez uniesień ST to blizna, nie świeży zawał', 'przy szybkiej akcji komór obniżenia ST bywają czynnościowe – oceń po zwolnieniu', 'tachykardia z AF u starszego pacjenta bywa wtórna (infekcja, odwodnienie) – szukaj przyczyny'],
     postepowanie: 'Pacjent stabilny: monitorowanie, dostęp i.v., ocena przyczyny (gorączka, hipowolemia). Kontrola częstości wg protokołu; przy niestabilności – kardiowersja. Transport na SOR, informacja o przebytym zawale i braku antykoagulacji.' },
 
@@ -15,7 +15,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 54, stemi: 'inferior_rv', stAmp: 0.35, av: 1, pr: 250 },
     kontekst: 'Ból w klatce od godziny, zlany potem, nudności, RR 85/50.',
     rozpoznanie: 'STEMI ściany dolnej z zajęciem prawej komory + bradykardia zatokowa + blok AV I°',
-    elementy: ['uniesienie ST w II, III, aVF', 'uniesienie ST w III większe niż w II – prawa tętnica wieńcowa', 'uniesienie ST w V1 – zajęcie prawej komory', 'obniżenie ST w I, aVL – zmiany przeciwstawne', 'bradykardia zatokowa', 'wydłużony PR >200 ms – blok AV I°'],
+    elementy: ['uniesienie ST w II, III, aVF', 'uniesienie ST w III większe niż w II – prawa tętnica wieńcowa', 'uniesienie ST w V1–V2 – zajęcie prawej komory; potwierdź V4R (≥0,5 mm), ostrożnie z azotanami', 'obniżenie ST w I, aVL – zmiany przeciwstawne', 'bradykardia zatokowa', 'wydłużony PR >200 ms – blok AV I°'],
     pulapki: ['bradykardia i blok AV w zawale dolnym to niedokrwienie węzła AV – może narastać do bloku III°', 'zawał prawej komory + hipotensja: nitrogliceryna i morfina mogą gwałtownie obniżyć ciśnienie', 'wykonaj V4R'],
     postepowanie: 'Teletransmisja, kwalifikacja do pierwotnej angioplastyki, ASA, heparyna wg protokołu. Bez nitratów przy hipotensji; ostrożne bolusy płynów przy czystych polach płucnych; atropina przy objawowej bradykardii, elektrody do stymulacji przyklejone. Transport do pracowni hemodynamiki.' },
 
@@ -23,7 +23,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', stemi: 'inferior', stAmp: 0.3, av: 'wenckebach', atrialRate: 80, pr: 210 },
     kontekst: 'Ucisk w nadbrzuszu i „zgaga” od 40 minut, wymioty, zawroty głowy. RR 100/60.',
     rozpoznanie: 'STEMI ściany dolnej + blok AV II° typu Mobitz I (Wenckebacha)',
-    elementy: ['uniesienie ST w II, III, aVF', 'obniżenie ST w I, aVL – zmiany przeciwstawne', 'PR wydłuża się z każdym pobudzeniem aż do wypadnięcia QRS – Wenckebach', 'niemiarowość z powodu wypadających pobudzeń'],
+    elementy: ['uniesienie ST w II, III, aVF', 'obniżenie ST w aVL (i aVR) – zmiany przeciwstawne', 'obniżenie ST w V2 – możliwy udział ściany tylnej', 'PR wydłuża się z każdym pobudzeniem (coraz mniej) aż do wypadnięcia QRS – Wenckebach', 'niemiarowość z powodu wypadających pobudzeń'],
     pulapki: ['ból w nadbrzuszu i wymioty to częsta maska zawału dolnego', 'Wenckebach w zawale dolnym zwykle ustępuje po reperfuzji, ale może przejść w blok III°', 'nie oceniaj ST na pobudzeniu po pauzie – oceniaj w kilku odprowadzeniach'],
     postepowanie: 'Teletransmisja, ASA, heparyna wg protokołu, monitorowanie z elektrodami do stymulacji. Atropina przy objawowej bradykardii. Transport do pracowni hemodynamiki z pominięciem SOR.' },
 
@@ -31,7 +31,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 104, stemi: 'anteroseptal', stAmp: 0.3, bbb: 'R' },
     kontekst: 'Nagły, gniotący ból za mostkiem od 30 minut, duszność, zimny pot. RR 95/60.',
     rozpoznanie: 'STEMI ściany przednio-przegrodowej + blok prawej odnogi pęczka Hisa (proksymalne zamknięcie LAD)',
-    elementy: ['tachykardia zatokowa', 'poszerzone QRS ≥120 ms', 'rSR′ w V1–V2', 'szerokie S w I, V5, V6', 'uniesienie ST w V1, V2, V3 mimo RBBB'],
+    elementy: ['tachykardia zatokowa', 'poszerzone QRS ≥120 ms', 'rSR′ w V1–V2', 'szerokie S w I, V5, V6', 'uniesienie ST w V1–V4 mimo RBBB (w samym RBBB ST w V1–V3 jest raczej obniżone)'],
     pulapki: ['RBBB nie maskuje STEMI – uniesienie ST w V1–V3 przy RBBB jest patologiczne (w zwykłym RBBB ST w V1–V3 jest raczej obniżony)', 'nowy RBBB w zawale przednim = duży obszar, ryzyko wstrząsu i bloku III°'],
     postepowanie: 'Teletransmisja, ASA, heparyna wg protokołu, monitorowanie z elektrodami do stymulacji i defibrylacji. Transport do pracowni hemodynamiki z pominięciem SOR.' },
 
@@ -55,7 +55,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 82, bbb: 'L', pvc: 0.28, av: 1, pr: 240 },
     kontekst: 'Duszność nocna i kołatanie serca, „serce wypada”. Kardiolog „wpisał blok lewej odnogi”, ale wypisu nie ma. Bez bólu w klatce, RR 140/85.',
     rozpoznanie: 'Rytm zatokowy + blok AV I° + blok lewej odnogi pęczka Hisa + częste przedwczesne pobudzenia komorowe',
-    elementy: ['rytm zatokowy z niemiarowością z powodu pobudzeń dodatkowych', 'wydłużony PR >200 ms – blok AV I°', 'przedwczesne, szerokie pobudzenia komorowe (PVC) z pauzą wyrównawczą', 'poszerzone QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5, V6', 'głębokie S / zespół QS w V1–V3', 'ST i T przeciwne do QRS – zmiany wtórne'],
+    elementy: ['rytm zatokowy z niemiarowością z powodu pobudzeń dodatkowych', 'wydłużony PR >200 ms – blok AV I°', 'przedwczesne, szerokie pobudzenia komorowe (PVC) z pauzą wyrównawczą', 'poszerzone QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5, V6', 'brak przegrodowego q w I, V5, V6', 'głębokie S / zespół QS w V1–V3', 'ST i T przeciwne do QRS – zmiany wtórne', 'niedokrwienie w LBBB ocenia się kryteriami Sgarbossy (Smith), nie zwykłymi kryteriami STEMI'],
     pulapki: ['PVC w LBBB trudno odróżnić od pobudzeń zatokowych – oceń przedwczesność, brak P i pauzę', 'LBBB + blok AV I° = choroba układu przewodzącego w dwóch miejscach; omdlenie u takiego pacjenta to podejrzenie przemijającego bloku III°', 'ból w klatce + nowy LBBB = kryteria Sgarbossy'],
     postepowanie: 'Bez bólu: monitorowanie, ocena przyczyny (elektrolity, niedokrwienie, niewydolność serca). Elektrody do stymulacji w gotowości przy omdleniach. Dokumentacja EKG do porównania w SOR.' },
 
@@ -71,7 +71,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 98, lvh: true, pType: 'mitrale', stemi: 'subendocardial', stAmp: 0.18 },
     kontekst: 'Nadciśnienie od 20 lat, ucisk za mostkiem od 2 godzin, duszność, RR 190/100. EKG „jak zwykle” według rodziny, ale poprzedniego zapisu nie ma.',
     rozpoznanie: 'Przerost lewej komory z powiększeniem lewego przedsionka + rozlane obniżenia ST z uniesieniem w aVR – niedokrwienie podwsierdziowe (OZW bez uniesienia ST?)',
-    elementy: ['rytm zatokowy, tachykardia graniczna', 'P szerokie, dwugarbne w II – powiększenie lewego przedsionka', 'wysokie QRS – cechy przerostu lewej komory', 'obniżenie ST w I, II, V3–V6', 'uniesienie ST w aVR', 'niejednoznaczne: strain LVH czy niedokrwienie – ocena dynamiki'],
+    elementy: ['rytm zatokowy ~95/min (górna granica normy)', 'P szerokie, dwugarbne w II – powiększenie lewego przedsionka', 'wysokie QRS – przerost lewej komory (Sokolow-Lyon >35 mm)', 'obniżenie ST w I, II, V3–V6', 'uniesienie ST w aVR', 'ujemne T w I, II, aVF, V5, V6', 'niejednoznaczne: strain LVH czy niedokrwienie – ocena dynamiki'],
     pulapki: ['strain LVH daje obniżenie ST i ujemne T w V5–V6, które naśladują niedokrwienie – rozstrzyga dynamika, ból i porównanie ze starym EKG', 'obniżenia ST w ≥6 odprowadzeniach z uniesieniem w aVR to obraz wysokiego ryzyka – nie bagatelizuj, bo „jest LVH”'],
     postepowanie: 'Seryjne EKG co kilkanaście minut, ASA, nitrogliceryna s.l. przy RR >110 i braku przeciwwskazań, monitorowanie. Teletransmisja i konsultacja; transport do ośrodka z całodobową hemodynamiką.' },
 
@@ -79,7 +79,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'af', hr: 104, bbb: 'L' },
     kontekst: 'Narastająca duszność od tygodnia, obrzęki podudzi, śpi na trzech poduszkach. Trzeszczenia u podstaw płuc. RR 150/90.',
     rozpoznanie: 'Migotanie przedsionków + blok lewej odnogi pęczka Hisa',
-    elementy: ['rytm niemiarowy zupełnie, bez załamków P – migotanie przedsionków', 'poszerzone QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5, V6', 'głębokie S / zespół QS w V1–V3', 'ST i T przeciwne do QRS – zmiany wtórne'],
+    elementy: ['rytm niemiarowy zupełnie, bez załamków P – migotanie przedsionków', 'poszerzone QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5, V6', 'brak przegrodowego q w I, V5, V6', 'głębokie S / zespół QS w V1–V3', 'ST i T przeciwne do QRS – zmiany wtórne', 'niedokrwienie w LBBB ocenia się kryteriami Sgarbossy (Smith), nie zwykłymi kryteriami STEMI'],
     pulapki: ['szerokie QRS + niemiarowość zupełna to nie VT – VT jest prawie miarowy', 'AF z szerokimi QRS u młodego pacjenta z bardzo szybką akcją – pomyśl o WPW', 'LBBB utrudnia ocenę niedokrwienia – kryteria Sgarbossy przy bólu'],
     postepowanie: 'Pozycja siedząca, tlen przy hipoksji, diuretyk i nitraty wg protokołu przy obrzęku płuc i RR >110. Monitorowanie, transport na SOR.' },
 
@@ -87,7 +87,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'af', hr: 88, lvh: true, lvhStrain: true },
     kontekst: 'Wieloletnie nadciśnienie, „arytmia od lat”, dziś zawroty głowy. Bez bólu w klatce. RR 175/95.',
     rozpoznanie: 'Migotanie przedsionków z prawidłową czynnością komór + przerost lewej komory z wtórnymi zmianami ST-T (strain)',
-    elementy: ['rytm niemiarowy zupełnie, bez załamków P – migotanie przedsionków', 'wysokie QRS – cechy przerostu lewej komory', 'obniżenie ST i asymetrycznie ujemne T w V5, V6 – strain'],
+    elementy: ['rytm niemiarowy zupełnie, bez załamków P – migotanie przedsionków', 'wysokie QRS – przerost lewej komory (Sokolow-Lyon >35 mm)', 'obniżenie ST i asymetrycznie ujemne T w V5, V6 – strain'],
     pulapki: ['strain to zmiana przewlekła – bez bólu nie traktuj jak OZW, ale porównaj ze starym EKG', 'kryteria woltażowe w AF ocenia się na kilku pobudzeniach – amplituda się waha'],
     postepowanie: 'Bez ostrych zmian: ocena przyczyny zawrotów (glikemia, ortostaza, leki), kontrola RR. Sprawdź, czy przyjmuje antykoagulant.' },
 
@@ -103,7 +103,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 96, uAmp: 0.14, tAmp: 0.45, qtc: 480, pvc: 0.2 },
     kontekst: 'Od kilku dni wymioty i biegunka, przyjmuje furosemid. Osłabienie mięśni, skurcze łydek, „serce przeskakuje”.',
     rozpoznanie: 'Hipokaliemia: spłaszczone T + fale U + wydłużony QT(U) + częste przedwczesne pobudzenia komorowe',
-    elementy: ['rytm zatokowy z pobudzeniami dodatkowymi', 'spłaszczone, niskie T', 'fale U (najlepiej V2–V3)', 'wydłużony QT (QU)', 'przedwczesne, szerokie pobudzenia komorowe (PVC) z pauzą wyrównawczą'],
+    elementy: ['rytm zatokowy z pobudzeniami dodatkowymi', 'spłaszczone, niskie T', 'fale U (najlepiej V2–V3)', 'wydłużony QT (częściowo pozornie – to QU, T zlewa się z U)', 'przedwczesne, szerokie pobudzenia komorowe (PVC) z pauzą wyrównawczą'],
     pulapki: ['T zlewające się z U daje fałszywie długi QT – mierz do końca T, jeśli da się je oddzielić', 'hipokaliemia z PVC i długim QT = ryzyko torsade de pointes', 'hipokaliemia często idzie w parze z hipomagnezemią'],
     postepowanie: 'Monitorowanie, dostęp i.v., płyny przy odwodnieniu, siarczan magnezu wg protokołu przy częstych PVC lub długim QT. Unikaj leków wydłużających QT (np. ondansetron). Transport na SOR.' },
 

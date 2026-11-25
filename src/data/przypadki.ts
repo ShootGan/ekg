@@ -47,7 +47,7 @@ const BAZA: Case[] = [
     kroki: { QRS: 'patologiczne Q w II, III, aVF (≥40 ms lub ≥25% wysokości R)', ST: 'izoelektryczny – brak uniesień', T: 'odwrócone w III, aVF' },
     kontekst: 'Zawał 6 lat temu, stent. Dziś wezwanie do upadku, bez bólu w klatce.',
     rozpoznanie: 'Rytm zatokowy, patologiczne załamki Q w II, III, aVF – przebyty zawał ściany dolnej',
-    elementy: ['rytm zatokowy', 'patologiczne Q w II, III, aVF (szerokie ≥40 ms, głębokie)', 'brak uniesień ST – zmiana stara', 'odwrócone T w odprowadzeniach dolnych', 'wniosek: przebyty zawał dolny (blizna)'],
+    elementy: ['rytm zatokowy', 'patologiczne Q w II, III, aVF (≥30 ms i ≥1 mm głębokości)', 'brak uniesień ST – zmiana stara', 'odwrócone T w odprowadzeniach dolnych', 'wniosek: przebyty zawał dolny (blizna)'],
     pulapki: ['małe q w III bywa prawidłowe – patrz szerokość i obecność także w aVF i II', 'Q bez uniesień ST i bez bólu to blizna, nie ostry zawał – ale porównaj ze starym EKG'],
     postepowanie: 'Bez ostrych zmian. Zawsze porównaj ze starym EKG pacjenta (karta wypisowa).' },
 
@@ -56,7 +56,7 @@ const BAZA: Case[] = [
     kroki: { QRS: 'zespoły QS w V1–V3, brak narastania R (słaba progresja R)', ST: 'izoelektryczny lub minimalnie uniesiony', T: 'spłaszczone / odwrócone w V1–V3' },
     kontekst: 'Duszność wysiłkowa, „miał zawał na przodzie 10 lat temu”. Bez bólu.',
     rozpoznanie: 'Rytm zatokowy, zespoły QS w V1–V3 – przebyty zawał przednio-przegrodowy',
-    elementy: ['rytm zatokowy', 'QS / patologiczne Q w V1–V3', 'brak prawidłowej progresji R w przedsercowych', 'brak ostrych uniesień ST', 'wniosek: przebyty zawał przednio-przegrodowy'],
+    elementy: ['rytm zatokowy', 'QS / patologiczne Q w V1–V3', 'brak narastania R w V1–V3 (QS), R pojawia się dopiero dalej', 'brak ostrych uniesień ST', 'wniosek: przebyty zawał przednio-przegrodowy'],
     pulapki: ['słaba progresja R bywa też od złego położenia elektrod V1–V2 (za wysoko)', 'utrzymujące się uniesienie ST z Q = tętniak pozawałowy, nie świeży zawał'],
     postepowanie: 'Bez ostrych zmian; porównanie ze starym EKG.' },
 
@@ -130,7 +130,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'af', hr: 148 },
     kontekst: 'Kołatanie serca od 6 godzin, duszność wysiłkowa, RR 128/80.',
     rozpoznanie: 'Migotanie przedsionków z szybką czynnością komór',
-    elementy: ['niemiarowość zupełna', 'brak P, fale f', 'częstość komór >110/min', 'QRS wąskie', 'ewentualne obniżenia ST to zmiany wtórne do tachykardii'],
+    elementy: ['niemiarowość zupełna', 'brak P, fale f', 'częstość komór >100/min – szybka odpowiedź komór', 'QRS wąskie', 'ewentualne obniżenia ST to zmiany wtórne do tachykardii'],
     pulapki: ['przy dużej częstości niemiarowość mniej widoczna – mierz kilka RR cyrklem'],
     postepowanie: 'Stabilny: kontrola częstości wg wytycznych / transport. Objawy niepokojące (wstrząs, omdlenie, niedokrwienie, niewydolność) → kardiowersja zsynchronizowana.' },
 
@@ -138,7 +138,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'flutter', atrialRate: 300, hr: 150 },
     kontekst: 'Nagłe kołatanie serca i osłabienie od rana. Wcześniej „coś z sercem” w karcie.',
     rozpoznanie: 'Trzepotanie przedsionków z blokiem 2:1 (komory ~150/min)',
-    elementy: ['regularna tachykardia z wąskimi QRS ~150/min', 'fale trzepotania („zęby piły”) w II, III, aVF', 'częstość przedsionków ~300/min', 'przewodzenie 2:1'],
+    elementy: ['regularna tachykardia z wąskimi QRS ~150/min', 'ujemne fale F („zęby piły”) w II, III, aVF – przy stałych ~150/min zawsze szukaj trzepotania 2:1', 'częstość przedsionków ~300/min', 'przewodzenie 2:1'],
     pulapki: ['co druga fala F chowa się w QRS/T – łatwo opisać jako tachykardię zatokową albo SVT', 'regularne ~150/min = trzepotanie, dopóki nie udowodnisz inaczej'],
     postepowanie: 'Stabilny – transport, monitorowanie. Niestabilny – kardiowersja zsynchronizowana (trzepotanie często już przy niskiej energii).' },
 
@@ -154,7 +154,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'vt', hr: 175, qrs: 170 },
     kontekst: 'Po zawale 3 lata temu. Teraz kołatanie, zawroty głowy, bladość. RR 96/60.',
     rozpoznanie: 'Częstoskurcz komorowy monomorficzny',
-    elementy: ['regularna tachykardia z szerokimi QRS (≥120 ms)', 'jednakowa morfologia QRS (monomorficzny)', 'brak widocznych P przed QRS', 'dysocjacja AV (brak związku P–QRS) – na tym zapisie niewidoczna', 'wywiad zawałowy przemawia za VT'],
+    elementy: ['regularna tachykardia z szerokimi QRS (≥120 ms)', 'jednakowa morfologia QRS (monomorficzny)', 'brak widocznych P przed QRS', 'dysocjacja AV (brak związku P–QRS) – na tym zapisie niewidoczna', 'wywiad zawałowy przemawia za VT', 'każdy częstoskurcz z szerokimi QRS traktuj jak VT, dopóki nie udowodnisz innego'],
     pulapki: ['szeroki częstoskurcz = VT, dopóki nie udowodnisz inaczej', 'nie podawać werapamilu'],
     postepowanie: 'Tętno obecne, objawy niepokojące → kardiowersja zsynchronizowana (do 3 prób), potem amiodaron 300 mg. Stabilny → amiodaron 300 mg i.v. w 10–20 min, transport z elektrodami.' },
 
@@ -170,7 +170,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 62, stemi: 'inferior', stAmp: 0.25 },
     kontekst: 'Ucisk za mostkiem od 50 minut, nudności, zlany potem.',
     rozpoznanie: 'STEMI ściany dolnej',
-    elementy: ['uniesienie ST w II, III, aVF', 'obniżenie ST w aVL (± I) – zmiany przeciwstawne', 'ST w III wyżej niż w II – sugeruje prawą tętnicę wieńcową', 'wniosek: ostry zawał z uniesieniem ST ściany dolnej', 'sprawdzić V4R (zawał prawej komory)'],
+    elementy: ['uniesienie ST w II, III, aVF', 'obniżenie ST w aVL – zmiana przeciwstawna', 'obniżenie ST w V2 – możliwy udział ściany tylnej', 'ST w III wyżej niż w II – sugeruje prawą tętnicę wieńcową', 'wniosek: ostry zawał z uniesieniem ST ściany dolnej', 'sprawdzić V4R (zawał prawej komory)'],
     pulapki: ['przy zawale dolnym dołożyć V4R przed nitratem', 'bradykardia i bloki AV są częste w zawale dolnym'],
     postepowanie: 'Teletransmisja, kontakt z pracownią hemodynamiki, ASA 300 mg, heparyna wg pracowni, transport do PCI. Nitrogliceryna dopiero po wykluczeniu zawału PK i hipotensji.' },
 
@@ -178,7 +178,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 88, stemi: 'anteroseptal', stAmp: 0.3 },
     kontekst: 'Ból w klatce piersiowej promieniujący do lewej ręki od 30 minut, palacz.',
     rozpoznanie: 'STEMI ściany przednio-przegrodowej',
-    elementy: ['uniesienie ST w V1–V4', 'zmiany przeciwstawne w odprowadzeniach dolnych – możliwe, na tym zapisie nieobecne', 'wniosek: ostry zawał z uniesieniem ST ściany przedniej / przegrody', 'najpewniej gałąź przednia zstępująca (LAD)'],
+    elementy: ['uniesienie ST w V1–V4 (w V2–V3 ≥2 mm u mężczyzn, ≥1,5 mm u kobiet; w pozostałych ≥1 mm)', 'zmiany przeciwstawne w odprowadzeniach dolnych – możliwe, na tym zapisie nieobecne', 'wniosek: ostry zawał z uniesieniem ST ściany przedniej / przegrody', 'najpewniej gałąź przednia zstępująca (LAD)'],
     pulapki: ['w V2–V3 próg uniesienia ST jest wyższy (≥2 mm u mężczyzn ≥40 r.ż.)'],
     postepowanie: 'Teletransmisja, pracownia hemodynamiki, ASA, heparyna, analgezja, transport do PCI. Elektrody defibrylacyjne w gotowości.' },
 
@@ -186,7 +186,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 74, bbb: 'L' },
     kontekst: 'Duszność wysiłkowa od miesięcy, niewydolność serca w wywiadzie. Bez bólu w klatce.',
     rozpoznanie: 'Blok lewej odnogi pęczka Hisa',
-    elementy: ['QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5–V6', 'głęboki QS/rS w V1', 'wtórne zmiany ST-T przeciwne do głównego wychylenia QRS', 'w LBBB nie ocenia się zwykłych kryteriów STEMI (Sgarbossa)'],
+    elementy: ['QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5–V6', 'brak przegrodowego q w I, aVL, V5–V6', 'głęboki QS/rS w V1', 'wtórne zmiany ST-T przeciwne do głównego wychylenia QRS', 'w LBBB nie stosuje się zwykłych kryteriów STEMI – niedokrwienie ocenia się kryteriami Sgarbossy (Smith); samo nowe LBBB nie jest równoważnikiem STEMI'],
     pulapki: ['zmiany ST-T w LBBB są wtórne – nie opisywać jako niedokrwienia', 'nowy LBBB + typowy ból = traktować jak równoważnik STEMI'],
     postepowanie: 'Porównać ze starym EKG. Przy bólu dławicowym konsultacja z pracownią.' },
 
@@ -243,7 +243,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 56, stemi: 'inferior_rv', stAmp: 0.3 },
     kontekst: 'Ból w nadbrzuszu i za mostkiem od godziny, RR 92/58, żyły szyjne poszerzone, płuca czyste.',
     rozpoznanie: 'STEMI ściany dolnej z zajęciem prawej komory',
-    elementy: ['uniesienie ST II, III, aVF (III > II)', 'uniesienie ST w V1, malejące w V2–V3 (odwrotnie niż w zawale przednim)', 'obniżenie ST I, aVL', 'wniosek: zawał dolny z zajęciem PK – potwierdzić V4R (uniesienie ≥1 mm)'],
+    elementy: ['uniesienie ST II, III, aVF (III > II)', 'uniesienie ST w V1, mniejsze w V2 (odwrotnie niż w zawale przednim, gdzie rośnie ku V3–V4)', 'obniżenie ST w I, aVL i V5–V6', 'wniosek: zawał dolny z zajęciem PK – potwierdzić V3R–V4R (uniesienie ST ≥0,5 mm); unikać azotanów'],
     pulapki: ['nitrogliceryna przeciwwskazana – ryzyko głębokiej hipotensji', 'uniesienie ST w V1 przy zawale dolnym to wskazówka PK, nie zawał przedni'],
     postepowanie: 'Bez nitratów i morfiny w dużych dawkach. Płyny przy hipotensji (bolusy 250 ml, kontrola płuc). Teletransmisja, ASA, heparyna, PCI.' },
 
@@ -251,7 +251,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 70, stemi: 'inferoposterior', stAmp: 0.25 },
     kontekst: 'Ból w klatce piersiowej od 40 minut, wymioty.',
     rozpoznanie: 'STEMI ściany dolno-tylnej',
-    elementy: ['uniesienie ST II, III, aVF', 'obniżenie ST w V1–V3 (lustrzane odbicie ściany tylnej)', 'wniosek: zawał dolno-tylny – rozważ V7–V9'],
+    elementy: ['uniesienie ST II, III, aVF', 'obniżenie ST w V1–V2 (lustrzane odbicie ściany tylnej), w aVL – zmiana przeciwstawna', 'wniosek: zawał dolno-tylny – rozważ V7–V9'],
     pulapki: ['obniżenia ST w V1–V3 to nie „niedokrwienie przednie”, tylko odbicie zawału tylnego'],
     postepowanie: 'Teletransmisja, ASA, heparyna, transport do PCI.' },
 
@@ -259,7 +259,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 82, stemi: 'high_lateral', stAmp: 0.18 },
     kontekst: 'Ból w lewym barku i klatce od 40 minut, cukrzyca.',
     rozpoznanie: 'STEMI ściany bocznej (wysokiej i przednio-bocznej)',
-    elementy: ['uniesienie ST w I i aVL (często też V5–V6)', 'obniżenie ST w III i aVF (zmiany przeciwstawne)', 'wniosek: zawał ściany bocznej wysokiej (gałąź diagonalna / okalająca)'],
+    elementy: ['uniesienie ST w I, aVL i V4–V6', 'obniżenie ST w III i aVF (zmiany przeciwstawne)', 'wniosek: zawał ściany bocznej (wysokiej i przednio-bocznej) – gałąź diagonalna / okalająca'],
     pulapki: ['uniesienia w I/aVL bywają małe – zmiany przeciwstawne w III to często pierwszy sygnał'],
     postepowanie: 'Teletransmisja, ASA, heparyna, transport do PCI.' },
 
@@ -267,7 +267,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 96, stemi: 'anterolateral', stAmp: 0.3 },
     kontekst: 'Silny ból w klatce piersiowej od 20 minut, bladość, poty, RR 110/70.',
     rozpoznanie: 'STEMI ściany przednio-bocznej (rozległy przedni)',
-    elementy: ['uniesienie ST V2–V6, I, aVL', 'obniżenie ST w III, aVF', 'wniosek: rozległy zawał przedni – proksymalna LAD', 'wysokie ryzyko VF i wstrząsu'],
+    elementy: ['uniesienie ST w V1–V6, I i aVL – rozległe, przód i bok', 'obniżenie ST w III (słabiej aVF) i aVR – zmiany przeciwstawne', 'wniosek: rozległy zawał przedni – proksymalna LAD', 'wysokie ryzyko VF i wstrząsu'],
     pulapki: [],
     postepowanie: 'Teletransmisja, ASA, heparyna, elektrody defibrylacyjne naklejone, transport do PCI.' },
 
@@ -275,7 +275,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 104, stemi: 'pericarditis' },
     kontekst: 'Kłujący ból w klatce piersiowej, gorszy na leżąco i przy wdechu, lżej w pochyleniu. Tydzień temu infekcja.',
     rozpoznanie: 'Ostre zapalenie osierdzia',
-    elementy: ['rozlane, wklęsłe uniesienia ST w wielu odprowadzeniach (nie w jednym obszarze naczyniowym)', 'obniżenie odcinka PR', 'uniesienie PR i obniżenie ST w aVR', 'brak zmian przeciwstawnych (poza aVR/V1)', 'tachykardia zatokowa'],
+    elementy: ['rozlane, wklęsłe uniesienia ST w wielu odprowadzeniach (nie w jednym obszarze naczyniowym)', 'obniżenie odcinka PR', 'uniesienie PR i obniżenie ST w aVR', 'brak zmian przeciwstawnych (poza aVR/V1)', 'tachykardia zatokowa', 'T początkowo dodatnie, patologiczne Q nieobecne'],
     pulapki: ['różnicowanie ze STEMI: rozlane, brak lustrzanych obniżeń, brak Q', 'w razie wątpliwości teletransmisja'],
     postepowanie: 'Transport na SOR, analgezja (NLPZ). Jeśli nie jesteś pewien – teletransmisja.' },
 
@@ -283,7 +283,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 108, stemi: 'subendocardial', stAmp: 0.2 },
     kontekst: 'Duszność i ucisk w klatce od 2 godzin, RR 100/60, zlana potem.',
     rozpoznanie: 'Rozlane obniżenia ST z uniesieniem ST w aVR – rozległe niedokrwienie podwsierdziowe (pień LCA / choroba wielonaczyniowa)',
-    elementy: ['obniżenia ST w ≥6–8 odprowadzeniach (I, II, V4–V6)', 'uniesienie ST w aVR (± V1)', 'tachykardia zatokowa', 'wniosek: OZW wysokiego ryzyka'],
+    elementy: ['obniżenia ST w ≥6 odprowadzeniach (I, II, aVL, aVF, V3–V6)', 'uniesienie ST w aVR', 'tachykardia zatokowa', 'wniosek: OZW wysokiego ryzyka – podejrzenie pnia LCA lub choroby wielonaczyniowej, pilna koronarografia'],
     pulapki: ['nie odpuszczać, bo „nie ma STEMI” – to obraz bardzo wysokiego ryzyka', 'obniżenia ST mogą też wynikać z tachykardii/anemii – kontekst kliniczny'],
     postepowanie: 'Teletransmisja i konsultacja z pracownią (wskazanie do pilnej inwazji), ASA, transport.' },
 
@@ -291,7 +291,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 52, pAmp: 0.3, tAmp: 2, qrs: 150 },
     kontekst: 'Dializowany, opuścił ostatnią dializę. Osłabienie, parestezje.',
     rozpoznanie: 'Hiperkaliemia (zaawansowana): szpiczaste T, spłaszczone P, poszerzone QRS',
-    elementy: ['wysokie, szpiczaste, wąskie u podstawy załamki T', 'spłaszczone / zanikające P', 'poszerzone QRS', 'bradykardia', 'stan bezpośredniego zagrożenia (ryzyko sinusoidy, VF, asystolii)'],
+    elementy: ['wysokie, szpiczaste, wąskie u podstawy załamki T', 'spłaszczone / zanikające P', 'poszerzone QRS', 'bradykardia', 'stan bezpośredniego zagrożenia (ryzyko sinusoidy, VF, asystolii)', 'EKG słabo koreluje ze stężeniem K⁺ – przy takim zapisie podaje się wapń bez czekania na wynik'],
     pulapki: ['szpiczaste T ≠ „hiperostre T” zawału – patrz kontekst i rozkład'],
     postepowanie: 'Chlorek/glukonian wapnia i.v. (stabilizacja błony), monitorowanie, pilny transport; dalej insulina + glukoza, salbutamol wg szpitala.' },
 
@@ -316,7 +316,7 @@ const BAZA: Case[] = [
     klucz: { iv: { req: ['LAFB'], ok: [] } },
     kontekst: 'EKG przy okazji wezwania do upadku, bez dolegliwości sercowych.',
     rozpoznanie: 'Blok przedniej wiązki lewej odnogi (LAFB) – odchylenie osi w lewo',
-    elementy: ['oś < −45°', 'qR w I i aVL, rS w II, III, aVF', 'QRS <120 ms'],
+    elementy: ['oś < −45°', 'qR w aVL (często też w I), rS w II, III, aVF; S w III głębsze niż w II', 'QRS <120 ms'],
     pulapki: ['oś: I dodatnie, aVF ujemne, II ujemne → lewogram patologiczny'],
     postepowanie: 'Bez pilnych działań.' },
 
@@ -324,7 +324,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 92, axis: 115 },
     kontekst: 'Wieloletni palacz, POChP, przewlekła duszność bez nagłego pogorszenia.',
     rozpoznanie: 'Rytm zatokowy, odchylenie osi w prawo',
-    elementy: ['oś > +90° (I ujemne, aVF dodatnie)', 'rytm zatokowy', 'możliwe przyczyny: przeciążenie PK, POChP, zatorowość, LPFB'],
+    elementy: ['oś > +90° (I ujemne, aVF dodatnie)', 'rytm zatokowy', 'możliwe przyczyny: przeciążenie PK, POChP, zatorowość, LPFB', 'wyklucz zamianę elektrod kończynowych (wtedy P i QRS są ujemne w I, a dodatnie w aVR)'],
     pulapki: ['zamiana elektrod rąk też daje ujemne I – sprawdź aVR i P w I'],
     postepowanie: 'Interpretować w kontekście klinicznym.' },
 
@@ -365,7 +365,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 78, stemi: 'posterior', stAmp: 0.22 },
     kontekst: 'Ucisk w klatce od godziny, poty. Automat opisał „obniżenia ST”.',
     rozpoznanie: 'Izolowany zawał ściany tylnej (równoważnik STEMI)',
-    elementy: ['poziome obniżenia ST w V1–V3 (V2–V3 najgłębiej)', 'wysokie R w V1–V2 (lustrzane do Q ściany tylnej) – na tym zapisie nieobecne', 'brak uniesień w standardowych 12 odprowadzeniach', 'wniosek: zawał tylny – odprowadzenia V7–V9 (uniesienie ≥0,5 mm)'],
+    elementy: ['poziome obniżenia ST w V1–V4 (najgłębiej V2–V3)', 'wysokie R w V1–V2 (lustrzane do Q ściany tylnej) – na tym zapisie nieobecne', 'brak uniesień w standardowych 12 odprowadzeniach', 'wniosek: zawał tylny – odprowadzenia V7–V9 (uniesienie ≥0,5 mm)'],
     pulapki: ['najczęściej przeoczony STEMI – obniżenia ST w V1–V3 ≠ NSTEMI', 'zrób V7–V9 i powiedz to w teletransmisji'],
     postepowanie: 'Dołożyć V7–V9, teletransmisja z informacją o podejrzeniu zawału tylnego, ASA, heparyna, PCI.' },
 
@@ -373,7 +373,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 66, tAnt: -1.3 },
     kontekst: 'Wczoraj ból w klatce przez 30 minut, sam ustąpił. Teraz bez bólu, chce tylko „sprawdzić”.',
     rozpoznanie: 'Zespół Wellensa (typ B): głęboko odwrócone T w V2–V3 – krytyczne zwężenie proksymalnej LAD',
-    elementy: ['symetrycznie, głęboko odwrócone załamki T w V1–V3 (± V4)', 'brak uniesienia ST', 'brak patologicznych Q, zachowana progresja R', 'w okresie bez bólu', 'wniosek: wysokie ryzyko rozległego zawału przedniego'],
+    elementy: ['symetrycznie, głęboko odwrócone T w V2–V3 (typ B; typ A to T dwufazowe)', 'uniesienie ST ≥1 mm – na tym zapisie nieobecne', 'brak patologicznych Q, zachowana progresja R', 'w okresie bez bólu', 'wniosek: wysokie ryzyko rozległego zawału przedniego'],
     pulapki: ['„pacjent bez bólu, EKG bez STEMI” – nie zostawiać w domu', 'próba wysiłkowa przeciwwskazana'],
     postepowanie: 'Transport do szpitala z PCI, teletransmisja/konsultacja kardiologiczna. Nie pozostawiać w domu.' },
 
@@ -381,7 +381,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 84, stemi: 'anterior', stAmp: 0.1, hyperacute: true },
     kontekst: 'Ból w klatce piersiowej od 15 minut, bardzo silny, zlany potem.',
     rozpoznanie: 'Hiperostre załamki T w V2–V4 – wczesna faza zawału przedniego',
-    elementy: ['wysokie, szerokie u podstawy, symetryczne T w odprowadzeniach przedsercowych', 'towarzyszące uniesienie ST w V2–V3 – w tym zapisie już na granicy kryteriów STEMI', 'wniosek: wczesny STEMI ściany przedniej – powtarzać EKG co 10–15 min'],
+    elementy: ['wysokie, szerokie u podstawy, symetryczne T w V2–V4 (w hiperkaliemii T są wąskie i szpiczaste)', 'uniesienie ST w V1–V4, najbardziej w V2–V3 – na granicy kryteriów STEMI', 'wniosek: wczesny STEMI ściany przedniej – powtarzać EKG co 10–15 min'],
     pulapki: ['T szerokie u podstawy (zawał) vs wąskie, szpiczaste (hiperkaliemia)', 'jedno EKG „bez kryteriów” przy typowym bólu nie wystarcza'],
     postepowanie: 'Powtarzane EKG, teletransmisja z opisem kliniki, ASA, kontakt z pracownią.' },
 
@@ -405,7 +405,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 80, uAmp: 0.14, tAmp: 0.45, qtc: 470 },
     kontekst: 'Biegunka od 4 dni, przyjmuje furosemid, osłabienie mięśni, kurcze.',
     rozpoznanie: 'Hipokaliemia: spłaszczone T, wyraźne fale U, pozornie wydłużony QT (QU)',
-    elementy: ['spłaszczone załamki T', 'wyraźne fale U (najlepiej V2–V3)', 'wydłużenie QT/QU', 'ryzyko arytmii komorowych / TdP'],
+    elementy: ['spłaszczone załamki T', 'wyraźne fale U (najlepiej V2–V3)', 'pozorne wydłużenie QT – w rzeczywistości QU (T zlewa się z U)', 'ryzyko arytmii komorowych / TdP'],
     pulapki: ['fala U wliczona w QT daje fałszywie długi QT'],
     postepowanie: 'Transport, monitorowanie; suplementacja potasu w szpitalu.' },
 
@@ -421,7 +421,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'tdp', hr: 220, qtc: 560 },
     kontekst: 'Nawracające utraty przytomności po kilka sekund, na metadonie.',
     rozpoznanie: 'Polimorficzny częstoskurcz komorowy typu torsade de pointes',
-    elementy: ['szeroki, nieregularny częstoskurcz', 'amplituda QRS narasta i maleje – „skręcanie wokół osi”', 'tło: wydłużony QT (poza epizodem) – na tym zapisie niemierzalny'],
+    elementy: ['szeroki, nieregularny częstoskurcz', 'amplituda QRS narasta i maleje – „skręcanie wokół osi”', 'tło: wydłużony QT – w czasie arytmii pomiar QT jest niewiarygodny, ocenia się go poza epizodem'],
     pulapki: ['nie podawać amiodaronu (wydłuża QT)'],
     postepowanie: 'Siarczan magnezu 2 g i.v.; bez tętna – defibrylacja; korekcja elektrolitów; stymulacja overdrive w szpitalu.' },
 
@@ -438,7 +438,7 @@ const BAZA: Case[] = [
     kroki: { QRS: 'poszerzone ~130 ms, RBBB (rSR\'/qR w V1), głębokie S w I (S1), małe q w III (Q3), słaba progresja R w V5–V6', T: 'odwrócone w V1–V3 i w III (T3)' },
     kontekst: 'Nagła duszność po locie z Egiptu, ból w łydce, SpO2 88%.',
     rozpoznanie: 'Przeciążenie prawej komory: tachykardia zatokowa, RBBB, odchylenie osi w prawo, odwrócone T V1–V3 (zatorowość płucna)',
-    elementy: ['tachykardia zatokowa', 'blok prawej odnogi (nowy)', 'odchylenie osi w prawo', 'odwrócone T w V1–V3 (± V4)', 'S1Q3T3: głębokie S w I, Q i ujemny T w III'],
+    elementy: ['tachykardia zatokowa', 'blok prawej odnogi (nowy)', 'odchylenie osi w prawo', 'odwrócone T w V2–V3 (przeciążenie prawej komory)', 'S1Q3T3: głębokie S w I, Q i ujemny T w III'],
     pulapki: ['najczęstszy obraz PE w EKG to sama tachykardia zatokowa', 'odwrócone T V1–V4 bywa mylone z Wellensem'],
     postepowanie: 'Tlen, monitorowanie, pilny transport (angio-TK), info o podejrzeniu PE.' },
 
@@ -455,7 +455,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 64, bbb: 'R', axis: -60, av: 1, pr: 240 },
     kontekst: 'Omdlenie w kościele bez objawów zwiastunowych, szybki powrót świadomości.',
     rozpoznanie: 'Blok dwuwiązkowy (RBBB + LAFB) z blokiem AV I° – ryzyko bloku całkowitego',
-    elementy: ['RBBB (rSR\' w V1, szerokie S w I, V6)', 'odchylenie osi w lewo < −45° (LAFB)', 'PR >200 ms', 'omdlenie + blok dwuwiązkowy = podejrzenie napadowego bloku III°'],
+    elementy: ['RBBB (rSR\' w V1, szerokie S w I, V6)', 'oś < −45°, qR w aVL, rS w II, III, aVF (LAFB)', 'PR >200 ms', 'omdlenie + blok dwuwiązkowy = podejrzenie napadowego bloku AV wysokiego stopnia – pilna diagnostyka'],
     pulapki: ['omdlenie „wazowagalne” u starszego z takim EKG – nie zostawiać w domu'],
     postepowanie: 'Transport z monitorowaniem, elektrody stymulacyjne w gotowości.' },
 
@@ -464,7 +464,7 @@ const BAZA: Case[] = [
     kroki: { QRS: 'wąskie; w V1–V2 obraz „pseudo-RBBB” (końcowe r\' to wysoki punkt J), bez szerokiego S w I i V6', ST: 'łukowate (coved) uniesienie J/ST ≥2 mm w V1–V2, opadające wprost w ujemny T; reszta bez zmian', T: 'ujemne w V1–V2' },
     kontekst: 'Omdlenie w nocy podczas snu, żona słyszała „chrapanie i charczenie”. Od wczoraj gorączka 39 °C. Brat zmarł nagle we śnie w wieku 38 lat.',
     rozpoznanie: 'Wzorzec Brugadów typu 1 (coved) w V1–V2 – zespół Brugadów, demaskowany gorączką',
-    elementy: ['uniesienie punktu J/ST ≥2 mm w V1–V2', 'kształt łukowaty (coved) – ST opada prosto w ujemny załamek T', 'ograniczone do prawych przedsercowych (V1–V2, ± V3), brak zmian przeciwstawnych', 'nie jest to RBBB – brak szerokiego S w I i V6', 'wniosek: wzorzec Brugadów typu 1 – ryzyko VF / nagłej śmierci'],
+    elementy: ['uniesienie punktu J/ST ≥2 mm w V1–V2', 'kształt łukowaty (coved) – ST opada prosto w ujemny załamek T', 'typowo tylko w V1–V2 (± V3), bez zmian przeciwstawnych', 'nie jest to RBBB – brak szerokiego S w I i V6', 'wniosek: wzorzec Brugadów typu 1 – ryzyko VF / nagłej śmierci'],
     pulapki: ['automat zgłasza „ostry zawał” – rozkład V1–V2 bez zmian przeciwstawnych i kształt coved przemawiają za Brugadą', 'typ 2 (siodełkowy, saddleback) nie jest diagnostyczny – rozpoznanie tylko przy typie 1', 'gorączka, alkohol, kokaina i niektóre leki (np. trójpierścieniowe, flekainid, propafenon) demaskują i nasilają wzorzec'],
     postepowanie: 'Monitorowanie z naklejonymi elektrodami defibrylacyjnymi, leczenie gorączki (paracetamol), transport do szpitala z kardiologią (wskazanie do oceny ICD). Unikać leków blokujących kanał sodowy. W razie VF – defibrylacja wg ALS.' },
 
@@ -473,7 +473,7 @@ const BAZA: Case[] = [
     kroki: { QRS: 'wąskie, wysokie R jak „kolec”', ST: 'wysoki punkt J (ok. 1/3 R) i jeden długi, kopulasty zjazd ST zlany z T w II, III, aVF (objaw hełmu); obniżenie w aVL; automat zgłasza zawał', T: 'nie odcina się od ST – zlany w kopułę', QT: 'wydłużony' },
     kontekst: 'Od 2 dni wymioty, brak stolca i gazów, brzuch wzdęty, twardy. Splątany, RR 85/50, SpO2 93%. Bólu w klatce nie zgłasza.',
     rozpoznanie: 'Tachykardia zatokowa z objawem hełmu (spiked helmet sign) w II, III, aVF i wydłużonym QT – naśladuje STEMI, wskaźnik ciężkiego stanu (np. wzrost ciśnienia w jamie brzusznej)',
-    elementy: ['tachykardia zatokowa', 'wysokie R jak kolec, zaraz po nim wysoki punkt J', 'ST opada jednym długim, kopulastym łukiem i zlewa się z T (kształt pruskiego hełmu)', 'wydłużony QT', 'wniosek: objaw hełmu – naśladuje STEMI dolny, znak ciężkiej choroby niekardiologicznej'],
+    elementy: ['tachykardia zatokowa', 'w II, III, aVF wysokie R jak kolec, zaraz po nim wysoki punkt J', 'ST opada jednym długim, kopulastym łukiem i zlewa się z T (kształt pruskiego hełmu)', 'wydłużony QT', 'wniosek: objaw hełmu – naśladuje STEMI dolny, znak ciężkiej choroby niekardiologicznej'],
     pulapki: ['automat i pobieżny opis dają „STEMI dolny” – w hełmie nie ma typowej ewolucji ST→T, za to jest jedna długa kopuła i długi QT; bywa też lekkie uniesienie linii tuż przed QRS', 'kontekst: brak bólu w klatce, ostry brzuch / ciężka choroba – nie odpuszczać, śmiertelność jest bardzo wysoka'],
     postepowanie: 'Leczenie przyczyny i wstrząsu: tlen, płyny, monitorowanie, pilny transport na SOR z chirurgią. W razie wątpliwości co do OZW – teletransmisja z opisem kliniki (brak bólu, ostry brzuch).' },
 
@@ -500,7 +500,7 @@ const BAZA: Case[] = [
     kroki: { P: 'prawidłowe; w pauzie brak P', PR: 'stały, prawidłowy w każdym pobudzeniu' },
     kontekst: 'Zawroty głowy od tygodnia, raz „pociemniało w oczach”. Przyjmuje bisoprolol.',
     rozpoznanie: 'Blok zatokowo-przedsionkowy II stopnia typu II (pauza = 2× PP)',
-    elementy: ['rytm zatokowy z pauzami', 'w pauzie brak P (i QRS)', 'pauza równa dokładnie dwóm odstępom PP', 'PR stały – to nie blok AV', 'wniosek: blok SA II° typu II – choroba węzła zatokowego / leki'],
+    elementy: ['rytm zatokowy z pauzami', 'w pauzie brak P (i QRS)', 'pauza równa wielokrotności PP (tu dwóm odstępom PP)', 'PR stały – to nie blok AV', 'wniosek: blok SA II° typu II – choroba węzła zatokowego / leki'],
     pulapki: ['brak P w pauzie odróżnia blok SA od bloku AV II° (tam P jest, brakuje QRS)', 'pauzę zmierz cyrklem i porównaj z PP – wielokrotność = blok SA, nie zahamowanie'],
     postepowanie: 'Monitorowanie, ocena objawów i ciśnienia; przy objawach niepokojących atropina, gotowość do stymulacji. Transport do szpitala (odstawienie BB, Holter/kardiologia).' },
 
@@ -526,7 +526,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 68, bbb: 'iR', qrs: 110 },
     kontekst: 'EKG do medycyny pracy, bez dolegliwości.',
     rozpoznanie: "Niepełny blok prawej odnogi pęczka Hisa (rSr' w V1, QRS <120 ms)",
-    elementy: ["rSr' w V1", 'QRS 100–119 ms', 'małe szerokie s w I, V6', 'wniosek: niepełny RBBB – zwykle wariant normy'],
+    elementy: ["rSr' w V1", 'QRS 110–119 ms (od 120 ms to pełny RBBB)', 'małe szerokie s w I, V6', 'wniosek: niepełny RBBB – zwykle wariant normy'],
     pulapki: ["rSr' przy QRS ≥120 ms to już pełny RBBB – zmierz szerokość"],
     postepowanie: 'Bez działań.' },
 

@@ -151,7 +151,7 @@ export function Omowienie({ kroki, i, gen, onGo, print, host, tick }: OmowienieP
       <div key={k.c.id} className="tour-body">
         <div className={'tour-badge ' + k.st}>{ETYKIETA[k.st]}</div>
         <h3>{k.c.t}</h3>
-        <p>{k.st === 'pul' ? nieTu(k.c.id, gen) : jakTekst(k.c)}</p>
+        <p>{k.st === 'pul' ? nieTu(k.c.id, gen) : jakTekst(k.c, gen)}</p>
         {k.st !== 'pul' && k.c.k.leads.length ? (
           <p className="tour-leads">
             Obrysowane: <b>{k.c.k.leads.join(', ')}</b>

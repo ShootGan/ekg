@@ -3,20 +3,20 @@ import { cechyZapisu } from '../lib/cechy';
 
 const SZEROKI = ['LBBB', 'RBBB', 'WPW', 'vt', 'tdp', 'szpicz'];
 const NAZWA: Record<string, string> = {
-  LBBB: 'blok lewej odnogi',
-  RBBB: 'blok prawej odnogi',
-  WPW: 'preekscytacja (fala delta)',
-  vt: 'częstoskurcz komorowy',
+  LBBB: 'bloku lewej odnogi',
+  RBBB: 'bloku prawej odnogi',
+  WPW: 'preekscytacji (fali delta)',
+  vt: 'częstoskurczu komorowego',
   tdp: 'torsade de pointes',
-  szpicz: 'hiperkaliemia',
+  szpicz: 'hiperkaliemii',
 };
 
 export const JAK: Record<string, string> = {
   norma: 'Rytm zatokowy 60–100/min, PR 120–200 ms, QRS poniżej 120 ms, bez zmian ST-T.',
-  zatokowy: 'Dodatni załamek P przed każdym QRS w II, ujemny w aVR, PR stały.',
+  zatokowy: 'Dodatni załamek P w II, ujemny w aVR, P pojawiają się miarowo (stałe PP). Przy prawidłowym przewodzeniu AV P jest przed każdym QRS, a PR jest stały.',
   niemiarSin: 'Rytm zatokowy, ale odstępy RR różnią się o ponad 120 ms, zwykle w rytm oddechu.',
-  af: 'Brak załamków P, linia izoelektryczna falista, odstępy RR całkowicie nieregularne.',
-  flutter: 'Fale F jak zęby piły w II, III i aVF, około 300/min; przy przewodzeniu 2:1 komory biją około 150/min.',
+  af: 'Brak załamków P, linia izoelektryczna falista, odstępy RR całkowicie nieregularne. Przy zatruciu digoksyną RR mogą być prawie równe (blok AV z rytmem zastępczym).',
+  flutter: 'Fale F jak zęby piły w II, III i aVF, około 300/min. Przy przewodzeniu 2:1 komory biją około 150/min, przy 4:1 około 75/min (między QRS widać 3 fale F).',
   wezlowy: 'Brak P albo P ujemne tuż przed lub tuż po QRS w II, QRS wąskie, częstość zwykle 40–60/min.',
   svt: 'Miarowy częstoskurcz z wąskimi QRS, zwykle 150–250/min, załamki P niewidoczne albo ukryte w ST.',
   vt: 'Miarowy częstoskurcz z szerokimi QRS (120 ms i więcej), często z dysocjacją przedsionkowo-komorową.',
@@ -30,7 +30,7 @@ export const JAK: Record<string, string> = {
   sa: 'Nagła pauza bez P i bez QRS. Przy bloku SA pauza trwa wielokrotność odstępu PP.',
   av1: 'PR powyżej 200 ms, stały w każdym cyklu, każde P przewiedzione do komór.',
   wenck: 'PR wydłuża się z cyklu na cykl, aż jedno P zostaje bez QRS, potem cykl rusza od nowa.',
-  mob2: 'PR stały, a potem nagle P bez QRS.',
+  mob2: 'PR stały w przewodzonych cyklach, a potem nagle P bez QRS. QRS często szeroki, bo blok leży poniżej węzła AV.',
   '21': 'Co drugie P zostaje bez QRS.',
   av3: 'P i QRS biją niezależnie: PP stałe, RR stałe, PR za każdym razem inny.',
   WPW: 'PR krótszy niż 120 ms, fala delta na początku QRS, QRS poszerzony.',
@@ -47,7 +47,7 @@ export const JAK: Record<string, string> = {
   pPlaskie: 'Załamki P ledwo widoczne, mimo że rytm jest nadkomorowy.',
   lvh: 'Wysokie R w lewych odprowadzeniach i głębokie S w prawych: S w V1 + R w V5 lub V6 powyżej 35 mm.',
   rvh: 'Dominujące R w V1, prawogram, głębokie S w V5–V6.',
-  niski: 'Amplituda QRS poniżej 5 mm we wszystkich odprowadzeniach kończynowych albo poniżej 10 mm w przedsercowych.',
+  niski: 'Amplituda QRS poniżej 5 mm we wszystkich odprowadzeniach kończynowych i/lub poniżej 10 mm we wszystkich przedsercowych.',
   alternans: 'Wysokość QRS zmienia się co drugi zespół.',
   q: 'Q szerokie na 30 ms i głębokie na 1 mm (w V2–V3 każde Q od 20 ms albo QS), w dwóch sąsiednich odprowadzeniach. Samo Q w III, aVR i QS w V1 bywa prawidłowe.',
   s1q3t3: 'Głęboki S w I, załamek Q i ujemne T w III.',
@@ -62,10 +62,24 @@ export const JAK: Record<string, string> = {
   hiper: 'Wysokie T szerokie u podstawy nad ścianą, w której zaczyna się zawał, często zanim uniesie się ST.',
   plaskie: 'Załamki T niskie, ledwo odróżnialne od linii izoelektrycznej.',
   U: 'Mały garb po załamku T, najlepiej widoczny w V2–V3.',
-  qtDl: 'QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Na oko: T kończy się dalej niż w połowie RR, ale tylko przy częstości ok. 60–90/min.',
+  qtDl: 'QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Na oko: T kończy się dalej niż w połowie RR, ale tylko przy częstości ok. 60–90/min. QTc powyżej 500 ms to wysokie ryzyko torsade de pointes.',
 };
 
-export function jakTekst(c: { id: string; k: { leads: string[] } }): string {
+export function jakTekst(c: { id: string; k: { leads: string[] } }, g?: GenerateResult): string {
+  const e = (g?.EX.ecg ?? {}) as Record<string, unknown>;
+  const hr = g?.key.klucz.hr;
+  if (c.id === 'zatokowy' && g) {
+    const ids = new Set(cechyZapisu(g).jest.map((x) => x.id));
+    if (['wenck', 'mob2', '21', 'av3'].some((x) => ids.has(x)))
+      return 'Dodatni załamek P w II, ujemny w aVR, P pojawiają się miarowo (stałe PP). Nie każde P przechodzi do komór – to sprawa bloku AV, nie rytmu.';
+    if (ids.has('pPlaskie')) return 'Załamki P są niskie, ledwo widoczne, ale obecne przed każdym QRS ze stałym PR. Przy dalszym narastaniu przyczyny mogą zniknąć.';
+  }
+  if (c.id === 'sa' && e.sa === 'wenckebach')
+    return 'Pauza bez P i bez QRS. Przed nią odstępy PP stopniowo się skracają, a sama pauza jest krótsza niż dwa PP (blok zatokowo-przedsionkowy typu I).';
+  if (c.id === 'sa' && e.sa === 'arrest')
+    return 'Nagła pauza bez P i bez QRS, która nie jest wielokrotnością podstawowego PP – to zahamowanie zatokowe. Przy bloku SA byłaby.';
+  if (c.id === 'qtDl' && hr != null && (hr < 60 || hr > 90))
+    return `QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Przy częstości ${hr}/min ocena na oko zawodzi – licz QTc ze wzoru.`;
   if (c.id === 'stUp' && c.k.leads.length === 1 && c.k.leads[0] === 'aVR')
     return 'Tu tylko w aVR, i to jest wyjątek od reguły dwóch sąsiednich odprowadzeń: uniesienie ST w aVR (od 1 mm) razem z rozlanym obniżeniem ST w wielu odprowadzeniach sugeruje zwężenie pnia lewej tętnicy wieńcowej albo chorobę wielonaczyniową.';
   return JAK[c.id] ?? '';
@@ -82,7 +96,7 @@ export function nieTu(id: string, g: GenerateResult): string {
   if (['szerQRS', 'LBBB', 'RBBB', 'vt'].includes(id) && qrs != null) {
     if (qrs < 120) return `QRS trwa tu ${qrs} ms, a do tego potrzeba co najmniej 120 ms.`;
     if (id !== 'szerQRS') {
-      const skad = zrodlo.length ? ` Szerokość bierze się tu z: ${zrodlo.join(', ')}.` : '';
+      const skad = zrodlo.length ? ` Szerokość wynika tu z ${zrodlo.join(' i ')}.` : '';
       return `QRS jest szeroki (${qrs} ms), ale kształt nie pasuje.${skad}${kryt}`;
     }
   }

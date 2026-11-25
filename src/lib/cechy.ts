@@ -263,7 +263,17 @@ export function cechyZapisu(g: GenerateResult): CechyZapisu {
     [jest.has('LBBB'), ['lvh']],
     [jest.has('osP'), ['rvh', 'pulm']],
     [K.pr != null && K.pr >= 190 && K.pr <= 210, ['av1']],
-    [Number(e.tAmp ?? 1) < 0.8 || jest.has('hiperk'), ['stDn']],
+    [Number(e.tAmp ?? 1) < 0.8, ['stDn']],
+    [jest.has('fJ'), ['stUp']],
+    [jest.has('q'), ['stUp']],
+    [jest.has('stUp') && (jest.get('stUp') ?? []).some((l) => l === 'V1' || l === 'V2'), ['brugada']],
+    [jest.has('RBBB') || jest.has('iRBBB'), ['brugada']],
+    [jest.has('brugada'), ['iRBBB', 'RBBB']],
+    [jest.has('flutter'), ['svt']],
+    [jest.has('tachykardia'), ['stDn']],
+    [jest.has('rvh'), ['RBBB', 'iRBBB']],
+    [jest.has('af') && jest.has('bradykardia'), ['av3']],
+    [jest.has('asystolia'), ['zatokowy']],
   ];
   for (const [warunek, ids] of dwuznaczne) if (warunek) ids.forEach((x) => !jest.has(x) && niepewne.add(x));
 

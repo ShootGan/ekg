@@ -355,7 +355,7 @@ const BAZA: Case[] = [
   { id: 'zatrzymanie-komor', poziom: 2, kat: 'nzk', wiek: [70, 95], plec: null,
     ecg: { rhythm: 'asystole', atrialRate: 70 },
     kontekst: 'Nieprzytomny, bez oddechu, wcześniej bradykardia 30/min.',
-    rozpoznanie: 'Zatrzymanie komór – obecne tylko załamki P (ventricular standstill)',
+    rozpoznanie: 'P-asystolia (zatrzymanie komór) – obecne tylko załamki P, bez QRS',
     elementy: ['regularne załamki P', 'brak zespołów QRS', 'rytm niedefibrylacyjny', 'ważne rozpoznanie – może odpowiedzieć na stymulację'],
     pulapki: ['to nie „linia izoelektryczna” – P świadczą o aktywności przedsionków'],
     postepowanie: 'RKO, adrenalina; rozważ stymulację przezskórną (jedyna sytuacja w NZK, gdy ma sens).' },

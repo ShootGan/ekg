@@ -27,7 +27,6 @@ interface Retry {
 }
 
 const SERIA = 10;
-const RETRY_AFTER = 3;
 const FOCUS = 'var(--focus)';
 
 function printFooter(pomiary: string): string {
@@ -76,9 +75,9 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
   const [pktSum, setPktSum] = useState(0);
   const [streak, setStreak] = useState(0);
   const [best, setBest] = useState(0);
-  const [total, setTotal] = useState(0);
   const [seen, setSeen] = useState<string[]>([]);
   const [retry, setRetry] = useState<Retry[]>([]);
+  const [seria, setSeria] = useState(0);
   const [hover, setHover] = useState<Focus | null>(null);
   const [pinned, setPinned] = useState<Focus | null>(null);
   const [tour, setTour] = useState<number | null>(null);
@@ -102,13 +101,16 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
   }, [seed, poziom, kat, id]);
 
   const next = useCallback(() => {
-    if (done >= SERIA) {
+    const nowa = done >= SERIA;
+    const nr = nowa ? seria + 1 : seria;
+    if (nowa) {
       setDone(0);
       setRight(0);
       setPktSum(0);
       setStreak(0);
+      setSeria(nr);
     }
-    const due = retry.find((r) => r.due <= total);
+    const due = retry.find((r) => r.due <= nr);
     const s = randomSeed();
     const r = due ? makeRound(s, undefined, undefined, [], due.id) : makeRound(s, poziom, kat, seen);
     if (due) setRetry((q) => q.filter((x) => x !== due));
@@ -117,7 +119,7 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
     reset();
     syncUrl(s, poziom, kat);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [done, retry, total, poziom, kat, seen]);
+  }, [done, retry, seria, poziom, kat, seen]);
 
   const toggle = useCallback(
     (cid: string) => {
@@ -136,7 +138,6 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
     const caseId = round.gen.key.id;
     setChecked(true);
     setDone((d) => d + 1);
-    setTotal((t) => t + 1);
     setPktSum((p) => p + pkt);
     if (perfect) {
       setRight((r) => r + 1);
@@ -147,7 +148,7 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
       });
     } else {
       setStreak(0);
-      setRetry((q) => (q.some((x) => x.id === caseId) ? q : [...q, { id: caseId, due: total + 1 + RETRY_AFTER }]));
+      setRetry((q) => (q.some((x) => x.id === caseId) ? q : [...q, { id: caseId, due: seria + 1 }]));
     }
     const missed = items.filter((c) => c.jest && !sel.includes(c.id)).map((c) => c.t);
     const extra = items.filter((c) => !c.jest && sel.includes(c.id)).map((c) => c.t);
@@ -162,7 +163,7 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
       tryb: 'quiz',
     });
     window.setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
-  }, [round, checked, sel, total]);
+  }, [round, checked, sel, seria]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {

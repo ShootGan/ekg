@@ -7,7 +7,7 @@ import { diagnosticMarks, kryterium, marksFor, type Kryterium } from '../lib/kry
 import { PRZYPADKI } from '../data/przypadki';
 import { useReal } from '../lib/real';
 import { RealToggle } from '../components/RealToggle';
-import { ATLAS_LINK, WYJASNIENIA } from '../data/wyjasnienia';
+import { WYJASNIENIA } from '../data/wyjasnienia';
 import { Omowienie, pokazNaWydruku, type KrokOmowienia } from './Omowienie';
 
 export interface QuizProps {
@@ -15,7 +15,6 @@ export interface QuizProps {
   poziom?: 1 | 2 | 3;
   kat?: string;
   id?: string;
-  navigate: (to: string) => void;
 }
 
 interface Round {
@@ -58,7 +57,7 @@ function syncUrl(seed: number, poziom?: 1 | 2 | 3, kat?: string) {
   if (poziom) q.set('poziom', String(poziom));
   if (kat) q.set('kat', kat);
   try {
-    window.history.replaceState(null, '', '#/trening/quiz?' + q.toString());
+    window.history.replaceState(null, '', '#/?' + q.toString());
   } catch {
     /* adres zostaje bez zmian */
   }
@@ -70,7 +69,7 @@ type Focus = { kind: 'k'; i: number } | { kind: 'c'; id: string };
 const same = (a: Focus | null, b: Focus | null) =>
   !!a && !!b && a.kind === b.kind && (a.kind === 'k' ? a.i === (b as { i: number }).i : a.id === (b as { id: string }).id);
 
-export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
+export function Quiz({ seed, poziom, kat, id }: QuizProps) {
   const [round, setRound] = useState<Round | null>(null);
   const [sel, setSel] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
@@ -315,12 +314,6 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
         </span>
         <div className="actions">
           <RealToggle compact />
-          <button type="button" className="mini" onClick={() => navigate('/trening')}>
-            ← Trening
-          </button>
-          <button type="button" className="mini" onClick={() => navigate('/trener/' + round.seed)}>
-            Pełny opis
-          </button>
           {checked ? (
             <button type="button" className="accent mini" onClick={next}>
               {endOfSeries ? 'Nowa seria →' : 'Następne EKG →'}
@@ -430,11 +423,6 @@ export function Quiz({ seed, poziom, kat, id, navigate }: QuizProps) {
                       Co się dzieje w sercu
                     </div>
                     <p style={{ margin: '4px 0 0', lineHeight: 1.55 }}>{WYJASNIENIA[key.id]}</p>
-                    {ATLAS_LINK[key.id] ? (
-                      <a href={'#/atlas/' + ATLAS_LINK[key.id]} style={{ display: 'inline-block', marginTop: 8, fontSize: 13 }}>
-                        Zobacz animację w atlasie →
-                      </a>
-                    ) : null}
                   </div>
                 ) : null}
 

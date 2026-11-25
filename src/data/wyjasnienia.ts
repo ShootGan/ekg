@@ -1,5 +1,4 @@
 // Wyjaśnienie każdego przypadku z banku: co dzieje się w sercu i dlaczego zapis wygląda właśnie tak.
-// ATLAS_LINK: przypadek → wzorzec w atlasie z animacją serca (gdy taki istnieje).
 
 export const WYJASNIENIA: Record<string, string> = {
   'p-pulmonale':
@@ -146,46 +145,4 @@ export const WYJASNIENIA: Record<string, string> = {
     'U starszego pacjenta z nadciśnieniem zwłóknienie obejmuje układ przewodzący w kilku miejscach: węzeł AV przewodzi wolniej (PR >200 ms), a przednia wiązka lewej odnogi przestaje przewodzić – górno-boczna część lewej komory pobudza się z opóźnieniem, więc wektor QRS kieruje się w górę i w lewo (lewogram, qR w I i aVL, rS w II, III, aVF). Pogrubiała lewa komora daje wysokie QRS. Chory układ przewodzący może okresowo blokować się całkowicie – stąd omdlenie.',
   'real-af-wolne-q-przedni':
     'Migoczące przedsionki nie dają P, a węzeł AV – dodatkowo hamowany β-blokerem i digoksyną – przepuszcza niewiele pobudzeń i nieregularnie, więc czynność komór jest wolna i niemiarowa. Blizna po zawale przednio-przegrodowym nie generuje sił elektrycznych, więc w V1–V3 zamiast narastającego R widać zespoły QS.',
-};
-
-export const ATLAS_LINK: Record<string, string> = {
-  'sinus-norma': 'sinus',
-  'tachykardia-zatokowa': 'stach',
-  'af-normo': 'af',
-  'af-rvr': 'af',
-  'af-wolne': 'af',
-  'flutter-2-1': 'afl',
-  'flutter-4-1': 'afl',
-  svt: 'avnrt',
-  'vt-mono': 'vt',
-  av1: 'av1',
-  wenckebach: 'wenckebach',
-  mobitz2: 'mobitz2',
-  'av-2-1': 'mobitz2',
-  'av3-waskie': 'av3',
-  'av3-szerokie': 'av3',
-  lbbb: 'lbbb',
-  rbbb: 'rbbb',
-  'niepelny-rbbb': 'rbbb',
-  wpw: 'wpw',
-  'stemi-dolny': 'stemi-inf',
-  'stemi-dolny-pk': 'stemi-inf',
-  'stemi-dolno-tylny': 'stemi-inf',
-  'stemi-przednioprzegrodowy': 'stemi-ant',
-  'stemi-przednioboczny': 'stemi-ant',
-  'hiperostre-t': 'stemi-ant',
-  lvh: 'lvh',
-  'nadcisnienie-lvh-pm': 'lvh',
-  hiperkaliemia: 'hiperk',
-  'real-af-q-dolny': 'af',
-  'real-stemi-dolny-pk-av1': 'stemi-inf',
-  'real-stemi-dolny-wenck': 'wenckebach',
-  'real-stemi-przedni-rbbb': 'stemi-ant',
-  'real-lbbb-pvc-av1': 'lbbb',
-  'real-hiperk-dializa': 'hiperk',
-  'real-lvh-nstemi': 'lvh',
-  'real-af-lbbb': 'af',
-  'real-af-lvh-strain': 'af',
-  'real-lvh-lafb-av1': 'av1',
-  'real-af-wolne-q-przedni': 'af',
 };

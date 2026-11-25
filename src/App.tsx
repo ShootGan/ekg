@@ -1,7 +1,6 @@
 import { Component, type ReactNode } from 'react';
 import { useHashRoute } from './lib/hash';
-import { NAV, matchRoute } from './routes';
-import { NotFound } from './pages/NotFound';
+import { matchRoute } from './routes';
 import { PulseMark } from './components/PulseMark';
 
 class Guard extends Component<{ children: ReactNode; resetKey: string }, { err: Error | null; key: string }> {
@@ -30,7 +29,7 @@ class Guard extends Component<{ children: ReactNode; resetKey: string }, { err: 
 export function App() {
   const { path } = useHashRoute();
   const route = matchRoute(path);
-  const Page = route ? route.page : NotFound;
+  const Page = route.page;
 
   return (
     <div className="shell">
@@ -39,15 +38,8 @@ export function App() {
           <a className="brand" href="#/">
             <PulseMark height={15} />
             <span className="brand-name">EKG</span>
-            <small>atlas i trener opisu</small>
+            <small>quiz EKG</small>
           </a>
-          <nav className="nav" aria-label="Nawigacja główna">
-            {NAV.filter((item) => !item.hidden).map((item) => (
-              <a key={item.path} href={'#' + item.path} aria-current={route === item || (route?.hidden && item.path === '/trening') ? 'page' : undefined}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
         </div>
       </header>
       <main className="main">

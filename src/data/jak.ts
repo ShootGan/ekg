@@ -77,7 +77,7 @@ export function jakTekst(c: { id: string; k: { leads: string[] } }, g?: Generate
   if (c.id === 'sa' && e.sa === 'wenckebach')
     return 'Pauza bez P i bez QRS. Przed nią odstępy PP stopniowo się skracają, a sama pauza jest krótsza niż dwa PP (blok zatokowo-przedsionkowy typu I).';
   if (c.id === 'sa' && e.sa === 'arrest')
-    return 'Nagła pauza bez P i bez QRS, która nie jest wielokrotnością podstawowego PP – to zahamowanie zatokowe. Przy bloku SA byłaby.';
+    return 'Nagła pauza bez P i bez QRS, która nie jest wielokrotnością podstawowego PP – to zahamowanie zatokowe. Przy bloku SA typu II pauza trwałaby dokładnie dwa (albo więcej) odstępy PP.';
   if (c.id === 'qtDl' && hr != null && (hr < 60 || hr > 90))
     return `QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Przy częstości ${hr}/min ocena na oko zawodzi – licz QTc ze wzoru.`;
   if (c.id === 'stUp' && c.k.leads.length === 1 && c.k.leads[0] === 'aVR')

@@ -590,9 +590,11 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
         <button type="button" onClick={() => zoomBy(1.4)} aria-label="Przybliż">
           +
         </button>
-        <button type="button" onClick={resetView}>
-          Reset
-        </button>
+        {zoom !== '1,0×' ? (
+          <button type="button" onClick={resetView}>
+            Cały zapis
+          </button>
+        ) : null}
       </div>
       <div className="ecgprint-scroll">
         <canvas

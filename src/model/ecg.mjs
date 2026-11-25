@@ -175,7 +175,7 @@
           S.atr.push({ t: ta, k: kind }); S.nA = (E.sa === 'wenckebach' && kind === 'a' ? S.nA : ta) + iv;
           if (cap) continue;
           var conducted = true, pr = E.pr / 1000;
-          if (E.av === 3) conducted = false;
+          if (E.av === 3 || r === 'asystole') conducted = false;
           else if (E.av === 'wenckebach') { var i = S.wk % E.avN; if (i === E.avN - 1) conducted = false; else pr += 0.2 * (1 - Math.pow(0.5, i)); S.wk++; }
           else if (E.av === 'mobitz2' || E.av === '2:1') { if (S.wk % E.avN === E.avN - 1) conducted = false; S.wk++; }
           if (conducted) pushV(S, ta + pr, 'n', R);
@@ -263,7 +263,7 @@
       o.tAx = axisOf(m.c.filter(function (c) { return !c.pl && c.t > m.D; }), m.D, m.qt + 0.1);
       var pl = m.c.filter(function (c) { return c.pl; }); // automat mierzy ST w J+60 ms; liczymy tylko składową uszkodzenia, bez ramienia T
       o.st = {}; NAMES.forEach(function (n) { o.st[n] = Math.round(evalComps(pl, m.D + 0.06, n) * 100) / 100; });
-      if (r === 'vf' || r === 'asystole') { o.qrs = o.qt = o.qtc = o.qrsAx = o.tAx = null; o.st = {}; }
+      if (r === 'vf' || r === 'asystole') { o.pr = o.qrs = o.qt = o.qtc = o.qrsAx = o.tAx = null; o.st = {}; }
       return o;
     }
     function measureStr(o) {

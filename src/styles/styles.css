@@ -695,10 +695,6 @@ h3,
 
 /* ---------- dymek omówienia na wydruku ------------------------------------ */
 
-.quiz-print {
-  position: relative;
-}
-
 .dymek {
   position: absolute;
   z-index: 5;

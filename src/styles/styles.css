@@ -770,3 +770,8 @@ h3,
     transition: none;
   }
 }
+
+html,
+body {
+  overflow-x: clip;
+}

@@ -1,4 +1,15 @@
 import type { GenerateResult } from '../lib/generate';
+import { cechyZapisu } from '../lib/cechy';
+
+const SZEROKI = ['LBBB', 'RBBB', 'WPW', 'vt', 'tdp', 'szpicz'];
+const NAZWA: Record<string, string> = {
+  LBBB: 'blok lewej odnogi',
+  RBBB: 'blok prawej odnogi',
+  WPW: 'preekscytacja (fala delta)',
+  vt: 'częstoskurcz komorowy',
+  tdp: 'torsade de pointes',
+  szpicz: 'hiperkaliemia',
+};
 
 export const JAK: Record<string, string> = {
   norma: 'Rytm zatokowy 60–100/min, PR 120–200 ms, QRS poniżej 120 ms, bez zmian ST-T.',
@@ -59,13 +70,28 @@ export function nieTu(id: string, g: GenerateResult): string {
   const qrs = g.M.qrs;
   const pr = K.pr;
   const hr = K.hr;
-  if (['szerQRS', 'LBBB', 'RBBB', 'vt'].includes(id) && qrs != null) return `QRS trwa tu ${qrs} ms, a do tego potrzeba co najmniej 120 ms.`;
+  const jest = new Set(cechyZapisu(g).jest.map((c) => c.id));
+  const kryt = JAK[id] ? ' Kryterium: ' + JAK[id] : '';
+  const zrodlo = SZEROKI.filter((x) => jest.has(x)).map((x) => NAZWA[x]);
+  if (['szerQRS', 'LBBB', 'RBBB', 'vt'].includes(id) && qrs != null) {
+    if (qrs < 120) return `QRS trwa tu ${qrs} ms, a do tego potrzeba co najmniej 120 ms.`;
+    if (id !== 'szerQRS') {
+      const skad = zrodlo.length ? ` Szerokość bierze się tu z: ${zrodlo.join(', ')}.` : '';
+      return `QRS jest szeroki (${qrs} ms), ale kształt nie pasuje.${skad}${kryt}`;
+    }
+  }
+  if (id === 'iRBBB' && jest.has('RBBB')) return `To pełny blok prawej odnogi: rSR' w V1 przy QRS ${qrs ?? '≥120'} ms.`;
+  if (id === 'iRBBB' && qrs != null && qrs >= 120) return `QRS trwa ${qrs} ms, a niepełny blok prawej odnogi ma QRS poniżej 120 ms i rSR' w V1.`;
   if (id === 'iRBBB' && qrs != null) return `Nie widać rSR' w V1. QRS trwa ${qrs} ms.`;
-  if (id === 'av1' && pr != null) return `PR ma tu ${pr} ms, a blok I stopnia zaczyna się powyżej 200 ms.`;
-  if (id === 'WPW' && pr != null) return `PR ma tu ${pr} ms i nie ma fali delta na początku QRS.`;
-  if (id === 'bradykardia' && hr != null) return `Komory biją ${hr}/min, a bradykardia to mniej niż 60/min.`;
-  if (id === 'tachykardia' && hr != null) return `Komory biją ${hr}/min, a tachykardia to więcej niż 100/min.`;
-  if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && K.rytm[0] === 'zatokowy') return 'Przed każdym QRS jest prawidłowy załamek P, a odstępy RR są równe. To rytm zatokowy.';
-  if (['wenck', 'mob2', '21', 'av3'].includes(id) && pr != null) return `Każde P przechodzi do komór, a PR jest stały (${pr} ms).`;
+  if (id === 'av1' && pr != null && pr <= 200) return `PR ma tu ${pr} ms, a blok I stopnia zaczyna się powyżej 200 ms.`;
+  if (id === 'WPW' && pr != null && pr >= 120) return `PR ma tu ${pr} ms i nie ma fali delta na początku QRS.`;
+  if (id === 'bradykardia' && hr != null && hr >= 60) return `Komory biją ${hr}/min, a bradykardia to mniej niż 60/min.`;
+  if (id === 'tachykardia' && hr != null && hr <= 100) return `Komory biją ${hr}/min, a tachykardia to więcej niż 100/min.`;
+  const blokAV = ['wenck', 'mob2', '21', 'av3'].some((x) => jest.has(x));
+  if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && jest.has('zatokowy') && blokAV)
+    return 'Załamki P są widoczne i biją miarowo z węzła zatokowego. Nieregularność komór bierze się z bloku AV, nie z innego rytmu.';
+  if (['af', 'flutter', 'wezlowy', 'svt'].includes(id) && jest.has('zatokowy') && !jest.has('sa')) return 'Przed każdym QRS jest prawidłowy załamek P, a odstępy RR są równe. To rytm zatokowy.';
+  if (['wenck', 'mob2', '21', 'av3'].includes(id) && pr != null && !['wenck', 'mob2', '21', 'av3'].some((x) => jest.has(x)))
+    return `Każde P przechodzi do komór, a PR jest stały (${pr} ms).`;
   return 'W tym zapisie tego obrazu nie ma. Kryterium: ' + (JAK[id] ?? '');
 }

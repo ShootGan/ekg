@@ -1,6 +1,6 @@
 import { Component, type ReactNode } from 'react';
 import { useHashRoute } from './lib/hash';
-import { matchRoute } from './routes';
+import { NAV, matchRoute } from './routes';
 import { PulseMark } from './components/PulseMark';
 
 class Guard extends Component<{ children: ReactNode; resetKey: string }, { err: Error | null; key: string }> {
@@ -40,6 +40,13 @@ export function App() {
             <span className="brand-name">EKG</span>
             <small>quiz EKG</small>
           </a>
+          <nav className="nav" aria-label="Nawigacja główna">
+            {NAV.map((item) => (
+              <a key={item.path} href={'#' + item.path} aria-current={route === item ? 'page' : undefined}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
         </div>
       </header>
       <main className="main">

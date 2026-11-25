@@ -55,7 +55,7 @@ function syncUrl(seed: number, poziom?: 1 | 2 | 3, kat?: string) {
   if (poziom) q.set('poziom', String(poziom));
   if (kat) q.set('kat', kat);
   try {
-    window.history.replaceState(null, '', '#/?' + q.toString());
+    window.history.replaceState(null, '', '#/quiz?' + q.toString());
   } catch {
     /* adres zostaje bez zmian */
   }
@@ -301,6 +301,9 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
           ) : null}
         </span>
         <div className="actions">
+          <a className="mini-link" href="#/">
+            ← Menu
+          </a>
           {checked ? (
             <button type="button" className="accent mini" onClick={next}>
               {endOfSeries ? 'Nowa seria →' : 'Następne EKG →'}

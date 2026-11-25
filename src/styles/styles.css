@@ -782,3 +782,73 @@ body {
   color: #8a3b12;
   margin-bottom: 8px;
 }
+
+/* ---------- MENU QUIZU ---------------------------------------------------- */
+
+.menu {
+  max-width: 880px;
+}
+
+.menu-head {
+  margin: 16px 0 32px;
+}
+
+.menu-head h1 {
+  font-size: 48px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+
+.menu-head p {
+  font-size: 17px;
+  line-height: 27px;
+  color: var(--ink-2);
+  max-width: 36rem;
+  margin: 0;
+}
+
+.menu-head .menu-stat {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.menu-head .menu-stat b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.menu-poziomy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.menu-poziomy small {
+  font: 12px var(--mono);
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.mini-link {
+  font-size: 13px;
+  color: var(--ink-2);
+  padding: 4px 8px;
+  border-radius: var(--r-ctl);
+}
+
+.mini-link:hover {
+  background: var(--chip);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+@media (max-width: 700px) {
+  .menu-head h1 {
+    font-size: 36px;
+  }
+  .menu-poziomy {
+    grid-template-columns: 1fr;
+  }
+}

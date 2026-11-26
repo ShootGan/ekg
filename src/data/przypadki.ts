@@ -186,7 +186,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 74, bbb: 'L' },
     kontekst: 'Duszność wysiłkowa od miesięcy, niewydolność serca w wywiadzie. Bez bólu w klatce.',
     rozpoznanie: 'Blok lewej odnogi pęczka Hisa',
-    elementy: ['QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5–V6', 'brak przegrodowego q w I, aVL, V5–V6', 'głęboki QS/rS w V1', 'wtórne zmiany ST-T przeciwne do głównego wychylenia QRS', 'w LBBB nie stosuje się zwykłych kryteriów STEMI – niedokrwienie ocenia się kryteriami Sgarbossy (Smith); samo nowe LBBB nie jest równoważnikiem STEMI'],
+    elementy: ['QRS ≥120 ms', 'szerokie, zazębione R w I, aVL, V5–V6', 'brak przegrodowego q w I, aVL, V5–V6', 'głęboki QS/rS w V1–V2', 'wtórne zmiany ST-T przeciwne do głównego wychylenia QRS', 'w LBBB nie stosuje się zwykłych kryteriów STEMI – niedokrwienie ocenia się kryteriami Sgarbossy (Smith); samo nowe LBBB nie jest równoważnikiem STEMI'],
     pulapki: ['zmiany ST-T w LBBB są wtórne – nie opisywać jako niedokrwienia', 'nowy LBBB + typowy ból = pilna ocena i teletransmisja; oceń ST kryteriami Sgarbossy'],
     postepowanie: 'Porównać ze starym EKG. Przy bólu dławicowym konsultacja z pracownią.' },
 
@@ -194,7 +194,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 70, bbb: 'R' },
     kontekst: 'Wizyta przy okazji infekcji, bez dolegliwości sercowych.',
     rozpoznanie: 'Blok prawej odnogi pęczka Hisa',
-    elementy: ['QRS ≥120 ms', 'rSR\' („M”) w V1–V2', 'szerokie, zazębione S w I i V6', 'wtórne odwrócenie T w V1–V3'],
+    elementy: ['QRS ≥120 ms', 'rSR\' („M”) w V1–V2', 'szerokie, zazębione S w I i V6', 'wtórne odwrócenie T w V1–V2'],
     pulapki: ['w RBBB ocena ST/zawału nadal możliwa – uniesienia ST nie są wtórne'],
     postepowanie: 'Izolowany RBBB u bezobjawowego – bez pilnych działań.' },
 
@@ -243,7 +243,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 56, stemi: 'inferior_rv', stAmp: 0.38 },
     kontekst: 'Ból w nadbrzuszu i za mostkiem od godziny, RR 92/58, żyły szyjne poszerzone, płuca czyste.',
     rozpoznanie: 'STEMI ściany dolnej z zajęciem prawej komory',
-    elementy: ['uniesienie ST II, III, aVF (III > II)', 'uniesienie ST w V1, mniejsze w V2 (odwrotnie niż w zawale przednim, gdzie rośnie ku V3–V4)', 'obniżenie ST w I, aVL i V5–V6', 'wniosek: zawał dolny z zajęciem PK – potwierdzić V3R–V4R (uniesienie ST ≥0,5 mm); unikać azotanów'],
+    elementy: ['uniesienie ST II, III, aVF (III > II)', 'uniesienie ST w V1, mniejsze w V2 (odwrotnie niż w zawale przednim)', 'obniżenie ST w I, aVL i V5–V6', 'wniosek: zawał dolny z zajęciem PK – potwierdzić V3R–V4R (uniesienie ST ≥0,5 mm); unikać azotanów'],
     pulapki: ['nitrogliceryna przeciwwskazana – ryzyko głębokiej hipotensji', 'uniesienie ST w V1 przy zawale dolnym to wskazówka PK, nie zawał przedni'],
     postepowanie: 'Bez nitratów i morfiny w dużych dawkach. Płyny przy hipotensji (bolusy 250 ml, kontrola płuc). Teletransmisja, ASA, heparyna, PCI.' },
 
@@ -324,7 +324,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 92, axis: 115 },
     kontekst: 'Wieloletni palacz, POChP, przewlekła duszność bez nagłego pogorszenia.',
     rozpoznanie: 'Rytm zatokowy, odchylenie osi w prawo',
-    elementy: ['oś > +90° (I ujemne, aVF dodatnie)', 'rytm zatokowy', 'możliwe przyczyny: przeciążenie PK, POChP, zatorowość, LPFB', 'wyklucz zamianę elektrod kończynowych (wtedy P i QRS są ujemne w I, a dodatnie w aVR)'],
+    elementy: ['oś > +90° (I ujemne, aVF dodatnie)', 'rytm zatokowy', 'możliwe przyczyny: przeciążenie PK, POChP, zatorowość, LPFB', 'wyklucz zamianę elektrod kończynowych (wtedy P i QRS są ujemne w I, a dodatnie w aVR) – to komentarz, nie cecha zapisu'],
     pulapki: ['zamiana elektrod rąk też daje ujemne I – sprawdź aVR i P w I'],
     postepowanie: 'Interpretować w kontekście klinicznym.' },
 
@@ -397,7 +397,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 40, jAmp: 0.25, qtc: 500, artifact: 0.25 },
     kontekst: 'Znaleziony rano na ławce, temperatura głęboka 29 °C, drżenia mięśniowe.',
     rozpoznanie: 'Hipotermia: bradykardia zatokowa, fale J (Osborna), wydłużony QT, artefakty z drżenia',
-    elementy: ['bradykardia', 'fale J (Osborna) – „garb” na przejściu QRS-ST', 'wydłużony QT', 'artefakty drżeniowe linii izoelektrycznej'],
+    elementy: ['bradykardia', 'fale J (Osborna) – „garb” na przejściu QRS-ST, najlepiej w II, III, aVF, V4–V6', 'wydłużony QT', 'artefakty drżeniowe linii izoelektrycznej'],
     pulapki: ['fale J mogą udawać uniesienia ST', 'ryzyko VF przy brutalnym przenoszeniu'],
     postepowanie: 'Delikatne przenoszenie w pozycji poziomej, izolacja termiczna, transport do ośrodka z ECMO wg stanu.' },
 
@@ -405,7 +405,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 80, uAmp: 0.14, tAmp: 0.45, qtc: 470 },
     kontekst: 'Biegunka od 4 dni, przyjmuje furosemid, osłabienie mięśni, kurcze.',
     rozpoznanie: 'Hipokaliemia: spłaszczone T, wyraźne fale U, pozornie wydłużony QT (QU)',
-    elementy: ['spłaszczone załamki T', 'wyraźne fale U (najlepiej V2–V3)', 'pozorne wydłużenie QT – w rzeczywistości QU (T zlewa się z U)', 'ryzyko arytmii komorowych / TdP'],
+    elementy: ['spłaszczone załamki T', 'wyraźne fale U (najlepiej V2–V3)', 'pozorne wydłużenie QT – w rzeczywistości QU (T zlewa się z U); to nie jest prawdziwe wydłużenie QT', 'ryzyko arytmii komorowych / TdP'],
     pulapki: ['fala U wliczona w QT daje fałszywie długi QT'],
     postepowanie: 'Transport, monitorowanie; suplementacja potasu w szpitalu.' },
 

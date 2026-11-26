@@ -32,7 +32,7 @@ export interface Kryterium {
 }
 
 const KLINICZNE: RegExp[] = [
-  /^(wniosek|w kontekście|przyczyna|ryzyko|stan |możliwe przyczyny|rozpoznanie z wykluczenia|nie da się|nowy |nagły początek|wywiad|omdlenie \+|tachykardia wtórna|ewentualne|sprawdzić|tło|ważne rozpoznanie|rytm niedefibr|w okresie|nie jest to RBBB|w LBBB nie ocenia)/,
+  /^(wniosek|w kontekście|przyczyna|ryzyko|stan |możliwe przyczyny|rozpoznanie z wykluczenia|nie da się|nowy |nagły początek|wywiad|omdlenie \+|tachykardia wtórna|ewentualne|sprawdzić|tło|ważne rozpoznanie|rytm niedefibr|w okresie|nie jest to RBBB|w LBBB nie ocenia|wyklucz zamianę|to komentarz|to nie jest prawdziwe)/,
   /^(reszta zapisu|bez |brak ostrych|brak uniesień|brak uniesienia|brak patologicznych|brak zmian przeciwstawnych|najpewniej|oś pionowa – norma|EKG prawidłowe)/,
   /^wysokie ryzyko/,
 ];

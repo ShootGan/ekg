@@ -39,7 +39,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 134, voltage: 0.5, tAmp: 0.6, alternans: 0.55 },
     kontekst: 'Rak płuca, narastająca duszność od kilku dni, siedzi pochylony do przodu, RR 80/60, tętno słabo wyczuwalne, poszerzone żyły szyjne, tony serca ściszone.',
     rozpoznanie: 'Tachykardia zatokowa + niski woltaż QRS + naprzemienność elektryczna – obraz płynu w worku osierdziowym (podejrzenie tamponady serca)',
-    elementy: ['tachykardia zatokowa', 'niski woltaż zespołów QRS w odprowadzeniach kończynowych i przedsercowych', 'naprzemienność elektryczna – amplituda QRS zmienia się co drugie pobudzenie (najlepiej widać w II, V3–V5)', 'wniosek: tamponada serca (triada Becka, tętno paradoksalne)'],
+    elementy: ['tachykardia zatokowa', 'niski woltaż zespołów QRS w odprowadzeniach kończynowych i przedsercowych', 'naprzemienność elektryczna – amplituda QRS zmienia się co drugie pobudzenie (najlepiej widać w II i V4)', 'wniosek: tamponada serca (triada Becka, tętno paradoksalne)'],
     pulapki: ['naprzemienność elektryczna bywa ledwo widoczna – porównuj sąsiednie zespoły QRS w jednym odprowadzeniu', 'niski woltaż tłumaczony otyłością lub POChP', 'tachykardia zatokowa to tu mechanizm kompensacyjny – nie spowalniaj β-blokerem'],
     postepowanie: 'Tlen, dostęp i.v., ostrożne bolusy płynów, unikaj leków obniżających ciśnienie i częstość, pozycja półsiedząca. USG przyłóżkowe (płyn w osierdziu, zapadanie PK). Pilny transport do ośrodka z możliwością perikardiocentezy, zgłoszenie wyprzedzające.' },
 
@@ -103,7 +103,7 @@ export const PRZYPADKI_REAL: Case[] = [
     ecg: { rhythm: 'sinus', hr: 96, uAmp: 0.14, tAmp: 0.45, qtc: 480, pvc: 0.2 },
     kontekst: 'Od kilku dni wymioty i biegunka, przyjmuje furosemid. Osłabienie mięśni, skurcze łydek, „serce przeskakuje”.',
     rozpoznanie: 'Hipokaliemia: spłaszczone T + fale U + wydłużony QT(U) + częste przedwczesne pobudzenia komorowe',
-    elementy: ['rytm zatokowy z pobudzeniami dodatkowymi', 'spłaszczone, niskie T', 'fale U (najlepiej V2–V3)', 'pozornie wydłużony QT (QU – T zlewa się z U)', 'przedwczesne, szerokie pobudzenia komorowe (PVC) z pauzą wyrównawczą'],
+    elementy: ['rytm zatokowy z pobudzeniami dodatkowymi', 'spłaszczone, niskie T', 'fale U (najlepiej V2–V3)', 'pozornie wydłużony QT (QU – T zlewa się z U); to nie jest prawdziwe wydłużenie QT', 'przedwczesne, szerokie pobudzenia komorowe (PVC) z pauzą wyrównawczą'],
     pulapki: ['T zlewające się z U daje fałszywie długi QT – mierz do końca T, jeśli da się je oddzielić', 'hipokaliemia z PVC i długim QT = ryzyko torsade de pointes', 'hipokaliemia często idzie w parze z hipomagnezemią'],
     postepowanie: 'Monitorowanie, dostęp i.v., płyny przy odwodnieniu, siarczan magnezu wg protokołu przy częstych PVC lub długim QT. Unikaj leków wydłużających QT (np. ondansetron). Transport na SOR.' },
 

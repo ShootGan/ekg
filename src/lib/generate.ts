@@ -472,7 +472,7 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
         for (const n of leadsP) {
           const vb = beatAfter(n, 0.3);
           const ap = vb ? S.atr.filter((x) => x.t < vb.t && vb.t - x.t < 0.4).pop() : null;
-          if (ap) add('P', n, ap.t - 0.01, ap.t + 0.13, n === 'V1' && e.pType === 'mitrale' ? 'P dwufazowy, ujemna końcówka' : e.pType === 'pulmonale' ? 'P > 2,5 mm' : 'P w V1', ['P']);
+          if (ap) add('P', n, ap.t - 0.01, ap.t + 0.13, n === 'V1' && e.pType === 'mitrale' ? 'P dwufazowy, ujemna końcówka' : n === 'V1' ? 'P w V1' : 'P > 2,5 mm', ['P']);
         }
       }
     }
@@ -551,8 +551,10 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
       if (e.wpw) add('prz', 'pasek', vq.t - 0.01, vq.t + 0.05, 'fala delta', ['delta']);
       if (e.jAmp) {
         add('morf', 'pasek', vq.t + m.D - 0.03, vq.t + m.D + 0.04, 'fala J', ['J']);
-        const vj = beatLead('V4');
-        if (vj) add('morf', 'V4', vj.t + morphOf(vj).D - 0.03, vj.t + morphOf(vj).D + 0.04, 'fala J', ['J']);
+        for (const n of ['III', 'aVF', 'V3', 'V4', 'V5', 'V6']) {
+          const vj = beatLead(n);
+          if (vj) add('morf', n, vj.t + morphOf(vj).D - 0.03, vj.t + morphOf(vj).D + 0.04, 'fala J', ['J']);
+        }
       }
       if (K.qtc != null && K.qtc > 520 && !e.uAmp)
         add('T', 'pasek', vq3.t + morphOf(vq3).tp - 0.12, vq3.t + morphOf(vq3).tp + 0.12, 'T szerokie', ['T']);
@@ -586,7 +588,7 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
     }
 
     if (K.os.length)
-      for (const n of ['I', 'II', 'aVF']) {
+      for (const n of ['I', 'II', 'III', 'aVL', 'aVF']) {
         const v = beatLead(n);
         if (v) {
           const m = morphOf(v);
@@ -597,7 +599,7 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
     if (e.bbb || K.iv.req.includes('IVCD')) {
       const spec: [string, string, string[]][] =
         e.bbb === 'L'
-          ? [['V1', 'QS / rS szerokie', ['prog', 'Q', 'rsr', 'QRS', 'bbb']], ['V5', 'szerokie R, bez q', ['QRS', 'bbb']], ['V6', 'szerokie R, bez q', ['QRS', 'bbb']], ['I', 'szerokie R', ['QRS', 'bbb']], ['aVL', 'szerokie R', ['QRS', 'bbb']]]
+          ? [['V1', 'QS / rS szerokie', ['prog', 'Q', 'rsr', 'QRS', 'bbb']], ['V2', 'QS / rS szerokie', ['prog', 'Q', 'rsr', 'QRS', 'bbb']], ['V5', 'szerokie R, bez q', ['QRS', 'bbb']], ['V6', 'szerokie R, bez q', ['QRS', 'bbb']], ['I', 'szerokie R', ['QRS', 'bbb']], ['aVL', 'szerokie R', ['QRS', 'bbb']]]
           : e.bbb === 'R'
             ? [['V1', "rSR'", ['rsr', 'QRS', 'bbb']], ['V2', "rSR'", ['rsr', 'QRS', 'bbb']], ['V6', 'szerokie S', ['szS', 'QRS', 'bbb']], ['I', 'szerokie S', ['szS', 'QRS', 'bbb']]]
             : e.bbb === 'iR'

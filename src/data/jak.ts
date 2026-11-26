@@ -80,6 +80,8 @@ export function jakTekst(c: { id: string; k: { leads: string[] } }, g?: Generate
     return 'Nagła pauza bez P i bez QRS, która nie jest wielokrotnością podstawowego PP – to zahamowanie zatokowe. Przy bloku SA typu II pauza trwałaby dokładnie dwa (albo więcej) odstępy PP.';
   if (c.id === 'qtDl' && hr != null && (hr < 60 || hr > 90))
     return `QTc powyżej 450 ms u mężczyzn i 460 ms u kobiet. Przy częstości ${hr}/min ocena na oko zawodzi – licz QTc ze wzoru.`;
+  if (c.id === 'lvh' && g && (g.key.klucz.osDeg ?? 0) < -45)
+    return 'Przy bloku przedniej wiązki (oś skręcona w lewo) kryterium Sokolowa bywa fałszywie ujemne – przerost potwierdza tu Cornell: R w aVL + S w V3 powyżej 28 mm u mężczyzn i 20 mm u kobiet.';
   if (c.id === 'stUp' && c.k.leads.length === 1 && c.k.leads[0] === 'aVR')
     return 'Tu tylko w aVR, i to jest wyjątek od reguły dwóch sąsiednich odprowadzeń: uniesienie ST w aVR (od 1 mm) razem z rozlanym obniżeniem ST w wielu odprowadzeniach sugeruje zwężenie pnia lewej tętnicy wieńcowej albo chorobę wielonaczyniową.';
   return JAK[c.id] ?? '';

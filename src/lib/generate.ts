@@ -234,9 +234,11 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
     K.rytm = r === 'asystole' ? (e.atrialRate ? ['zatrzymanie'] : ['asystolia']) : sinus ? ['zatokowy'] : [RYTMK[r] || r];
     if (r === 'tdp') K.rytm.push('vt');
     const drops = ['wenckebach', 'mobitz2'].includes(String(e.av ?? '')) || !!e.sa;
-    K.miar = ['vf', 'asystole'].includes(r) ? [] : ['af', 'tdp'].includes(r) ? ['zupelnie'] : drops || e.pvc || e.pac || (e.sinArr || 0) >= 0.08 ? ['niemiarowy'] : ['miarowy'];
-    if (e.pvc || e.pac) K.miar.push('miarowy');
-    K.dod = { req: [e.pvc && 'pvc', e.pac && 'pac', (e.sinArr || 0) >= 0.08 && 'niemiar'].filter((x): x is string => !!x), ok: drops ? ['pauzy'] : [] };
+    const pvcIn = S.ev.some((v) => v.k === 'v' && v.t > 0.5 && v.t < 9.3);
+    const pacIn = S.atr.some((a) => a.k === 'pac' && a.t > 0.3 && a.t < 9.5);
+    K.miar = ['vf', 'asystole'].includes(r) ? [] : ['af', 'tdp'].includes(r) ? ['zupelnie'] : drops || pvcIn || pacIn || (e.sinArr || 0) >= 0.08 ? ['niemiarowy'] : ['miarowy'];
+    if (pvcIn || pacIn) K.miar.push('miarowy');
+    K.dod = { req: [pvcIn && 'pvc', pacIn && 'pac', (e.sinArr || 0) >= 0.08 && 'niemiar'].filter((x): x is string => !!x), ok: drops ? ['pauzy'] : [] };
 
     K.hr = M.hr ?? null;
     K.ha = (e.av && e.av !== 1) || r === 'flutter' || (r === 'asystole' && e.atrialRate)
@@ -715,14 +717,14 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
         }
       }
     if (K.T.req.includes('szpicz') || K.T.req.includes('hiper'))
-      for (const n of K.T.req.includes('hiper') ? ['V2', 'V3', 'V4'] : ['V2', 'V3']) {
+      for (const n of ['V2', 'V3', 'V4']) {
         const v = beatLead(n);
         if (v) {
           const m = morphOf(v);
           add('T', n, v.t + m.tp - 0.1, v.t + m.tp + 0.08, K.T.req.includes('hiper') ? 'T hiperostry' : 'T szpiczasty', ['T']);
         }
       }
-    if (K.T.req.includes('plaskie') || (e.tAmp ?? 1) <= 0.6)
+    if (K.T.req.includes('plaskie') || (e.tAmp ?? 1) < 0.6)
       for (const n of ['II', 'V4', 'V5']) {
         const v = beatLead(n);
         if (v) add('T', n, v.t + morphOf(v).tp - 0.09, v.t + morphOf(v).tp + 0.09, 'T spłaszczone', ['T']);
@@ -831,7 +833,7 @@ export function generateCase(opts: GenerateOpts): GenerateResult {
     elementy: P.elementy,
     pulapki: P.pulapki,
     postepowanie: P.postepowanie,
-    pomiary: G.measureStr(M),
+    pomiary: klucz.qt == null ? G.measureStr(M).replace(/QT\/QTc \S+/, 'QT/QTc ---/---') : G.measureStr(M),
     klucz,
     zaznaczenia: zaznaczenia(klucz),
   };

@@ -301,6 +301,7 @@ function draw(v: View) {
   }
   drawMarks(v, lw);
   v.setZoom(v.s.toFixed(1).replace('.', ',') + '×');
+  v.cv.style.touchAction = v.s > 1.001 ? 'none' : 'pan-y';
   v.onDraw?.();
 }
 
@@ -438,6 +439,12 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
         if (lastD) zoomAt(v, d / lastD, (a[0] + b[0]) / 2 - rc.left, (a[1] + b[1]) / 2 - rc.top);
         lastD = d;
       } else if (lastPos) {
+        const sc = cv.parentElement;
+        if (v.s <= 1.001 && sc && sc.scrollWidth > sc.clientWidth) {
+          sc.scrollLeft -= e.clientX - lastPos[0];
+          lastPos = [e.clientX, e.clientY];
+          return;
+        }
         v.ox += e.clientX - lastPos[0];
         v.oy += e.clientY - lastPos[1];
         lastPos = [e.clientX, e.clientY];
@@ -606,7 +613,7 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
             background: 'var(--paper)',
             borderRadius: 4,
             border: '1px solid var(--line)',
-            touchAction: 'none',
+            touchAction: 'pan-y',
             cursor: 'grab',
           }}
         />

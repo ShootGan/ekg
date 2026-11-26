@@ -284,8 +284,13 @@ export function cechyZapisu(g: GenerateResult): CechyZapisu {
     [jest.has('rvh'), ['RBBB', 'iRBBB']],
     [jest.has('af') && jest.has('bradykardia'), ['av3']],
     [jest.has('asystolia'), ['zatokowy']],
+    [jest.has('vt') || jest.has('svt') || jest.has('tdp'), ['tachykardia', 'czestNorm']],
   ];
   for (const [warunek, ids] of dwuznaczne) if (warunek) ids.forEach((x) => !jest.has(x) && niepewne.add(x));
+  if (jest.has('vt') || jest.has('svt') || jest.has('tdp')) {
+    jest.delete('tachykardia');
+    niepewne.add('tachykardia');
+  }
 
   if (hr != null && !['vf', 'asystolia'].includes(ry ?? '')) {
     if (hr > 62 && hr < 98) add('czestNorm');

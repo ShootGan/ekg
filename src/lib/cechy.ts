@@ -28,23 +28,27 @@ const KATALOG: [string, string, string, string[]][] = [
   ['tdp', 'rytm', 'Torsade de pointes', ['tdp', 'QRS']],
   ['vf', 'rytm', 'Migotanie komór', ['rytm']],
   ['asystolia', 'rytm', 'Brak zespołów QRS (asystolia / zatrzymanie komór)', ['pauza']],
+  ['czestNorm', 'czest', 'Częstość komór prawidłowa (60–100/min)', ['czest']],
   ['bradykardia', 'czest', 'Bradykardia (<60/min)', ['czest']],
   ['tachykardia', 'czest', 'Tachykardia (>100/min)', ['czest']],
   ['pvc', 'dod', 'Przedwczesne pobudzenia komorowe', ['pvc']],
   ['pac', 'dod', 'Przedwczesne pobudzenia nadkomorowe', ['pac']],
   ['sa', 'sa', 'Pauzy zatokowe (blok SA / zahamowanie zatokowe)', ['pauza', 'pp']],
+  ['prNorm', 'av', 'PR prawidłowy (120–200 ms)', ['PR']],
   ['av1', 'av', 'Blok AV I° (PR >200 ms)', ['PR']],
   ['wenck', 'av', 'Blok AV II° Mobitz I (Wenckebach)', ['PR', 'pbez', 'pauza']],
   ['mob2', 'av', 'Blok AV II° Mobitz II', ['pbez', 'P']],
   ['21', 'av', 'Blok AV II° 2:1', ['pbez', 'P']],
   ['av3', 'av', 'Blok AV III° (całkowity)', ['dysoc', 'P']],
   ['WPW', 'av', 'Preekscytacja (WPW) – krótki PR, fala delta', ['delta', 'PR']],
+  ['qrsWaski', 'iv', 'QRS wąskie (<120 ms)', ['QRS']],
   ['szerQRS', 'iv', 'Poszerzone QRS (≥120 ms)', ['QRS']],
   ['LBBB', 'iv', 'Blok lewej odnogi (LBBB)', ['bbb', 'QRS']],
   ['RBBB', 'iv', 'Blok prawej odnogi (RBBB)', ['bbb', 'rsr', 'szS']],
   ['iRBBB', 'iv', 'Niepełny blok prawej odnogi', ['rsr']],
   ['LAFB', 'iv', 'Blok przedniej wiązki lewej odnogi (LAFB)', ['os']],
   ['LPFB', 'iv', 'Blok tylnej wiązki lewej odnogi (LPFB)', ['os']],
+  ['osPosr', 'os', 'Oś prawidłowa (od −30° do +90°)', ['os']],
   ['osL', 'os', 'Odchylenie osi w lewo (lewogram)', ['os']],
   ['osP', 'os', 'Odchylenie osi w prawo (prawogram)', ['os']],
   ['pulm', 'P', 'P pulmonale (powiększenie prawego przedsionka)', ['P']],
@@ -87,25 +91,29 @@ const MYLI: Record<string, string[]> = {
   tdp: ['vt', 'vf', 'af', 'qtDl'],
   vf: ['tdp', 'vt', 'asystolia', 'af'],
   asystolia: ['av3', 'vf', 'bradykardia', 'sa'],
-  bradykardia: ['sa', 'av1', '21', 'wezlowy'],
-  tachykardia: ['svt', 'flutter', 'af', 'pac'],
+  czestNorm: ['bradykardia', 'tachykardia'],
+  bradykardia: ['sa', 'av1', '21', 'wezlowy', 'czestNorm'],
+  tachykardia: ['svt', 'flutter', 'af', 'pac', 'czestNorm'],
   pvc: ['pac', 'LBBB', 'vt', 'niemiarSin'],
   pac: ['pvc', 'af', 'niemiarSin', 'sa'],
   sa: ['wenck', 'mob2', '21', 'pac', 'niemiarSin'],
-  av1: ['wenck', 'WPW', 'mob2', 'av3'],
+  prNorm: ['av1', 'WPW'],
+  av1: ['wenck', 'WPW', 'mob2', 'av3', 'prNorm'],
   wenck: ['mob2', '21', 'av1', 'sa', 'av3'],
   mob2: ['wenck', '21', 'av3', 'sa'],
   '21': ['wenck', 'mob2', 'av3', 'bradykardia'],
   av3: ['21', 'mob2', 'wezlowy', 'wenck'],
-  WPW: ['LBBB', 'av1', 'szerQRS', 'q'],
-  szerQRS: ['LBBB', 'RBBB', 'WPW', 'iRBBB'],
+  WPW: ['LBBB', 'av1', 'szerQRS', 'q', 'prNorm'],
+  qrsWaski: ['szerQRS', 'iRBBB'],
+  szerQRS: ['LBBB', 'RBBB', 'WPW', 'iRBBB', 'qrsWaski'],
   LBBB: ['RBBB', 'WPW', 'stUp', 'lvh', 'iRBBB'],
   RBBB: ['LBBB', 'iRBBB', 'rvh', 'brugada'],
   iRBBB: ['RBBB', 'brugada', 'rvh', 'szerQRS'],
-  LAFB: ['LPFB', 'osP', 'LBBB', 'q'],
-  LPFB: ['LAFB', 'osL', 'rvh'],
-  osL: ['osP', 'LPFB'],
-  osP: ['osL', 'LAFB'],
+  LAFB: ['LPFB', 'osP', 'LBBB', 'q', 'osPosr'],
+  LPFB: ['LAFB', 'osL', 'rvh', 'osPosr'],
+  osPosr: ['osL', 'osP'],
+  osL: ['osP', 'LPFB', 'osPosr'],
+  osP: ['osL', 'LAFB', 'osPosr'],
   pulm: ['mitr', 'pPlaskie', 'rvh'],
   mitr: ['pulm', 'av1', 'lvh'],
   pPlaskie: ['pulm', 'mitr', 'wezlowy'],
@@ -131,6 +139,8 @@ const MYLI: Record<string, string[]> = {
 
 // Ciężkie arytmie jako fałszywa odpowiedź tylko przy szerokim / szybkim rytmie – inaczej to oczywista eliminacja.
 const ZLOSLIWE = new Set(['vt', 'tdp', 'vf', 'asystolia']);
+
+export const NORMALNE = new Set(['zatokowy', 'czestNorm', 'prNorm', 'qrsWaski', 'osPosr']);
 
 const RYTM_ID: Record<string, string> = {
   zatokowy: 'zatokowy', af: 'af', flutter: 'flutter', wezlowy: 'wezlowy', svt: 'svt', vt: 'vt', tdp: 'tdp', vf: 'vf',
@@ -277,7 +287,27 @@ export function cechyZapisu(g: GenerateResult): CechyZapisu {
   ];
   for (const [warunek, ids] of dwuznaczne) if (warunek) ids.forEach((x) => !jest.has(x) && niepewne.add(x));
 
-  const patol = [...jest.keys()].filter((x) => x !== 'zatokowy');
+  if (hr != null && !['vf', 'asystolia'].includes(ry ?? '')) {
+    if (hr > 62 && hr < 98) add('czestNorm');
+    else if (hr >= 58 && hr <= 102) niepewne.add('czestNorm');
+  } else niepewne.add('czestNorm');
+  const blokAV = ['av1', 'wenck', 'mob2', '21', 'av3', 'WPW'].some((x) => jest.has(x));
+  const pr = K.pr;
+  if (pr != null && jest.has('zatokowy') && !blokAV) {
+    if (pr >= 125 && pr <= 195) add('prNorm');
+    else niepewne.add('prNorm');
+  } else if (!blokAV) niepewne.add('prNorm');
+  if (!wide && qrs > 0 && !jest.has('szerQRS')) {
+    if (qrs < 110 && !jest.has('pvc')) add('qrsWaski');
+    else niepewne.add('qrsWaski');
+  } else if (!jest.has('szerQRS')) niepewne.add('qrsWaski');
+  const os = K.osDeg;
+  if (!wide && os != null && !jest.has('osL') && !jest.has('osP')) {
+    if (os > -25 && os < 85) add('osPosr');
+    else niepewne.add('osPosr');
+  } else if (os == null || wide) niepewne.add('osPosr');
+
+  const patol = [...jest.keys()].filter((x) => !NORMALNE.has(x));
   if (!patol.length) add('norma');
   else if (patol.every((x) => x === 'niemiarSin')) {
     add('norma');
@@ -302,13 +332,14 @@ function shuffle<T>(a: T[], rnd: () => number): T[] {
   return x;
 }
 
-// Wszystkie patologie z zapisu + fałszywe odpowiedzi z cech, z którymi najłatwiej je pomylić.
-// Rytm zatokowy nie jest patologią – pokazujemy go tylko wtedy, gdy zapis jest prawidłowy albo jako pułapkę przy innym rytmie.
+// Wszystkie patologie z zapisu, czasem 1–2 prawidłowe cechy, i pułapki z cech, z którymi najłatwiej je pomylić.
 export function quizCech(g: GenerateResult, seed: number, min = 5): CechaQ[] {
   const rnd = mulberry32((seed ^ 0x51ed270b) >>> 0);
   const { jest, niepewne } = cechyZapisu(g);
   const ids = new Set(jest.map((c) => c.id));
-  const prawdziwe = jest.filter((c) => c.id !== 'zatokowy');
+  const patologie = jest.filter((c) => !NORMALNE.has(c.id));
+  const ileNorm = patologie.length <= 1 ? 1 + Math.floor(rnd() * 2) : Math.floor(rnd() * 3);
+  const prawdziwe = [...patologie, ...shuffle(jest.filter((c) => NORMALNE.has(c.id)), rnd).slice(0, ileNorm)];
   const szybkiSzeroki = ids.has('tachykardia') || ids.has('szerQRS') || ids.has('vt') || ids.has('vf') || ids.has('asystolia');
   const przeciwne = (id: string) => (id === 'tachykardia' && ids.has('bradykardia')) || (id === 'bradykardia' && ids.has('tachykardia'));
   const ok = (id: string) => !ids.has(id) && !niepewne.has(id) && BY.has(id) && !przeciwne(id) && (szybkiSzeroki || !ZLOSLIWE.has(id));

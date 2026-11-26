@@ -23,23 +23,27 @@ export const JAK: Record<string, string> = {
   tdp: 'Szerokie QRS, których amplituda i kierunek falują wokół linii, na tle wydłużonego QT.',
   vf: 'Chaotyczne fale bez rozpoznawalnych zespołów QRS.',
   asystolia: 'Brak zespołów QRS, linia prawie płaska. Sprawdź w dwóch odprowadzeniach i przy większym wzmocnieniu.',
+  czestNorm: 'Częstość komór 60–100/min. Szybko: 300 dzielone przez liczbę dużych kratek między R, albo liczba QRS na całym pasku (10 s) razy 6.',
   bradykardia: 'Częstość komór poniżej 60/min.',
   tachykardia: 'Częstość komór powyżej 100/min.',
   pvc: 'Przedwczesny, szeroki QRS bez załamka P przed nim, zwykle z pełną przerwą wyrównawczą.',
   pac: 'Przedwczesny załamek P o innym kształcie, zwykle z wąskim QRS.',
   sa: 'Nagła pauza bez P i bez QRS. Przy bloku SA pauza trwa wielokrotność odstępu PP.',
+  prNorm: 'PR od początku P do początku QRS trwa 120–200 ms, czyli 3–5 małych kratek, i jest taki sam w każdym cyklu.',
   av1: 'PR powyżej 200 ms, stały w każdym cyklu, każde P przewiedzione do komór.',
   wenck: 'PR wydłuża się z cyklu na cykl, aż jedno P zostaje bez QRS, potem cykl rusza od nowa.',
   mob2: 'PR stały w przewodzonych cyklach, a potem nagle P bez QRS. QRS często szeroki, bo blok leży poniżej węzła AV.',
   '21': 'Co drugie P zostaje bez QRS.',
   av3: 'P i QRS biją niezależnie: PP stałe, RR stałe, PR za każdym razem inny.',
   WPW: 'PR krótszy niż 120 ms, fala delta na początku QRS, QRS poszerzony.',
+  qrsWaski: 'QRS trwa poniżej 120 ms, czyli mniej niż 3 małe kratki.',
   szerQRS: 'QRS trwa 120 ms albo dłużej.',
   LBBB: 'QRS co najmniej 120 ms, szerokie R z zazębieniem w I, aVL, V5–V6 i głęboki S w V1.',
   RBBB: "QRS co najmniej 120 ms, rSR' w V1–V2 i szeroki S w I oraz V6.",
   iRBBB: "rSR' w V1 przy QRS 110–119 ms. Przy węższym QRS bywa wariantem normy.",
   LAFB: 'Oś poniżej −45°, qR w aVL, rS w II, III i aVF.',
   LPFB: 'Oś zwykle +100° i więcej, rS w I i aVL, qR w III i aVF, po wykluczeniu przerostu prawej komory i budowy ciała.',
+  osPosr: 'QRS dodatni w I i w II – oś mieści się między −30° a +90°.',
   osL: 'QRS dodatni w I i ujemny w II oraz aVF, oś poniżej −30°.',
   osP: 'QRS ujemny w I i dodatni w aVF, oś powyżej +90°.',
   pulm: 'Wysokie, szpiczaste P, co najmniej 2,5 mm w II, III i aVF.',
@@ -107,6 +111,11 @@ export function nieTu(id: string, g: GenerateResult): string {
   if (id === 'iRBBB' && qrs != null) return `Nie widać rSR' w V1. QRS trwa ${qrs} ms.`;
   if (id === 'av1' && pr != null && pr <= 200) return `PR ma tu ${pr} ms, a blok I stopnia zaczyna się powyżej 200 ms.`;
   if (id === 'WPW' && pr != null && pr >= 120) return `PR ma tu ${pr} ms i nie ma fali delta na początku QRS.`;
+  if (id === 'czestNorm' && hr != null && (hr < 60 || hr > 100)) return `Komory biją ${hr}/min, poza zakresem 60–100/min.`;
+  if (id === 'prNorm' && ['wenck', 'mob2', '21', 'av3'].some((x) => jest.has(x))) return 'PR nie jest stały, a nie każde P przechodzi do komór – to blok AV.';
+  if (id === 'prNorm' && pr != null) return pr > 200 ? `PR ma tu ${pr} ms, czyli ponad 200 ms.` : `PR ma tu ${pr} ms, czyli mniej niż 120 ms.`;
+  if (id === 'qrsWaski' && qrs != null) return `QRS trwa tu ${qrs} ms, czyli co najmniej 120 ms.`;
+  if (id === 'osPosr' && K.osDeg != null) return `Oś QRS to ok. ${K.osDeg}°, poza zakresem od −30° do +90°.`;
   if (id === 'bradykardia' && hr != null && hr >= 60) return `Komory biją ${hr}/min, a bradykardia to mniej niż 60/min.`;
   if (id === 'tachykardia' && hr != null && hr <= 100) return `Komory biją ${hr}/min, a tachykardia to więcej niż 100/min.`;
   const blokAV = ['wenck', 'mob2', '21', 'av3'].some((x) => jest.has(x));

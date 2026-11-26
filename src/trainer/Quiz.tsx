@@ -5,7 +5,6 @@ import { quizCech, type CechaQ } from '../lib/cechy';
 import { saveEntry } from '../lib/historia';
 import { diagnosticMarks, kryterium, marksFor, type Kryterium } from '../lib/kryteria';
 import { PRZYPADKI } from '../data/przypadki';
-import { WYJASNIENIA } from '../data/wyjasnienia';
 import { Omowienie, pokazNaWydruku, type KrokOmowienia } from './Omowienie';
 
 export interface QuizProps {
@@ -409,15 +408,6 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
                   {key.pomiary}
                 </div>
 
-                {WYJASNIENIA[key.id] ? (
-                  <div className="note">
-                    <div className="sub" style={{ marginTop: 0 }}>
-                      Co się dzieje w sercu
-                    </div>
-                    <p style={{ margin: '4px 0 0', lineHeight: 1.55 }}>{WYJASNIENIA[key.id]}</p>
-                  </div>
-                ) : null}
-
                 <div className="sub">Kryteria rozpoznania – gdzie je widać na wydruku</div>
                 <p className="muted" style={{ fontSize: 12.5, margin: '2px 0 8px', lineHeight: 1.5 }}>
                   {touch ? 'Dotknij' : 'Najedź na'} kryterium – na wydruku obrysują się odprowadzenia, w których je widać.
@@ -427,18 +417,7 @@ export function Quiz({ seed, poziom, kat, id }: QuizProps) {
                   {kryteria.map((k, i) => {
                     const f: Focus = { kind: 'k', i };
                     const isActive = same(pinned, f);
-                    if (!k.wizualne)
-                      return (
-                        <li key={k.t}>
-                          <div className="kryt-note">
-                            <span aria-hidden className="kryt-mark">
-                              i
-                            </span>
-                            <span style={{ flex: '1 1 200px' }}>{k.t}</span>
-                            <span style={{ fontSize: 11.5 }}>{k.nieobecne ? 'nieobecne' : 'kliniczne'}</span>
-                          </div>
-                        </li>
-                      );
+                    if (!k.wizualne) return null;
                     return (
                       <li key={k.t}>
                         <button

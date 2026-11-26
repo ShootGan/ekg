@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { PRZYPADKI } from '../src/data/przypadki';
 import { generateCase } from '../src/lib/generate';
-import { cechyZapisu, quizCech } from '../src/lib/cechy';
+import { NORMALNE, cechyZapisu, quizCech } from '../src/lib/cechy';
 
 const has = (id: string, seed = 11) => cechyZapisu(generateCase({ seed, id })).jest.map((c) => c.id);
 const ZLOSLIWE = ['vt', 'tdp', 'vf', 'asystolia'];
@@ -18,7 +18,8 @@ describe('cechy zapisu', () => {
   });
 
   it('zapis prawidłowy to „bez patologii”, a nie pusty quiz', () => {
-    expect(has('sinus-norma')).toEqual(['norma', 'zatokowy']);
+    expect(has('sinus-norma')).toEqual(expect.arrayContaining(['norma', 'zatokowy', 'czestNorm', 'qrsWaski', 'osPosr']));
+    expect(has('sinus-norma').filter((x) => !NORMALNE.has(x))).toEqual(['norma']);
     expect(has('af-normo')).not.toContain('zatokowy');
     expect(has('lbbb')).not.toContain('stUp');
     expect(has('stemi-dolny')).not.toContain('norma');
@@ -31,7 +32,7 @@ describe('cechy zapisu', () => {
         const z = cechyZapisu(g);
         const q = quizCech(g, seed);
         const jest = new Set(z.jest.map((c) => c.id));
-        const patol = z.jest.filter((c) => c.id !== 'zatokowy').map((c) => c.id);
+        const patol = z.jest.filter((c) => !NORMALNE.has(c.id)).map((c) => c.id);
         expect(patol.length).toBeGreaterThan(0);
         for (const id of patol) expect(q.some((c) => c.id === id && c.jest)).toBe(true);
         expect(q.length).toBeGreaterThanOrEqual(5);

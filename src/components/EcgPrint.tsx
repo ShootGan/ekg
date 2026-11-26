@@ -301,7 +301,7 @@ function draw(v: View) {
   }
   drawMarks(v, lw);
   v.setZoom(v.s.toFixed(1).replace('.', ',') + '×');
-  v.cv.style.touchAction = v.s > 1.001 ? 'none' : 'pan-y';
+  v.cv.style.touchAction = v.s > 1.001 ? 'none' : 'pan-x pan-y';
   v.onDraw?.();
 }
 
@@ -409,7 +409,7 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
       zoomAt(v, e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX - b.left, e.clientY - b.top);
     };
     const onDown = (e: PointerEvent) => {
-      cv.setPointerCapture(e.pointerId);
+      if (!(e.pointerType === 'touch' && v.s <= 1.001)) cv.setPointerCapture(e.pointerId);
       pts[e.pointerId] = [e.clientX, e.clientY];
       if (false && Object.keys(pts).length === 1) {
         const w = toWorld(v, e);
@@ -440,6 +440,7 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
         lastD = d;
       } else if (lastPos) {
         const sc = cv.parentElement;
+        if (v.s <= 1.001 && e.pointerType === 'touch') return;
         if (v.s <= 1.001 && sc && sc.scrollWidth > sc.clientWidth) {
           sc.scrollLeft -= e.clientX - lastPos[0];
           lastPos = [e.clientX, e.clientY];
@@ -613,7 +614,7 @@ export const EcgPrint = forwardRef<EcgPrintHandle, EcgPrintProps>(function EcgPr
             background: 'var(--paper)',
             borderRadius: 4,
             border: '1px solid var(--line)',
-            touchAction: 'pan-y',
+            touchAction: 'pan-x pan-y',
             cursor: 'grab',
           }}
         />

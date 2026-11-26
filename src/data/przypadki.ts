@@ -324,7 +324,7 @@ const BAZA: Case[] = [
     ecg: { rhythm: 'sinus', hr: 92, axis: 115 },
     kontekst: 'Wieloletni palacz, POChP, przewlekła duszność bez nagłego pogorszenia.',
     rozpoznanie: 'Rytm zatokowy, odchylenie osi w prawo',
-    elementy: ['oś > +90° (I ujemne, aVF dodatnie)', 'rytm zatokowy', 'możliwe przyczyny: przeciążenie PK, POChP, zatorowość, LPFB', 'wyklucz zamianę elektrod kończynowych (wtedy P i QRS są ujemne w I, a dodatnie w aVR) – to komentarz, nie cecha zapisu'],
+    elementy: ['oś > +90° (I ujemne, aVF dodatnie)', 'rytm zatokowy', 'możliwe przyczyny: przeciążenie PK, POChP, zatorowość, LPFB', 'wyklucz zamianę elektrod kończynowych (wtedy P i QRS są ujemne w I, a dodatnie w aVR)'],
     pulapki: ['zamiana elektrod rąk też daje ujemne I – sprawdź aVR i P w I'],
     postepowanie: 'Interpretować w kontekście klinicznym.' },
 

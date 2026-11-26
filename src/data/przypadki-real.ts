@@ -65,7 +65,7 @@ export const PRZYPADKI_REAL: Case[] = [
     rozpoznanie: 'Hiperkaliemia: bradykardia + blok AV I° + spłaszczone P + poszerzone QRS + wysokie szpiczaste T',
     elementy: ['bradykardia zatokowa', 'spłaszczone, niskie załamki P', 'wydłużony PR >200 ms – blok AV I°', 'poszerzone zespoły QRS', 'wysokie, szpiczaste, wąskie u podstawy T w V2, V3, V4', 'stan bezpośredniego zagrożenia (ryzyko sinusoidy, VF, asystolii)'],
     pulapki: ['szeroki QRS z bradykardią u dializowanego = hiperkaliemia, dopóki nie wykażesz inaczej', 'zanikające P i wydłużony PR to kolejny etap – następny bywa sinusoida', 'T szpiczaste ≠ hiperostre T zawału – sprawdź szerokość podstawy i kontekst'],
-    postepowanie: 'Monitorowanie ciągłe, dostęp i.v., wapń i.v. szybko (bolus) – stabilizacja błony, powtórz przy utrzymującym się szerokim QRS; salbutamol w nebulizacji; pilny transport do ośrodka z dializoterapią, zgłoszenie wyprzedzające.' },
+    postepowanie: 'Monitorowanie ciągłe, dostęp i.v., wapń i.v. (np. 10 ml 10% chlorku wapnia w 2–5 min) – stabilizacja błony, powtórz przy utrzymującym się szerokim QRS; salbutamol w nebulizacji; pilny transport do ośrodka z dializoterapią, zgłoszenie wyprzedzające.' },
 
   { id: 'real-lvh-nstemi', poziom: 3, kat: 'niedokrwienie', wiek: [58, 85], plec: null,
     ecg: { rhythm: 'sinus', hr: 92, lvh: true, pType: 'mitrale', stemi: 'subendocardial', stAmp: 0.18, axis: 50 },
